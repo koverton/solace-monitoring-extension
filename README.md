@@ -107,8 +107,8 @@ see table below for each server configuration </td>
 </tr>
 <tr>
 <td class='confluenceTd'> mgmtUrl </td>
-<td class='confluenceTd'> SEMP URL for server queries; format should be `http://\<server-address\>:8080/SEMP` for 
-Solace VMR instances and `http://\<mgmt-address\>/SEMP` for Solace hardware instances.
+<td class='confluenceTd'> SEMP URL for server queries; format should be `http://&lt;server-address&gt;:8080/SEMP` for 
+Solace VMR instances and `http://&lt;mgmt-address&gt;/SEMP` for Solace hardware instances.
 </td>
 </tr>
 <tr>
