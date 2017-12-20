@@ -19,6 +19,7 @@ class SolaceGlobalMonitorTask implements Runnable {
 
     @Override
     public void run() {
+        logger.debug("<SolaceGlobalMonitorTask.run>");
         String serverName = svc.getDisplayName();
 
         String metricPrefix = configuration.getConfigYml().get("metricPrefix")  + serverName + '|';
@@ -48,6 +49,7 @@ class SolaceGlobalMonitorTask implements Runnable {
             queue.remove("QueueName");
             printMetrics(prefix, queue);
         }
+        logger.debug("</SolaceGlobalMonitorTask.run>");
     }
 
     private void printMetrics(String prefix, Map<String,Object> metrics) {

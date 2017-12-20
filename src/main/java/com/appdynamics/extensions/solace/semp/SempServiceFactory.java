@@ -22,9 +22,12 @@ public class SempServiceFactory {
      * @return SempService object defining the platform and version number of the service we are connected to.
      */
     static public SempService createSempService(Sempv1Connector connector) {
+        logger.debug("<SempServiceFactory.createSempService>");
         SempVersion sempVersion = connector.checkBrokerVersion();
 
         if (sempVersion.getPlatform().equals(SempVersion.Platform.VMR)) {
+            logger.info("SempServiceFactory instantiating VMR SEMP-service");
+
             // Prefer newest version we can
             //if (sempVersion.getVersionNumber() >= SempVersion.v8_6VMR.getVersionNumber()) {
                 try {
@@ -43,6 +46,7 @@ public class SempServiceFactory {
             // TBD: Support more here
         }
         else {
+            logger.info("SempServiceFactory instantiating Hardware SEMP-service");
             // Prefer newest version we can
             //if (sempVersion.getVersionNumber() >= SempVersion.v8_2_0.getVersionNumber()) {
                 try {
@@ -61,6 +65,7 @@ public class SempServiceFactory {
             //}
             // TBD: Support more here
         }
+        logger.debug("</SempServiceFactory.createSempService>");
 
         return null;
     }

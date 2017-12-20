@@ -26,7 +26,9 @@ public class SolaceMonitor extends AManagedMonitor {
     }
 
     protected void initialize(Map<String, String> argsMap) {
+        logger.debug("<SolaceMonitor.initialize>");
         if (configuration == null) {
+            logger.info("Creating new SolaceMonitor MonitorConfiguration because it doesn't exist.");
             MetricWriteHelper metricWriter = MetricWriteHelperFactory.create(this);
             MonitorConfiguration conf = new MonitorConfiguration(
                     "Custom Metrics|Solace",
@@ -39,11 +41,13 @@ public class SolaceMonitor extends AManagedMonitor {
                     MonitorConfiguration.ConfItem.EXECUTOR_SERVICE);
             this.configuration = conf;
         }
+        logger.debug("</SolaceMonitor.initialize>");
     }
 
     private class TaskRunner implements Runnable {
         @Override
         public void run () {
+            logger.debug("<SolaceMonitor.TaskRunner.run>");
             Map<String, ?> config = configuration.getConfigYml();
             List<Map> servers = (List) config.get("servers");
             if (servers != null && !servers.isEmpty()) {
@@ -72,12 +76,13 @@ public class SolaceMonitor extends AManagedMonitor {
             } else {
                 logger.error("The stats read from the metric xml is empty. Please make sure that the metrics xml is correct");
             }
+            logger.debug("</SolaceMonitor.TaskRunner.run>");
         }
     }
 
     @Override
     public TaskOutput execute(Map<String, String> argMap, TaskExecutionContext context) {
-        logger.debug("The raw arguments are {}", argMap);
+        logger.debug("<SolaceMonitor.execute>The raw arguments are {}", argMap);
         try {
             initialize(argMap);
             configuration.executeTask();
@@ -87,6 +92,7 @@ public class SolaceMonitor extends AManagedMonitor {
                 configuration.getMetricWriter().registerError(e.getMessage(), e);
             }
         }
+        logger.debug("</SolaceMonitor.execute>");
         return null;
     }
 /**
