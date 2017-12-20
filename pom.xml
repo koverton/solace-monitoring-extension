@@ -1,118 +1,118 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.appdynamics.extensions</groupId>
-  <artifactId>solace-monitoring-extension</artifactId>
-  <version>1.0</version>
-  <packaging>jar</packaging>
+    <groupId>com.appdynamics.extensions</groupId>
+    <artifactId>solace-monitoring-extension</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
 
-  <name>solace-monitoring-extension</name>
-  <url>http://maven.apache.org</url>
+    <name>solace-monitoring-extension</name>
+    <url>http://maven.apache.org</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
-    <slf4j.version>1.7.25</slf4j.version>
-    <logback.version>1.2.3</logback.version>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <slf4j.version>1.7.25</slf4j.version>
+        <logback.version>1.2.3</logback.version>
+    </properties>
 
-  <dependencies>
-  <!-- Solace SEMP mgmt protocol -->
-    <!-- VMR -->
-    <dependency>
-      <groupId>com.solacesystems</groupId>
-      <artifactId>semp_jaxb_8_6VMR</artifactId>
-      <version>8.6.0.1010</version>
-    </dependency>
-    <!-- hardware -->
-    <dependency>
-      <groupId>com.solacesystems</groupId>
-      <artifactId>semp_jaxb_8_2_0</artifactId>
-      <version>8.2.1.4</version>
-    </dependency>
+    <dependencies>
+        <!-- Solace SEMP mgmt protocol -->
+        <!-- VMR -->
+        <dependency>
+            <groupId>com.solacesystems</groupId>
+            <artifactId>semp_jaxb_8_6VMR</artifactId>
+            <version>8.6.0.1010</version>
+        </dependency>
+        <!-- hardware -->
+        <dependency>
+            <groupId>com.solacesystems</groupId>
+            <artifactId>semp_jaxb_8_2_0</artifactId>
+            <version>8.2.1.4</version>
+        </dependency>
 
-    <!-- AppDynamics agent libs -->
-    <dependency>
-      <groupId>com.appdynamics</groupId>
-      <artifactId>machine-agent</artifactId>
-      <version>3.7.11</version>
-      <!--<scope>provided</scope>-->
-    </dependency>
-    <dependency>
-      <groupId>com.appdynamics</groupId>
-      <artifactId>appd-exts-commons</artifactId>
-      <version>1.6.1</version>
-    </dependency>
+        <!-- AppDynamics agent libs -->
+        <dependency>
+            <groupId>com.appdynamics</groupId>
+            <artifactId>machine-agent</artifactId>
+            <version>3.7.11</version>
+            <!--<scope>provided</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>com.appdynamics</groupId>
+            <artifactId>appd-exts-commons</artifactId>
+            <version>1.6.1</version>
+        </dependency>
 
-    <!-- ?? Blew up without it -->
-    <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.4</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>4.5.2</version>
-    </dependency>
+        <!-- ?? Blew up without it -->
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+        </dependency>
 
-    <!-- Logging -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>${logback.version}</version>
-    </dependency>
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-  <build>
-  <plugins>
-    <plugin>
-      <artifactId>maven-compiler-plugin</artifactId>
-      <configuration>
-        <source>1.7</source>
-        <target>1.7</target>
-      </configuration>
-    </plugin>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
 
-      <!-- Assembles the AppDynamics-friendly package -->
-      <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-assembly-plugin</artifactId>
-          <configuration>
-              <finalName>SolaceMonitor</finalName>
-          </configuration>
-          <executions>
-              <execution>
-                  <id>create-distribution</id>
-                  <phase>package</phase>
-                  <goals>
-                      <goal>single</goal>
-                  </goals>
-                  <configuration>
-                      <descriptors>
-                          <descriptor>assembly.xml</descriptor>
-                      </descriptors>
-                  </configuration>
-              </execution>
-          </executions>
-      </plugin>
+            <!-- Assembles the AppDynamics-friendly package -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <finalName>SolaceMonitor</finalName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>create-distribution</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
-  </plugins>
-  </build>
+        </plugins>
+    </build>
 </project>
