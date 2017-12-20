@@ -1,0 +1,27 @@
+### ANY CHANGES TO THIS FILE DOES NOT REQUIRE A RESTART ###
+
+# List of Solace Servers
+servers:
+  - mgmtUrl: "http://192.168.56.201:8080/SEMP"
+    adminUser: "admin"
+    adminPassword: "admin"
+    #displayName is required. Displays your server name in metric path.
+    displayName: "PrimaryVMR"
+  - mgmtUrl: "http://192.168.56.202:8080/SEMP"
+    adminUser: "admin"
+    adminPassword: "admin"
+    #displayName is required. Displays your server name in metric path.
+    displayName: "BackupVMR"
+
+# number of concurrent tasks
+numberOfThreads: 2
+
+# timeout for the thread
+# threadTimeout: 30
+
+
+#This will create this metric in all the tiers, under this path
+metricPrefix: "Custom Metrics|Solace|"
+#
+#This will create it in specific Tier. Replace <TIER_NAME>
+# metricPrefix: "Server|Component:13|Custom Metrics|Solace"

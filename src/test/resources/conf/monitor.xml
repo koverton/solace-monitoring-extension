@@ -1,0 +1,24 @@
+<monitor>
+    <name>SolaceMonitor</name>
+    <type>managed</type>
+    <description>Solace message router monitor</description>
+    <monitor-configuration></monitor-configuration>
+    <monitor-run-task>
+        <execution-style>periodic</execution-style>
+        <execution-frequency-in-seconds>60</execution-frequency-in-seconds>
+        <name>Solace Monitor Global Metrics Task</name>
+        <display-name>Solace Global Monitor Task</display-name>
+        <description>Solace Global Monitor Task</description>
+        <type>java</type>
+        <execution-timeout-in-secs>60</execution-timeout-in-secs>
+        <task-arguments>
+            <argument name="config-file" is-required="true" default-value="monitors/SolaceMonitor/config.yml" />
+        </task-arguments>
+        <java-task>
+            <impl-class>com.appdynamics.extensions.solace.SolaceMonitor</impl-class>
+            <classpath>lib</classpath>
+            <load-jars-in-classpath-dirs>true</load-jars-in-classpath-dirs>
+        </java-task>
+    </monitor-run-task>
+</monitor>
+
