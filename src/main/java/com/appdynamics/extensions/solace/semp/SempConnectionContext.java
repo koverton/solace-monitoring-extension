@@ -11,6 +11,7 @@ class SempConnectionContext<Request,Reply> {
         this.replyFactory = replyFactory;
         this.marshaller = marshaller;
         this.sempVersion = sempVersion;
+        this.schemaVersion= "soltr/"+this.sempVersion;
     }
 
     public Sempv1Connector getConnector() {
@@ -32,10 +33,14 @@ class SempConnectionContext<Request,Reply> {
     public String getSempVersion() {
         return sempVersion;
     }
+    public String getSchemaVersion() {
+        return schemaVersion;
+    }
 
     final private Sempv1Connector connector;
     final private SempRequestFactory<Request> reqFactory;
     final private SempReplyFactory<Reply> replyFactory;
     final private SempMarshaller<Request,Reply> marshaller;
     final private String sempVersion;
+    final private String schemaVersion;
 }

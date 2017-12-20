@@ -43,12 +43,23 @@ public class SempMarshaller_r8_6VMR implements SempMarshaller<Rpc, RpcReply> {
 
     public RpcReply fromReplyXml(String response) {
         try {
-            return (RpcReply) unmarshaller.unmarshal(new StringReader(response));
+            RpcReply reply = (RpcReply) unmarshaller.unmarshal(new StringReader(response));
+            if (!isSuccess(reply)) {
+                logger.error("SEMP FAILURE RESPONSE: {}", response);
+            }
+            return reply;
         } catch (Exception e) {
             logger.error("Exception thrown unmarshaling soltr/8.6VMR reply", e);
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    private boolean isSuccess(RpcReply reply) {
+        if (reply.getParseError() != null && reply.getParseError().length()!=0)
+            return false;
+        return reply.getExecuteResult().getCode().equals("ok");
     }
 
     private JAXBContext reqCtx;

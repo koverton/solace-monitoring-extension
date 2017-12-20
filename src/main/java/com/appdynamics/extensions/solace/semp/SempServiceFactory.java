@@ -26,7 +26,7 @@ public class SempServiceFactory {
 
         if (sempVersion.getPlatform().equals(SempVersion.Platform.VMR)) {
             // Prefer newest version we can
-            if (sempVersion.getVersionNumber() >= SempVersion.v8_6VMR.getVersionNumber()) {
+            //if (sempVersion.getVersionNumber() >= SempVersion.v8_6VMR.getVersionNumber()) {
                 try {
                     return new GenericSempService<>(
                             new SempConnectionContext<>(connector,
@@ -39,12 +39,12 @@ public class SempServiceFactory {
                             + SempVersion.v8_6VMR.getVersionString(), ex);
                     ex.printStackTrace();
                 }
-            }
+            //}
             // TBD: Support more here
         }
         else {
             // Prefer newest version we can
-            if (sempVersion.getVersionNumber() >= SempVersion.v8_2_0.getVersionNumber()) {
+            //if (sempVersion.getVersionNumber() >= SempVersion.v8_2_0.getVersionNumber()) {
                 try {
                     return new GenericSempService<>(
                             new SempConnectionContext<>(connector,
@@ -58,7 +58,7 @@ public class SempServiceFactory {
                             + SempVersion.v8_2_0.getVersionString(), ex);
                     ex.printStackTrace();
                 }
-            }
+            //}
             // TBD: Support more here
         }
 

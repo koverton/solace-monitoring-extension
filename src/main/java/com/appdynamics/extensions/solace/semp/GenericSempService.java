@@ -12,7 +12,7 @@ class GenericSempService<Request,Reply> implements SempService {
     }
     public Map<String,Object> checkGlobalStats() {
         // Show the appliance version
-        Request request = ctx.getReqFactory().createGlobalStatsRequest(ctx.getSempVersion());
+        Request request = ctx.getReqFactory().createGlobalStatsRequest(ctx.getSchemaVersion());
         String xml = ctx.getMarshaller().toRequestXml(request);
 
         String response = ctx.getConnector().doPost(xml);
@@ -22,7 +22,7 @@ class GenericSempService<Request,Reply> implements SempService {
     }
 
     public Map<String,Object> checkGlobalRedundancy() {
-        Request request = ctx.getReqFactory().createGlobalRedundancyRequest(ctx.getSempVersion());
+        Request request = ctx.getReqFactory().createGlobalRedundancyRequest(ctx.getSchemaVersion());
         String xml = ctx.getMarshaller().toRequestXml(request);
 
         String response = ctx.getConnector().doPost(xml);
@@ -32,7 +32,7 @@ class GenericSempService<Request,Reply> implements SempService {
     }
 
     public Map<String,Object> checkGlobalServiceStatus() {
-        Request request = ctx.getReqFactory().createGlobalServiceRequest(ctx.getSempVersion());
+        Request request = ctx.getReqFactory().createGlobalServiceRequest(ctx.getSchemaVersion());
         String xml = ctx.getMarshaller().toRequestXml(request);
 
         String response = ctx.getConnector().doPost(xml);
@@ -42,7 +42,7 @@ class GenericSempService<Request,Reply> implements SempService {
     }
 
     public Map<String,Object> checkGlobalMsgSpoolStats() {
-        Request request = ctx.getReqFactory().createGlobalMsgSpoolRequest(ctx.getSempVersion());
+        Request request = ctx.getReqFactory().createGlobalMsgSpoolRequest(ctx.getSchemaVersion());
         String xml = ctx.getMarshaller().toRequestXml(request);
 
         String response = ctx.getConnector().doPost(xml);
@@ -52,7 +52,7 @@ class GenericSempService<Request,Reply> implements SempService {
     }
 
     public List<Map<String,Object>> checkQueueList() {
-        Request request = ctx.getReqFactory().createQueueListRequest(ctx.getSempVersion());
+        Request request = ctx.getReqFactory().createQueueListRequest(ctx.getSchemaVersion());
         String xml = ctx.getMarshaller().toRequestXml(request);
 
         String response = ctx.getConnector().doPost(xml);
