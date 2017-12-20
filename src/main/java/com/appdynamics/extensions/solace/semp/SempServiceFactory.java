@@ -15,11 +15,6 @@ import java.util.Map;
 public class SempServiceFactory {
     private static final Logger logger = LoggerFactory.getLogger(SempServiceFactory.class);
 
-    // Supported hardware versions
-    final public static SempVersion vmrMin = SempVersion.v8_6VMR;
-    // Supported VMR versions
-    final public static SempVersion applMin = SempVersion.v8_2_0;
-
     /**
      * Constructs a SempService for a given Solace broker that uses the appropriate SEMP library for version supported by that broker.
      *
@@ -69,42 +64,4 @@ public class SempServiceFactory {
 
         return null;
     }
-
-    private static Object newInstance(String sempVersion, String localJarName, String fqClassName) {
-        try {
-            URLClassLoader child = getClassLoader(sempVersion, localJarName);
-            Class clazz = Class.forName(fqClassName, true, child);
-            return clazz.newInstance ();
-        }
-        catch(MalformedURLException urlex) {
-            logger.error("Could not load semp version:{} Jar:{}", sempVersion, localJarName);
-            urlex.printStackTrace();
-        }
-        catch(ClassNotFoundException noclex) {
-            logger.error("Could not find class:{} in Jar:{}", fqClassName, localJarName);
-            noclex.printStackTrace();
-        }
-        catch(InstantiationException instex) {
-            logger.error("Could not instantiate class:{} in Jar:{}", fqClassName, localJarName);
-            instex.printStackTrace();
-        }
-        catch(IllegalAccessException illex) {
-            logger.error("Could not access class:{} in Jar:{}", fqClassName, localJarName);
-            illex.printStackTrace();
-        }
-        return null;
-    }
-
-    private static URLClassLoader getClassLoader(String sempVersion, String localJarName) throws MalformedURLException {
-        if (clmap.containsKey(sempVersion)) {
-            return clmap.get(sempVersion);
-        }
-        URLClassLoader child = new URLClassLoader(
-                new URL[]{new URL("file://./" + localJarName)},
-                SempServiceFactory.class.getClassLoader());
-        clmap.put(sempVersion, child);
-        return child;
-    }
-
-    private static Map<String,URLClassLoader> clmap = new HashMap<>();
 }

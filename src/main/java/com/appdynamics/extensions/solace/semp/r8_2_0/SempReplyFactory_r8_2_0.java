@@ -58,16 +58,16 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
         result.put("WebParseError", stats.getIngressDiscards().getWebParseError());
         result.put("PublishTopicAcl", stats.getIngressDiscards().getPublishTopicAcl());
         result.put("MsgSpoolDiscards", stats.getIngressDiscards().getMsgSpoolDiscards());
-        result.put("MessagePromotionCongestion", stats.getIngressDiscards().getMessagePromotionCongestion());
-        result.put("MessageSpoolCongestion", stats.getIngressDiscards().getMessageSpoolCongestion());
+        result.put("IngressMessagePromotionCongestion", stats.getIngressDiscards().getMessagePromotionCongestion());
+        result.put("IngressMessageSpoolCongestion", stats.getIngressDiscards().getMessageSpoolCongestion());
 
         result.put("TotalEgressDiscards", stats.getEgressDiscards().getTotalEgressDiscards());
         result.put("TransmitCongestion", stats.getEgressDiscards().getTransmitCongestion());
         result.put("CompressionCongestion", stats.getEgressDiscards().getCompressionCongestion());
         result.put("MessageElided", stats.getEgressDiscards().getMessageElided());
         result.put("PayloadCouldNotBeFormatted", stats.getEgressDiscards().getPayloadCouldNotBeFormatted());
-        result.put("MessagePromotionCongestion", stats.getEgressDiscards().getMessagePromotionCongestion());
-        result.put("MessageSpoolCongestion", stats.getEgressDiscards().getMessageSpoolCongestion());
+        result.put("EgressMessagePromotionCongestion", stats.getEgressDiscards().getMessagePromotionCongestion());
+        result.put("EgressMessageSpoolCongestion", stats.getEgressDiscards().getMessageSpoolCongestion());
         result.put("MsgSpoolEgressDiscards", stats.getEgressDiscards().getMsgSpoolEgressDiscards());
 
         return result;

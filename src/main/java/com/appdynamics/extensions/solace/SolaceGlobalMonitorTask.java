@@ -21,7 +21,7 @@ class SolaceGlobalMonitorTask implements Runnable {
     public void run() {
         String serverName = svc.getDisplayName();
 
-        String metricPrefix = (String) configuration.getConfigYml().get("metricPrefix")  + serverName + '|';
+        String metricPrefix = configuration.getConfigYml().get("metricPrefix")  + serverName + '|';
 
         // Run Service check
         Map<String,Object> serviceStats = svc.checkGlobalServiceStatus();

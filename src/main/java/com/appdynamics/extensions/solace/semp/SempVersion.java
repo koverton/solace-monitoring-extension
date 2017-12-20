@@ -42,7 +42,7 @@ public class SempVersion {
     }
 
     private Platform parsePlatform(String schemaVersion) {
-        if (schemaVersion.indexOf("VMR") == -1)
+        if (!schemaVersion.contains("VMR"))
             return Platform.APPLIANCE;
         // Default to VMR if we don't know
         return Platform.VMR;

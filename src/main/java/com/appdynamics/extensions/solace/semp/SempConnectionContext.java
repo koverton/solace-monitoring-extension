@@ -1,6 +1,6 @@
 package com.appdynamics.extensions.solace.semp;
 
-public class SempConnectionContext<Request,Reply> {
+class SempConnectionContext<Request,Reply> {
     public SempConnectionContext(Sempv1Connector connector,
                                  SempRequestFactory<Request> reqFactory,
                                  SempReplyFactory<Reply> replyFactory,

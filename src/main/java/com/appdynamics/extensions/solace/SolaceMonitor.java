@@ -9,13 +9,10 @@ import com.appdynamics.extensions.solace.semp.Sempv1Connector;
 import com.singularity.ee.agent.systemagent.api.AManagedMonitor;
 import com.singularity.ee.agent.systemagent.api.TaskExecutionContext;
 import com.singularity.ee.agent.systemagent.api.TaskOutput;
-import com.singularity.ee.agent.systemagent.api.exception.TaskExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.bind.JAXBException;
 import java.net.*;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +21,7 @@ public class SolaceMonitor extends AManagedMonitor {
 
     final private static String MON_VERSION = "1.0";
 
-    public SolaceMonitor() throws JAXBException {
+    public SolaceMonitor() {
         logger.info(String.format("Using SolaceMonitor Version [%s]", MON_VERSION));
     }
 
@@ -79,7 +76,7 @@ public class SolaceMonitor extends AManagedMonitor {
     }
 
     @Override
-    public TaskOutput execute(Map<String, String> argMap, TaskExecutionContext context) throws TaskExecutionException {
+    public TaskOutput execute(Map<String, String> argMap, TaskExecutionContext context) {
         logger.debug("The raw arguments are {}", argMap);
         try {
             initialize(argMap);

@@ -150,3 +150,11 @@ servers:
     #displayName is required. Displays your server name in metric path.
     displayName: "MonitorVMR"
 ```
+
+## Next Steps / TODO Items
+
+1. Fix redundancy status for hardware queries (as of 8.2.0)
+2. More backwards compatibility schemas
+3. Better calculation to match parsing schema version to the version presented by the router
+4. When too many schemas need to be supported, load only the required libs dynamically via child classloaders
+5. Add bridge statistics / status

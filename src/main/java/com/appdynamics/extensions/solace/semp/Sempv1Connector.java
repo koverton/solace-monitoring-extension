@@ -40,14 +40,14 @@ public class Sempv1Connector {
                         new InputStreamReader(
                                 connection.getInputStream()));
                 logger.info("Successful SEMP Response");
-                String total = "";
+                StringBuilder total = new StringBuilder();
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
                     logger.debug(inputLine);
-                    total += inputLine;
+                    total.append(inputLine);
                 }
                 in.close();
-                return total;
+                return total.toString();
             } else {
                 logger.error("Error: [{}] {}", responseCode , connection.getResponseMessage());
             }
