@@ -14,7 +14,7 @@ plane via HTTP. The following metrics are currently gathered by this monitor:
 * Global service status
 * Global queue summaries
 
-##Installation
+## Installation
 
 The protocol for querying metrics is currently an XML-based POST request protocol. 
 Schemas for request and reply messages are provided by Solace, which can be used 
@@ -37,7 +37,7 @@ cd mvn_libs
 > Application Infrastructure Performance  | \<Tier\> | Custom Metrics | Solace.
 
 
-##Directory Structure
+## Directory Structure
 
 <table><tbody>
 <tr>
