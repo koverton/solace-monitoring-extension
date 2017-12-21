@@ -57,7 +57,7 @@ appropriate to the version of you AppDynamics MachineAgent. You should get this 
 </tr>
 <tr>
 <td class='confluenceTd'> src/main/java/ </td>
-<td class='confluenceTd'> Contains source code of the Nginx monitoring extension </td>
+<td class='confluenceTd'> Contains source code of the Solace monitoring extension </td>
 </tr>
 <tr>
 <td class='confluenceTd'> target/SolaceMonitor.zip </td>
