@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,7 @@ public class SolaceMonitor extends AManagedMonitor {
     }
 
     private class TaskRunner implements Runnable {
+        public TaskRunner() { logger.info("Creating a new SolaceMonitor TaskRunner"); }
         @Override
         public void run () {
             logger.debug("<SolaceMonitor.TaskRunner.run>");
@@ -59,12 +61,19 @@ public class SolaceMonitor extends AManagedMonitor {
                     try {
                         logger.info("Server:{}, Mgmt URL:{}, Admin User:{}",
                                     displayName, mgmtUrl, adminUser);
-                        Sempv1Connector connector = new Sempv1Connector(
-                                mgmtUrl,
-                                adminUser,
-                                adminPass,
-                                displayName);
-                        SempService sempService = SempServiceFactory.createSempService(connector);
+                        SempService sempService;
+                        if (url2svc.containsKey(mgmtUrl)) {
+                            sempService = url2svc.get(mgmtUrl);
+                        }
+                        else {
+                            Sempv1Connector connector = new Sempv1Connector(
+                                    mgmtUrl,
+                                    adminUser,
+                                    adminPass,
+                                    displayName);
+                            sempService = SempServiceFactory.createSempService(connector);
+                            url2svc.put(mgmtUrl, sempService);
+                        }
                         SolaceGlobalMonitorTask task = new SolaceGlobalMonitorTask(configuration, sempService);
                         configuration.getExecutorService().execute(task);
                     }
@@ -78,6 +87,7 @@ public class SolaceMonitor extends AManagedMonitor {
             }
             logger.debug("</SolaceMonitor.TaskRunner.run>");
         }
+        final private Map<String,SempService> url2svc = new HashMap<>();
     }
 
     @Override
