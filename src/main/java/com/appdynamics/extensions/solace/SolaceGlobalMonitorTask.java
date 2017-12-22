@@ -7,18 +7,30 @@ import com.singularity.ee.agent.systemagent.api.MetricWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Worker task for all Solace metrics gathering. Executes all desired metrics queries
+ * on the SempService that is provided to it.
+ */
 class SolaceGlobalMonitorTask implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(SolaceGlobalMonitorTask.class);
 
     SolaceGlobalMonitorTask(MonitorConfiguration config, SempService svc) {
         this.config = config;
-        this.svc = svc;
+        this.svc    = svc;
 
-        this.vpnFilter = (List<String>) config.getConfigYml().get("excludeMsgVpns");
-        this.queueFilter = (List<String>) config.getConfigYml().get("excludeQueues");
+        this.vpnFilter   = getConfigListOrNew(config, "excludeMsgVpns");
+        this.queueFilter = getConfigListOrNew(config, "excludeQueues");
+    }
+
+    private List<String> getConfigListOrNew(MonitorConfiguration config, String key) {
+        if (config.getConfigYml().containsKey(key))
+            return (List<String>) config.getConfigYml().get(key);
+        else
+            return new ArrayList<>();
     }
 
     @Override

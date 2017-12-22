@@ -18,6 +18,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This extension extracts metrics from Solace message brokers remotely via HTTP and
+ * writes those metrics to an AppDynamics Controller. It is designed to run under
+ * an AppDynamics standalone Java MachineAgent.
+ */
 public class SolaceMonitor extends AManagedMonitor {
     private static final Logger logger = LoggerFactory.getLogger(SolaceMonitor.class);
 
