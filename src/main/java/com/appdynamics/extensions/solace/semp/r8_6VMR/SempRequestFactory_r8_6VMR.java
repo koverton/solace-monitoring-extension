@@ -51,6 +51,7 @@ public class SempRequestFactory_r8_6VMR implements SempRequestFactory<Rpc> {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setQueue(factory.createRpcShowQueue());
         request.getShow().getQueue().setName("*");
+        request.getShow().getQueue().setDetail(factory.createKeywordType());
         return request;
     }
 

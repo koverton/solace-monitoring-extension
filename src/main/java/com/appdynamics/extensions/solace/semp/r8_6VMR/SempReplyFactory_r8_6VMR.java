@@ -161,7 +161,7 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
             result.put("VpnName", q.getInfo().getMessageVpn());
             result.put("IsIngressEnabled", q.getInfo().getIngressConfigStatus().equals("Up") ? 1 : 0);
             result.put("IsEgressEnabled", q.getInfo().getEgressConfigStatus().equals("Up") ? 1 : 0);
-            //result.put("AccessType", q.getInfo().getAccessType());
+            result.put("QuotaInMB", q.getInfo().getQuota().longValue());
             result.put("MessagesEnqueued", q.getInfo().getNumMessagesSpooled().intValue());
             result.put("UsageInMB", q.getInfo().getCurrentSpoolUsageInMb());
             result.put("ConsumerCount", q.getInfo().getBindCount().intValue());
