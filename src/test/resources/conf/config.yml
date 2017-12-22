@@ -4,7 +4,7 @@
 servers:
   - mgmtUrl: "http://192.168.56.201:8080/SEMP"
     adminUser: "admin"
-    adminPassword: "admin"
+    password: "admin"
     #displayName is required. Displays your server name in metric path.
     displayName: "PrimaryVMR"
 

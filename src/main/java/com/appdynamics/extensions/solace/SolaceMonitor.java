@@ -1,6 +1,7 @@
 package com.appdynamics.extensions.solace;
 
 import com.appdynamics.extensions.conf.MonitorConfiguration;
+import com.appdynamics.extensions.crypto.CryptoUtil;
 import com.appdynamics.extensions.util.MetricWriteHelper;
 import com.appdynamics.extensions.util.MetricWriteHelperFactory;
 import com.appdynamics.extensions.solace.semp.SempService;
@@ -56,7 +57,7 @@ public class SolaceMonitor extends AManagedMonitor {
                 for (Map server : servers) {
                     String mgmtUrl     = (String)server.get("mgmtUrl");
                     String adminUser   = (String)server.get("adminUser");
-                    String adminPass   = (String)server.get("adminPassword");
+                    String adminPass   = CryptoUtil.getPassword(server);
                     String displayName = (String)server.get("displayName");
                     try {
                         logger.info("Server:{}, Mgmt URL:{}, Admin User:{}",
@@ -105,6 +106,7 @@ public class SolaceMonitor extends AManagedMonitor {
         logger.debug("</SolaceMonitor.execute>");
         return null;
     }
+
 /**
     public static void main( String[] args )
     {
@@ -118,15 +120,8 @@ public class SolaceMonitor extends AManagedMonitor {
         catch(InterruptedException ex) {
             ex.printStackTrace();
         }
-        catch(TaskExecutionException tex) {
-            tex.printStackTrace();
-        }
-        catch(JAXBException jex) {
-            jex.printStackTrace();
-        }
     }
 **/
-
     private MonitorConfiguration configuration;
 
 }

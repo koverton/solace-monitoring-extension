@@ -19,6 +19,9 @@
         <file>
             <source>src/main/resources/conf/monitor.xml</source>
         </file>
+        <file>
+            <source>src/main/resources/conf/encrypt.sh</source>
+        </file>
     </files>
     <!-- use this section to package dependencies -->
     <dependencySets>
