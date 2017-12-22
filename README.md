@@ -42,15 +42,31 @@ appropriate to the version of you AppDynamics MachineAgent. You should get this 
 ## Storing Passwords in the Extension `config.yml`
 
 For simple testing or dev environments, Solace admin credentials can be stored in the 
-config.yml file in cleartext. For higher environments, it is a best practice to only 
-store encrypted versions of the passwords in higher environments. An encrypt.sh script 
-is included in the distributable bundle that can be used to safely encrypt a password 
-with your own hash-key. 
+config.yml file in cleartext. For each server in your configuration, the `password` 
+configuration value is assumed to be cleartext and is used by the extension in that manner.
+For higher environments, it is a best practice to only store encrypted versions of the 
+passwords and the Solace monitoring extension provides support for that.
 
-The output of that script can be stored in the `encrypted-password` field of each server credentials.
-The hash-key you entered must also be saved, and added to the MachineAgent commandline 
-by including the following flag definition:
-> java -Dappdynamics.extensions.key=<your-hash-key> ...
+A script for encrypting your passwords is included in the distributable bundle that 
+you can run at the commandline with your own hash-key. The output of that script can 
+be stored in the `encrypted-password` field of each server credentials.
+
+```bash
+Linux$ ./encrypt.sh na1jFUKT8euDXp1p7bgwIxhI6ZESLylz # <-- my hash-key
+Enter password to encrypt:
+***************Encrypted String***************
+1U57HGivpI0szB6X7n6tKw==
+**********************************************
+```
+
+It is best practice to randomly generate your hash-key rather than entering something yourself. 
+The hash-key you use to encrypt the password must also be saved, we recommend adding to the 
+MachineAgent commandline by including the following flag definition:
+> java -Dappdynamics.extensions.key=na1jFUKT8euDXp1p7bgwIxhI6ZESLylz ...
+
+If for any reason you cannot set the property on the MachineAgent commandline it can alternatively 
+be added to the extension's config.yml as the value for the configuration `encryption-key` 
+for each server configuration specifying `encrypted-password`. 
 
 Typically you will have other definitions, for example:
 ```bash
