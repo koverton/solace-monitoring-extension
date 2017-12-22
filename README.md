@@ -198,6 +198,9 @@ servers:
     adminPassword: "admin"
     #displayName is required. Displays your server name in metric path.
     displayName: "MonitorVMR"
+
+excludeMsgVpns: ["#config-sync", "default"]
+excludeQueues: ["ignoreThis", "ignoreThat"]
 ```
 
 ## Next Steps / TODO Items
