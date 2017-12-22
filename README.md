@@ -4,7 +4,7 @@ Solace message brokers and update an ADController.
 
 This extension works only with the java standalone machine agent.
 
-Solace is a multi-protocol Message-Oriented middleware, providing a self-contained  
+Solace is a multi-protocol Message-Oriented middleware, providing a self-contained 
 standalone message broker server in both hardware and containerized formats.
 Statistics and metrics on Solace performance can be queried from the management 
 plane via HTTP. The following metrics are currently gathered by this monitor:
@@ -21,8 +21,8 @@ Schemas for request and reply messages are provided by Solace, which can be used
 to generate Java request and reply objects. I have a project for generating these 
 libraries and installing them to Maven repositories: https://github.com/koverton/semp_jaxb
 
-I have provided initial libraries for the last Solace hardware and software versions 
-in the `mvn_libs/` directory which you can install locally to build and deploy with:
+I have provided initial libraries for the latest Solace hardware and software versions 
+in the `mvn_libs/` directory which you can install locally to build and deploy:
 
 ```bash
 cd mvn_libs
@@ -32,7 +32,9 @@ cd mvn_libs
 You will also need to obtain the AppDynamics `machine-agent.jar` and `appd-exts-commons.jar` 
 appropriate to the version of you AppDynamics MachineAgent. You should get this from AppDynamics.
 
-1. Type `mvn clean install` in the command line from the solace-monitoring-extension directory
+### Build and Deploy Steps
+
+1. Type `mvn clean install` in the commandline from the solace-monitoring-extension directory
 2. Deploy the output file `target/SolaceMonitor.zip` into `<machineagent install dir>/monitors/`
 3. Unzip the deployed file
 4. Restart the MachineAgent
@@ -41,7 +43,7 @@ appropriate to the version of you AppDynamics MachineAgent. You should get this 
 
 ## Storing Passwords in the Extension `config.yml`
 
-For simple testing or dev environments, Solace admin credentials can be stored in the 
+For simple Test or Dev environments Solace admin credentials can be stored in the 
 config.yml file in cleartext. For each server in your configuration, the `password` 
 configuration value is assumed to be cleartext and is used by the extension in that manner.
 For higher environments, it is a best practice to only store encrypted versions of the 
@@ -49,7 +51,7 @@ passwords and the Solace monitoring extension provides support for that.
 
 A script for encrypting your passwords is included in the distributable bundle that 
 you can run at the commandline with your own hash-key. The output of that script can 
-be stored in the `encrypted-password` field of each server credentials.
+be stored in the `encrypted-password` field of each server credentials instead of `password`.
 
 ```bash
 Linux$ ./encrypt.sh na1jFUKT8euDXp1p7bgwIxhI6ZESLylz # <-- my hash-key
@@ -60,21 +62,19 @@ Enter password to encrypt:
 ```
 
 It is best practice to randomly generate your hash-key rather than entering something yourself. 
-The hash-key you use to encrypt the password must also be saved, we recommend adding to the 
-MachineAgent commandline by including the following flag definition:
-> java -Dappdynamics.extensions.key=na1jFUKT8euDXp1p7bgwIxhI6ZESLylz ...
-
-If for any reason you cannot set the property on the MachineAgent commandline it can alternatively 
-be added to the extension's config.yml as the value for the configuration `encryption-key` 
-for each server configuration specifying `encrypted-password`. 
-
-Typically you will have other definitions, for example:
+The hash-key you use to encrypt the password must also be saved, we recommend adding it to the 
+MachineAgent commandline as the env-property `appdynamics.extensions.key`. Typically you will 
+have other definitions, for example:
 ```bash
  java -Dappdynamics.agent.applicationName=<appname> \
       -Dappdynamics.agent.tierName=<app-teir> \
       -Dappdynamics.extensions.key=<your-hash-key> \
       -jar $ADAGENT_HOME/machineagent.jar
 ```
+
+If for any reason you cannot set this property via the MachineAgent commandline it can alternatively 
+be added to the extension's config.yml as the server configuration `encryption-key`. Note this 
+must be present for each server configuration specifying `encrypted-password`.
 	
 ## Directory Structure
 
@@ -89,7 +89,7 @@ Typically you will have other definitions, for example:
 </tr>
 <tr>
 <td class='confluenceTd'> src/main/resources/conf </td>
-<td class='confluenceTd'> Contains the monitor.xml </td>
+<td class='confluenceTd'> Contains the extension config.yml and monitor.xml </td>
 </tr>
 <tr>
 <td class='confluenceTd'> src/main/java </td>
@@ -97,24 +97,24 @@ Typically you will have other definitions, for example:
 </tr>
 <tr>
 <td class='confluenceTd'> target/SolaceMonitor.zip </td>
-<td class='confluenceTd'> Distributable .zip artifact; only obtained when using maven; run 'mvn clean install' to generate. </td>
+<td class='confluenceTd'> Distributable .zip artifact. Only obtained when using maven, run 'mvn clean install' to generate. </td>
 </tr>
 <tr>
 <td class='confluenceTd'> pom.xml </td>
-<td class='confluenceTd'> Maven build script to package the project (required only if changing Java code) </td>
+<td class='confluenceTd'> Maven build script used to compile and package the distributable bundle </td>
 </tr>
 </tbody>
 </table>
 
 ## Configuring
 
-The `monitor.xml` file should not require any modification, it just gives the 
+The `monitor.xml` file should not require any modification, it gives the 
 AppDynamics MachineAgent all the necessary information to load and run the 
-extension.
+Solace monitoring extension.
 
 The `config.yml` file is how you configure the Solace monitoring extension to 
-monitor Solace message brokers, and therefore should be modified to reflect your 
-Solace deployment that you want to monitor.
+monitor Solace message brokers, and therefore should be modified to reflect the 
+Solace deployment you want to monitor.
 
 <table><tbody>
 <tr>
@@ -124,7 +124,7 @@ Solace deployment that you want to monitor.
 <tr>
 <td class='confluenceTd'> metricPrefix </td>
 <td class='confluenceTd'> This will create this metric in all the tiers, 
-under this path; it should always start with Custom Metrics|Solace, but can be varied 
+under this path; it should always start with "Custom Metrics|Solace", but can be varied 
 from there onwards.</td>
 </tr>
 <tr>
@@ -134,11 +134,11 @@ see table below for each server configuration </td>
 </tr>
 <tr>
 <td class='confluenceTd'> excludeMsgVpns </td>
-<td class='confluenceTd'> List of MsgVPNs to *not* upload metrics for.</td>
+<td class='confluenceTd'> List of MsgVPNs for which to <B>not</B> upload metrics.</td>
 </tr>
 <tr>
 <td class='confluenceTd'> excludeQueues </td>
-<td class='confluenceTd'> List of Queues to *not* upload metrics for.</td>
+<td class='confluenceTd'> List of Queues for which to <B>not</B> upload metrics.</td>
 </tr>
 </tbody>
 </table>
@@ -154,8 +154,8 @@ see table below for each server configuration </td>
 </tr>
 <tr>
 <td class='confluenceTd'> mgmtUrl </td>
-<td class='confluenceTd'> SEMP URL for server queries; format should be `http://&lt;server-address&gt;:8080/SEMP` for 
-Solace VMR instances and `http://&lt;mgmt-address&gt;/SEMP` for Solace hardware instances.
+<td class='confluenceTd'> SEMP URL for server queries; format should be http://&lt;server-address&gt;:8080/SEMP for 
+Solace VMR instances and http://&lt;mgmt-address&gt;/SEMP for Solace hardware instances.
 </td>
 </tr>
 <tr>
@@ -164,8 +164,8 @@ Solace VMR instances and `http://&lt;mgmt-address&gt;/SEMP` for Solace hardware 
 </tr>
 <tr>
 <td class='confluenceTd'> password or encrypted-password </td>
-<td class='confluenceTd'> HTTP authentication credentials used for the admin user. `password` 
-assumes the credentials are stored directly as cleartext, `encrypted-password` assumes the 
+<td class='confluenceTd'> HTTP authentication credentials used for the admin user. <tt>password</tt> 
+assumes the credentials are stored directly as cleartext, <tt>encrypted-password</tt> assumes the 
 credentials are stored in encryped form as generated by your hash-key and the bundle's encrypt.sh script.</td>
 </tr>
 </tbody>
