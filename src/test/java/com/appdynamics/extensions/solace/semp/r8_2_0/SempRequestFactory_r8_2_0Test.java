@@ -62,5 +62,5 @@ public class SempRequestFactory_r8_2_0Test {
         Rpc request = factory.createQueueListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
         System.out.println(xml);
-        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><queue><name>*</name></queue></show></rpc>", xml);
+        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><queue><name>*</name><detail/></queue></show></rpc>", xml);
     }}
