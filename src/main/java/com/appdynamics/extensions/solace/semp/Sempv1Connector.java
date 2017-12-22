@@ -8,6 +8,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.*;
 
+/**
+ * Transport connector for SEMPv1 protocol requests. Implements HTTP POST operations
+ * and returns results as String objects.
+ */
 public class Sempv1Connector {
     private static final Logger logger = LoggerFactory.getLogger(Sempv1Connector.class);
 

@@ -1,5 +1,16 @@
 package com.appdynamics.extensions.solace.semp;
 
+/**
+ * Responsible for parsing and representing logical attributes of a given SEMP
+ * version including Platform (Hardware vs. VMR), Version String and Version Number.
+ * Version numbers are represented as Floating point numbers with the major version
+ * as the Integer portion, and all further versions concatenated together as the
+ * floating point A SEMP version specifies the protocol version-number and the
+ * platform type it applies to.
+ *
+ * For example: VMR versions strings appear as '6_3VMR', while hardware versions
+ * appear as '7_2'
+ */
 public class SempVersion {
     public enum Platform {
         APPLIANCE,

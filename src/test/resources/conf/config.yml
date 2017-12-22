@@ -8,6 +8,9 @@ servers:
     #displayName is required. Displays your server name in metric path.
     displayName: "PrimaryVMR"
 
+excludeQueues: ["ignoreThis", "ignoreThat"]
+excludeMsgVpns: ["#config-sync", "default"]
+
 # number of concurrent tasks
 numberOfThreads: 2
 

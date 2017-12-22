@@ -7,22 +7,25 @@ import com.singularity.ee.agent.systemagent.api.MetricWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
 
 class SolaceGlobalMonitorTask implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(SolaceGlobalMonitorTask.class);
 
-    SolaceGlobalMonitorTask(MonitorConfiguration configuration, SempService svc) {
-        this.configuration = configuration;
+    SolaceGlobalMonitorTask(MonitorConfiguration config, SempService svc) {
+        this.config = config;
         this.svc = svc;
+
+        this.vpnFilter = (List<String>) config.getConfigYml().get("excludeMsgVpns");
+        this.queueFilter = (List<String>) config.getConfigYml().get("excludeQueues");
     }
 
     @Override
     public void run() {
         logger.debug("<SolaceGlobalMonitorTask.run>");
         String serverName = svc.getDisplayName();
-
-        String metricPrefix = configuration.getConfigYml().get("metricPrefix")  + serverName + '|';
+        String metricPrefix = config.getConfigYml().get("metricPrefix")  + serverName + '|';
 
         // Run Service check
         Map<String,Object> serviceStats = svc.checkGlobalServiceStatus();
@@ -42,9 +45,19 @@ class SolaceGlobalMonitorTask implements Runnable {
 
         // Run queues check
         for(Map<String,Object> queue : svc.checkQueueList()) {
-            String prefix = metricPrefix + "Queues|"
-                    + queue.get("VpnName") + ":"
-                    + queue.get("QueueName");
+            String vpnname= (String) queue.get("VpnName");
+            if (this.vpnFilter.contains(vpnname)) {
+                logger.info("NOT writing metrics for queues in the {} MsgVPN because it is in the excludedMsgVpns list.", vpnname);
+                continue;
+            }
+            String qname = (String) queue.get("QueueName");
+            if (this.queueFilter.contains(qname)) {
+                logger.info("NOT writing metrics for queues in the {} queue because it is in the excludedQueues list.", qname);
+                continue;
+            }
+            String prefix = metricPrefix
+                    + "MsgVpns|" + vpnname
+                    + "|Queues|"  + qname;
             queue.remove("VpnName");
             queue.remove("QueueName");
             printMetrics(prefix, queue);
@@ -59,22 +72,27 @@ class SolaceGlobalMonitorTask implements Runnable {
     }
 
     private void printMetric(String metricPrefix, String metricName, Object metricValue) {
+        MetricWriteHelper metricWriter = config.getMetricWriter();
 
-        String aggregation = MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION;
-        String timeRollup = MetricWriter.METRIC_TIME_ROLLUP_TYPE_AVERAGE;
-        String cluster = MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE;
         String metricPath = metricPrefix + '|' + metricName;
-        MetricWriteHelper metricWriter = configuration.getMetricWriter();
         if (metricValue instanceof Double)
             metricValue = ((Double)metricValue).longValue();
-        metricWriter.printMetric(metricPath, metricValue.toString(), aggregation, timeRollup, cluster);
+
+        metricWriter.printMetric(metricPath, metricValue.toString(),
+                MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
+                MetricWriter.METRIC_TIME_ROLLUP_TYPE_AVERAGE,
+                MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
 
 
         logger.debug("Metric [{}/{}/{}] metric = {} = {}",
-                aggregation, timeRollup, cluster,
+                MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
+                MetricWriter.METRIC_TIME_ROLLUP_TYPE_AVERAGE,
+                MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE,
                 metricPath, metricValue);
     }
 
-    private MonitorConfiguration configuration;
-    private SempService svc;
+    final private MonitorConfiguration config;
+    final private SempService svc;
+    final private List<String> vpnFilter;
+    final private List<String> queueFilter;
 }

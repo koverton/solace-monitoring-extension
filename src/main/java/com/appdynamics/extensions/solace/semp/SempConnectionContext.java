@@ -1,5 +1,12 @@
 package com.appdynamics.extensions.solace.semp;
 
+/**
+ * Encapsulates all the required request and reply handling libraries around
+ * a particular SEMP Connection and its required SEMP version.
+ *
+ * @param <Request> The SEMP version-specific Request type
+ * @param <Reply> The SEMP version-specific Reply type
+ */
 class SempConnectionContext<Request,Reply> {
     public SempConnectionContext(Sempv1Connector connector,
                                  SempRequestFactory<Request> reqFactory,

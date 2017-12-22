@@ -48,20 +48,20 @@ appropriate to the version of you AppDynamics MachineAgent. You should get this 
 <th align="left"> Description </th>
 </tr>
 <tr>
-<td class='confluenceTd'> mvn_libs/ </td>
+<td class='confluenceTd'> mvn_libs </td>
 <td class='confluenceTd'> Contains pre-built SEMP serialization objects required for this build and an installer script </td>
 </tr>
 <tr>
-<td class='confluenceTd'> src/main/resources/conf/ </td>
+<td class='confluenceTd'> src/main/resources/conf </td>
 <td class='confluenceTd'> Contains the monitor.xml </td>
 </tr>
 <tr>
-<td class='confluenceTd'> src/main/java/ </td>
+<td class='confluenceTd'> src/main/java </td>
 <td class='confluenceTd'> Contains source code of the Solace monitoring extension </td>
 </tr>
 <tr>
 <td class='confluenceTd'> target/SolaceMonitor.zip </td>
-<td class='confluenceTd'> Distributable .zip artifact; only obtained when using maven. Run 'mvn clean install' to get the distributable .zip file </td>
+<td class='confluenceTd'> Distributable .zip artifact; only obtained when using maven; run 'mvn clean install' to generate. </td>
 </tr>
 <tr>
 <td class='confluenceTd'> pom.xml </td>
@@ -95,6 +95,14 @@ from there onwards.</td>
 <td class='confluenceTd'> Servers </td>
 <td class='confluenceTd'> List of all server details to query and upload to the Controller; 
 see table below for each server configuration </td>
+</tr>
+<tr>
+<td class='confluenceTd'> excludeMsgVpns </td>
+<td class='confluenceTd'> List of MsgVPNs to *not* upload metrics for.</td>
+</tr>
+<tr>
+<td class='confluenceTd'> excludeQueues </td>
+<td class='confluenceTd'> List of Queues to *not* upload metrics for.</td>
 </tr>
 </tbody>
 </table>
