@@ -74,6 +74,18 @@ class SolaceGlobalMonitorTask implements Runnable {
             queue.remove("QueueName");
             printMetrics(prefix, queue);
         }
+
+        // Run bridges check
+        for(Map<String,Object> bridge: svc.checkGlobalBridgeList()) {
+            String vpnname= (String) bridge.get("VpnName");
+            String bridgename= (String) bridge.get("BridgeName");
+            String prefix = metricPrefix
+                    + "MsgVpns|" + vpnname
+                    + "|Bridges|"  + bridgename;
+            bridge.remove("VpnName");
+            bridge.remove("BridgeName");
+            printMetrics(prefix, bridge);
+        }
         logger.debug("</SolaceGlobalMonitorTask.run>");
     }
 
