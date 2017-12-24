@@ -13,6 +13,7 @@ plane via HTTP. The following metrics are currently gathered by this monitor:
 * Global HA redundancy metrics
 * Global service status
 * Global queue summaries
+* Global bridge summaries
 
 ## Installation
 
@@ -22,7 +23,8 @@ to generate Java request and reply objects. I have a project for generating thes
 libraries and installing them to Maven repositories: https://github.com/koverton/semp_jaxb
 
 I have provided initial libraries for the latest Solace hardware and software versions 
-in the `mvn_libs/` directory which you can install locally to build and deploy:
+in the `mvn_libs/` directory which you can install to your maven repository to build and deploy 
+via maven:
 
 ```bash
 cd mvn_libs
@@ -30,11 +32,11 @@ cd mvn_libs
 ```
 
 You will also need to obtain the AppDynamics `machine-agent.jar` and `appd-exts-commons.jar` 
-appropriate to the version of you AppDynamics MachineAgent. You should get this from AppDynamics.
+appropriate to the version of your AppDynamics MachineAgent. You should get this from AppDynamics.
 
 ### Build and Deploy Steps
 
-1. Type `mvn clean install` in the commandline from the solace-monitoring-extension directory
+1. Type `mvn clean install` at the commandline from the solace-monitoring-extension directory
 2. Deploy the output file `target/SolaceMonitor.zip` into `<machineagent install dir>/monitors/`
 3. Unzip the deployed file
 4. Restart the MachineAgent
@@ -46,11 +48,11 @@ appropriate to the version of you AppDynamics MachineAgent. You should get this 
 For simple Test or Dev environments Solace admin credentials can be stored in the 
 config.yml file in cleartext. For each server in your configuration, the `password` 
 configuration value is assumed to be cleartext and is used by the extension in that manner.
-For higher environments, it is a best practice to only store encrypted versions of the 
-passwords and the Solace monitoring extension provides support for that.
+For higher environments, the best practice is to only store encrypted versions of the 
+passwords; the Solace monitoring extension provides the following support for that.
 
 A script for encrypting your passwords is included in the distributable bundle that 
-you can run at the commandline with your own hash-key. The output of that script can 
+can be run at the commandline with your own hash-key. The output of that script can 
 be stored in the `encrypted-password` field of each server credentials instead of `password`.
 
 ```bash
@@ -61,7 +63,7 @@ Enter password to encrypt:
 **********************************************
 ```
 
-It is best practice to randomly generate your hash-key rather than entering something yourself. 
+It is best practice to randomly generate a strong hash-key rather than entering something yourself. 
 The hash-key you use to encrypt the password must also be saved, we recommend adding it to the 
 MachineAgent commandline as the env-property `appdynamics.extensions.key`. Typically you will 
 have other definitions, for example:
@@ -73,7 +75,7 @@ have other definitions, for example:
 ```
 
 If for any reason you cannot set this property via the MachineAgent commandline it can alternatively 
-be added to the extension's config.yml as the server configuration `encryption-key`. Note this 
+be added to the extension's `config.yml` as the server configuration `encryption-key`. Note this 
 must be present for each server configuration specifying `encrypted-password`.
 	
 ## Directory Structure
@@ -85,7 +87,7 @@ must be present for each server configuration specifying `encrypted-password`.
 </tr>
 <tr>
 <td class='confluenceTd'> mvn_libs </td>
-<td class='confluenceTd'> Contains pre-built SEMP serialization objects required for this build and an installer script </td>
+<td class='confluenceTd'> Contains pre-built SEMP serialization libs required for this build and an installer script </td>
 </tr>
 <tr>
 <td class='confluenceTd'> src/main/resources/conf </td>
@@ -118,7 +120,7 @@ Solace deployment you want to monitor.
 
 <table><tbody>
 <tr>
-<th align="left"> Configuration </th>
+<th align="left"> Config.yml Configuration </th>
 <th align="left"> Description </th>
 </tr>
 <tr>
@@ -206,7 +208,7 @@ excludeQueues: ["ignoreThis", "ignoreThat"]
 ## Next Steps / TODO Items
 
 1. Fix redundancy status for hardware queries (as of 8.2.0)
-2. Add bridge statistics / status
+2. Add more statistics to all entities; current version emphasizes status checks
 3. More backwards compatibility schemas
 4. Better calculation to match parsing schema version to the version presented by the router
-5. When too many schemas need to be supported, load only the required libs dynamically via child classloaders
+5. When many schemas need to be supported, should load only the servers' required libs dynamically via child classloaders

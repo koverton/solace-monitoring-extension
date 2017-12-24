@@ -170,6 +170,29 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
         }
         return results;
     }
+    public List<Map<String,Object>> getGlobalBridgeList(RpcReply reply) {
+        List<Map<String,Object>> results = new ArrayList<>();
+        List<RpcReply.Rpc.Show.Bridge.Bridges.Bridge2> bridges = reply.getRpc()
+                .getShow()
+                .getBridge()
+                .getBridges()
+                .getBridge();
+        for(RpcReply.Rpc.Show.Bridge.Bridges.Bridge2 b : bridges) {
+            // Skip the generated local side of bridges that the user doesn't configure
+            if (b.getAdminState().equals("N/A"))
+                continue;
+            Map<String, Object> result = new HashMap<>();
+            result.put("BridgeName", b.getBridgeName());
+            result.put("VpnName", b.getLocalVpnName());
+            result.put("IsEnabled", b.getAdminState().equals("Enabled") ? 1:0);
+            result.put("IsConnected", b.getConnectionEstablisher().equals("Local") ? 1:0);
+            result.put("IsInSync", b.getInboundOperationalState().equals("Ready-InSync") ? 1:0);
+            result.put("IsBoundToBridgeQueue", b.getQueueOperationalState().equals("Bound") ? 1:0);
+            result.put("UptimeInSecs", b.getConnectionUptimeInSeconds().longValue());
+            results.add(result);
+        }
+        return results;
+    }
 
 
     private Double safeParseDouble(String fieldName, String input) {

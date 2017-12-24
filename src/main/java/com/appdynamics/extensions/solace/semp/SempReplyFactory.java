@@ -17,4 +17,5 @@ public interface SempReplyFactory<Reply> {
 
     List<Map<String,Object>> getQueueList(Reply reply);
 
+    List<Map<String,Object>> getGlobalBridgeList(Reply reply);
 }

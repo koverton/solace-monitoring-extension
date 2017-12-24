@@ -13,4 +13,6 @@ public interface SempRequestFactory<Request> {
     Request createGlobalServiceRequest(String sempVersion);
 
     Request createQueueListRequest(String sempVersion);
+
+    Request createGlobalBridgeListRequest(String sempVersion);
 }

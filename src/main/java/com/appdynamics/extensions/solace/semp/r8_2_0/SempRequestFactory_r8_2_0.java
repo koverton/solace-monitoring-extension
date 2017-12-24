@@ -55,6 +55,13 @@ public class SempRequestFactory_r8_2_0 implements SempRequestFactory<Rpc> {
         return request;
     }
 
+    public Rpc createGlobalBridgeListRequest(String sempVersion) {
+        final Rpc request = newShowRequest(sempVersion);
+        request.getShow().setBridge(factory.createRpcShowBridge());
+        request.getShow().getBridge().setBridgeNamePattern("*");
+        //request.getShow().getBridge().setDetail(factory.createKeywordType());
+        return request;
+    }
 
     private Rpc newShowRequest(String sempVersion) {
         final Rpc request = new Rpc();
