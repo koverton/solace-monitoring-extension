@@ -107,6 +107,7 @@ public class SolaceMonitor extends AManagedMonitor {
             if(configuration != null && configuration.getMetricWriter() != null) {
                 configuration.getMetricWriter().registerError(e.getMessage(), e);
             }
+            logger.error("Exception thrown attempting to initialize and execute SolaceMonitor.", e);
         }
         logger.debug("</SolaceMonitor.execute>");
         return null;
