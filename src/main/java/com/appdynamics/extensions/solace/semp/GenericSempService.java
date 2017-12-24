@@ -128,6 +128,27 @@ class GenericSempService<Request,Reply> implements SempService {
         return result;
     }
 
+    public List<Map<String,Object>> checkGlobalBridgeList() {
+        logger.debug("<GenericSempService.checkGlobalBridgeList>");
+        Request request = ctx.getReqFactory().createGlobalBridgeListRequest(ctx.getSchemaVersion());
+        String xml = ctx.getMarshaller().toRequestXml(request);
+
+        String response = ctx.getConnector().doPost(xml);
+        @SuppressWarnings("unchecked")
+        Reply reply = ctx.getMarshaller().fromReplyXml(response);
+
+        List<Map<String,Object>> result;
+        if (!ctx.getReplyFactory().isSuccess(reply)) {
+            logger.error("Empty BridgeList because no data in the response.");
+            result = new ArrayList<>();
+        }
+        else {
+            result = ctx.getReplyFactory().getGlobalBridgeList(reply);
+        }
+        logger.debug("</GenericSempService.checkGlobalBridgeList>");
+        return result;
+    }
+
     public String getDisplayName() {
         return ctx.getConnector().getDisplayName();
     }

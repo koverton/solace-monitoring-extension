@@ -4,6 +4,7 @@ import com.appdynamics.extensions.solace.semp.SempReplyFactory;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.QueueType;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.RpcReply;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.SolStatsType;
+import com.solacesystems.semp_jaxb.r8_6VMR.reply.RpcReply.Rpc.Show.Bridge.Bridges.Bridge2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -147,10 +148,9 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
         return result;
     }
 
-    @Override
-    public List<Map<String, Object>> getQueueList(RpcReply rpcReply) {
+    public List<Map<String, Object>> getQueueList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
-        List<QueueType> queues = rpcReply.getRpc()
+        List<QueueType> queues = reply.getRpc()
                 .getShow()
                 .getQueue()
                 .getQueues()
@@ -165,6 +165,30 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
             result.put("MessagesEnqueued", q.getInfo().getNumMessagesSpooled().intValue());
             result.put("UsageInMB", q.getInfo().getCurrentSpoolUsageInMb());
             result.put("ConsumerCount", q.getInfo().getBindCount().intValue());
+            results.add(result);
+        }
+        return results;
+    }
+
+    public List<Map<String,Object>> getGlobalBridgeList(RpcReply reply) {
+        List<Map<String,Object>> results = new ArrayList<>();
+        List<Bridge2> bridges = reply.getRpc()
+                .getShow()
+                .getBridge()
+                .getBridges()
+                .getBridge();
+        for(Bridge2 b : bridges) {
+            // Skip the generated local side of bridges that the user doesn't configure
+            if (b.getAdminState().equals("N/A"))
+                continue;
+            Map<String, Object> result = new HashMap<>();
+            result.put("BridgeName", b.getBridgeName());
+            result.put("VpnName", b.getLocalVpnName());
+            result.put("IsEnabled", b.getAdminState().equals("Enabled") ? 1:0);
+            result.put("IsConnected", b.getConnectionEstablisher().equals("Local") ? 1:0);
+            result.put("IsInSync", b.getInboundOperationalState().equals("Ready-InSync") ? 1:0);
+            result.put("IsBoundToBridgeQueue", b.getQueueOperationalState().equals("Bound") ? 1:0);
+            result.put("UptimeInSecs", b.getConnectionUptimeInSeconds().longValue());
             results.add(result);
         }
         return results;

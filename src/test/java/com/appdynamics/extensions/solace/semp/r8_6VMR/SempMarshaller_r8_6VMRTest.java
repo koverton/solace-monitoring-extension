@@ -8,6 +8,7 @@ import javax.xml.bind.JAXBException;
 import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -87,5 +88,19 @@ public class SempMarshaller_r8_6VMRTest
         RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-backup.xml"));
         Map<String, Object> redundancy = factory.getGlobalRedundancy(reply);
         assertNotNull(redundancy);
+    }
+
+    @Test
+    public void showQueueListTest() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-queues.detail.xml"));
+        List<Map<String, Object>> queues = factory.getQueueList(reply);
+        assertNotNull(queues);
+    }
+
+    @Test
+    public void showBridgeListTest() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-bridges.xml"));
+        List<Map<String, Object>> bridges = factory.getGlobalBridgeList(reply);
+        assertNotNull(bridges);
     }
 }
