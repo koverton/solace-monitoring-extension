@@ -125,22 +125,22 @@ Solace deployment you want to monitor.
 <th align="left"> Description </th>
 </tr>
 <tr>
-<td class='confluenceTd'> metricPrefix </td>
+<td class='confluenceTd'> <tt>metricPrefix</tt> </td>
 <td class='confluenceTd'> This will create this metric in all the tiers, 
 under this path; it should always start with "Custom Metrics|Solace", but can be varied 
 from there onwards.</td>
 </tr>
 <tr>
-<td class='confluenceTd'> Servers </td>
+<td class='confluenceTd'> <tt>Servers</tt> </td>
 <td class='confluenceTd'> List of all server details to query and upload to the Controller; 
 see table below for each server configuration </td>
 </tr>
 <tr>
-<td class='confluenceTd'> excludeMsgVpns </td>
+<td class='confluenceTd'> <tt>excludeMsgVpns</tt> </td>
 <td class='confluenceTd'> List of MsgVPNs for which to <B>not</B> upload metrics.</td>
 </tr>
 <tr>
-<td class='confluenceTd'> excludeQueues </td>
+<td class='confluenceTd'> <tt>excludeQueues</tt> </td>
 <td class='confluenceTd'> List of Queues for which to <B>not</B> upload metrics.</td>
 </tr>
 </tbody>
