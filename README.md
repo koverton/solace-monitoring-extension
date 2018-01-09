@@ -2,7 +2,8 @@
 This java library provides an AppDynamics MachineAgent extension to query 
 Solace message brokers and update an ADController.
 
-This extension works only with the java standalone machine agent.
+This extension works only with the java standalone machine agent. It has been tested 
+against a Machine Agent v4.3.7.3 GA build.
 
 Solace is a multi-protocol Message-Oriented middleware, providing a self-contained 
 standalone message broker server in both hardware and containerized formats.
