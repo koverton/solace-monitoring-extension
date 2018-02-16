@@ -1,27 +1,26 @@
-<rpc-reply semp-version="soltr/8_7VMR">
+<rpc-reply semp-version="soltr/8_8VMR">
   <rpc>
     <show>
       <redundancy>
-        <config-status>Enabled</config-status>
-        <redundancy-status>Up</redundancy-status>
-        <last-failure-reason>One or more nodes is offline</last-failure-reason>
-        <last-failure-time>Feb 13 2018 09:48:19 UTC</last-failure-time>
+        <config-status>Shutdown</config-status>
+        <redundancy-status>Down</redundancy-status>
+        <last-failure-reason></last-failure-reason>
+        <last-failure-time>N/A</last-failure-time>
         <operating-mode>Message Routing Node</operating-mode>
         <switchover-mechanism>Hostlist</switchover-mechanism>
         <auto-revert>false</auto-revert>
-        <redundancy-mode>Active/Standby</redundancy-mode>
-        <active-standby-role>Backup</active-standby-role>
-        <mate-router-name>solprimary</mate-router-name>
-        <mate-connect-via-addr>192.168.56.201:8741</mate-connect-via-addr>
+        <redundancy-mode>N/A</redundancy-mode>
+        <active-standby-role>Primary</active-standby-role>
+        <mate-connect-via-addr></mate-connect-via-addr>
         <oper-status>
-          <adb-link-up>true</adb-link-up>
+          <adb-link-up>false</adb-link-up>
           <adb-link-last-failure-reason>Mate Link Restart</adb-link-last-failure-reason>
-          <adb-link-last-failure-time>Feb 13 2018 09:48:11 UTC</adb-link-last-failure-time>
-          <adb-hello-up>true</adb-hello-up>
+          <adb-link-last-failure-time>Feb 13 2018 10:28:02 UTC</adb-link-last-failure-time>
+          <adb-hello-up>false</adb-hello-up>
           <adb-hello-last-failure-reason>N/A</adb-hello-last-failure-reason>
           <adb-hello-last-failure-time>Jan  1 1970 00:00:00 UTC</adb-hello-last-failure-time>
           <adb-hello-avg-latency>0</adb-hello-avg-latency>
-          <adb-hello-max-latency>80</adb-hello-max-latency>
+          <adb-hello-max-latency>0</adb-hello-max-latency>
         </oper-status>
         <adb-hello-interval>1000</adb-hello-interval>
         <adb-hello-timeout>3000</adb-hello-timeout>
@@ -32,31 +31,22 @@
               <vrrp-vrid>-1</vrrp-vrid>
             </config>
             <status>
-              <activity>Shutdown</activity>
-            </status>
-          </primary>
-          <backup>
-            <config>
-              <routing-interface>intf0:1</routing-interface>
-              <vrrp-vrid>-1</vrrp-vrid>
-            </config>
-            <status>
-              <activity>Mate Active</activity>
+              <activity>Local Active</activity>
               <vrrp>Initialize</vrrp>
               <routing-interface>Up</routing-interface>
-              <vrrp-priority>100</vrrp-priority>
+              <vrrp-priority>250</vrrp-priority>
               <detail>
                 <priority-reported-by-mate>
-                  <summary>Active</summary>
+                  <summary>None</summary>
                   <cspf>None</cspf>
-                  <adb-hello>Active</adb-hello>
-                  <vrrp>Active (250)</vrrp>
+                  <adb-hello>None</adb-hello>
+                  <vrrp>None (-1)</vrrp>
                 </priority-reported-by-mate>
                 <activity-status>
-                  <summary>Mate Active</summary>
+                  <summary>Local Active</summary>
                   <operational-status>
                     <summary>Ready</summary>
-                    <redundancy-config>Enabled</redundancy-config>
+                    <redundancy-config>Shutdown</redundancy-config>
                     <message-spool>Ready</message-spool>
                   </operational-status>
                   <smrp-status>
@@ -66,32 +56,32 @@
                     <db-sync>Ready</db-sync>
                   </smrp-status>
                   <internal>
-                    <priority>Standby</priority>
-                    <activity>Mate Active</activity>
-                    <redundancy>Bkup-Standby</redundancy>
+                    <priority>Active</priority>
+                    <activity>Local Active</activity>
+                    <redundancy>Pri-Shutdown</redundancy>
                   </internal>
                 </activity-status>
                 <message-spool-status>
                   <summary>Ready</summary>
                   <message-spool-config>Enabled</message-spool-config>
                   <status-if-enabled>
-                    <cvrid-config-ready>true</cvrid-config-ready>
+                    <cvrid-config-ready>false</cvrid-config-ready>
                     <adm-card-ready>true</adm-card-ready>
                     <flash-module-ready>true</flash-module-ready>
                     <power-module-ready>true</power-module-ready>
                     <adm-contents-ready>true</adm-contents-ready>
-                    <local-contents-key>63.211.186.110:35,22</local-contents-key>
-                    <mate-contents-key>63.211.186.110:35,22</mate-contents-key>
+                    <local-contents-key>240.148.49.101:2,1</local-contents-key>
+                    <mate-contents-key>Invalid</mate-contents-key>
                     <router-schema-match>true</router-schema-match>
                     <disk-ready>true</disk-ready>
                     <disk-contents>Ready</disk-contents>
-                    <disk-key-primary>63.211.186.110:35,22</disk-key-primary>
-                    <disk-key-backup>63.211.186.110:35,22</disk-key-backup>
+                    <disk-key-primary>240.148.49.101:2,1</disk-key-primary>
+                    <disk-key-backup>240.148.49.101:2,1</disk-key-backup>
                     <adm-datapath-ready>true</adm-datapath-ready>
                     <lock-owner></lock-owner>
                   </status-if-enabled>
                   <internal>
-                    <redundancy>AD-Standby</redundancy>
+                    <redundancy>AD-Active</redundancy>
                   </internal>
                 </message-spool-status>
                 <last-update-status>
@@ -101,34 +91,39 @@
                 </last-update-status>
               </detail>
             </status>
+          </primary>
+          <backup>
+            <config>
+              <routing-interface>intf0:1</routing-interface>
+              <vrrp-vrid>-1</vrrp-vrid>
+            </config>
+            <status>
+              <activity>Shutdown</activity>
+            </status>
           </backup>
         </virtual-routers>
         <mismatch-info>
           <local>
             <primary-cvrid>
+              <ip-address>240.148.49.101</ip-address>
             </primary-cvrid>
             <backup-cvrid>
-              <ip-address>63.211.186.110</ip-address>
             </backup-cvrid>
             <mate-address>
             </mate-address>
             <ad-enabled-cvrid>
-              <ip-address>63.211.186.110</ip-address>
+              <ip-address>240.148.49.101</ip-address>
             </ad-enabled-cvrid>
             <disk-wwn>N/A</disk-wwn>
           </local>
           <received-from-mate>
             <primary-cvrid>
-              <ip-address>0.0.0.0</ip-address>
             </primary-cvrid>
             <backup-cvrid>
-              <ip-address>63.211.186.110</ip-address>
             </backup-cvrid>
             <mate-address>
-              <ip-address>192.168.56.201</ip-address>
             </mate-address>
             <ad-enabled-cvrid>
-              <ip-address>63.211.186.110</ip-address>
             </ad-enabled-cvrid>
             <disk-wwn>N/A</disk-wwn>
           </received-from-mate>

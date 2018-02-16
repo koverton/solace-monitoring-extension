@@ -1,5 +1,6 @@
 package com.appdynamics.extensions.solace.semp.r8_6VMR;
 
+import com.appdynamics.extensions.solace.semp.MsgSpoolMetrics;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -69,16 +70,46 @@ public class SempMarshaller_r8_6VMRTest
     }
 
     @Test
-    public void showMessageSpoolTest() throws Exception {
-        RpcReply reply = marshaller.fromReplyXml(readFile("show-message-spool.detail.xml"));
+    public void showPrimaryMessageSpoolTest() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-message-spool.detail-primary.xml"));
         Map<String, Object> info =
                 factory.getGlobalMsgSpool(reply);
         assertNotNull(info);
+
+        Integer isEnabled = (Integer)info.get(MsgSpoolMetrics.IsEnabled);
+        Integer isActive = (Integer)info.get(MsgSpoolMetrics.IsActive);
+        Integer isStandby = (Integer)info.get(MsgSpoolMetrics.IsStandby);
+        Integer isDatapathUp = (Integer)info.get(MsgSpoolMetrics.IsDatapathUp);
+        Integer isSynchronized = (Integer)info.get(MsgSpoolMetrics.IsSynchronized);
+        assertEquals(1, isEnabled.intValue());
+        assertEquals(1, isActive.intValue());
+        assertEquals(0, isStandby.intValue());
+        assertEquals(1, isDatapathUp.intValue());
+        assertEquals(1, isSynchronized.intValue());
+    }
+
+    @Test
+    public void showBackupMessageSpoolTest() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-message-spool.detail-backup.xml"));
+        Map<String, Object> info =
+                factory.getGlobalMsgSpool(reply);
+        assertNotNull(info);
+
+        Integer isEnabled = (Integer)info.get(MsgSpoolMetrics.IsEnabled);
+        Integer isActive = (Integer)info.get(MsgSpoolMetrics.IsActive);
+        Integer isStandby = (Integer)info.get(MsgSpoolMetrics.IsStandby);
+        Integer isDatapathUp = (Integer)info.get(MsgSpoolMetrics.IsDatapathUp);
+        Integer isSynchronized = (Integer)info.get(MsgSpoolMetrics.IsSynchronized);
+        assertEquals(1, isEnabled.intValue());
+        assertEquals(0, isActive.intValue());
+        assertEquals(1, isStandby.intValue());
+        assertEquals(0, isDatapathUp.intValue());
+        assertEquals(0, isSynchronized.intValue());
     }
 
     @Test
     public void showPrimaryRedundancyTest() throws Exception {
-        RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-primary.xml"));
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-backup.xml"));
         Map<String, Object> redundancy = factory.getGlobalRedundancy(reply);
         assertNotNull(redundancy);
     }

@@ -212,8 +212,14 @@ excludeQueues: ["ignoreThis", "ignoreThat"]
 
 ## Next Steps / TODO Items
 
+In priority order:
 1. Fix redundancy status for hardware queries (as of 8.2.0)
 2. Add more statistics to all entities; current version emphasizes status checks
-3. More backwards compatibility schemas
-4. Better calculation to match parsing schema version to the version presented by the router
-5. When many schemas need to be supported, should load only the servers' required libs dynamically via child classloaders
+3. Per-metric documentation
+4. More backwards compatibility schemas
+5. Better calculation to match parsing schema version to the version presented by the router
+6. When many schemas need to be supported, should load only the servers' required libs dynamically via child classloaders
+
+Additional metrics that make sense to add:
+1. Client connections
+2. DR links
