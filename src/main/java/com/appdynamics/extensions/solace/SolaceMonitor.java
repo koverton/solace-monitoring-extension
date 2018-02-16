@@ -113,7 +113,6 @@ public class SolaceMonitor extends AManagedMonitor {
         return null;
     }
 
-/**
     public static void main( String[] args )
     {
         try {
@@ -127,7 +126,6 @@ public class SolaceMonitor extends AManagedMonitor {
             ex.printStackTrace();
         }
     }
-**/
     private MonitorConfiguration configuration;
 
 }

@@ -1,0 +1,3 @@
+<rpc semp-version="soltr/8_6VMR">
+	<show><message-spool><detail/></message-spool></show>
+</rpc>
