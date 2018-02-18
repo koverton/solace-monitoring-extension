@@ -1,131 +1,120 @@
 package com.appdynamics.extensions.solace;
 
-import com.appdynamics.extensions.conf.MonitorConfiguration;
-import com.appdynamics.extensions.crypto.CryptoUtil;
-import com.appdynamics.extensions.util.MetricWriteHelper;
-import com.appdynamics.extensions.util.MetricWriteHelperFactory;
+import com.appdynamics.extensions.ABaseMonitor;
+import com.appdynamics.extensions.MetricWriteHelper;
+import com.appdynamics.extensions.TasksExecutionServiceProvider;
 import com.appdynamics.extensions.solace.semp.SempService;
 import com.appdynamics.extensions.solace.semp.SempServiceFactory;
 import com.appdynamics.extensions.solace.semp.Sempv1Connector;
-import com.singularity.ee.agent.systemagent.api.AManagedMonitor;
-import com.singularity.ee.agent.systemagent.api.TaskExecutionContext;
-import com.singularity.ee.agent.systemagent.api.TaskOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.*;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-/**
- * This extension extracts metrics from Solace message brokers remotely via HTTP and
- * writes those metrics to an AppDynamics Controller. It is designed to run under
- * an AppDynamics standalone Java MachineAgent.
- */
-public class SolaceMonitor extends AManagedMonitor {
+import static com.appdynamics.extensions.solace.MonitorConfigs.*;
+
+public class SolaceMonitor extends ABaseMonitor {
     private static final Logger logger = LoggerFactory.getLogger(SolaceMonitor.class);
+    private static final String DEFAULT_PREFIX = "Custom Metrics|Solace|";
+    private static final String CONFIG_ARG = "config-file";
 
-    final private static String MON_VERSION = "1.0";
-
-    public SolaceMonitor() {
-        logger.info(String.format("Using SolaceMonitor Version [%s]", MON_VERSION));
-    }
-
-    protected void initialize(Map<String, String> argsMap) {
-        logger.debug("<SolaceMonitor.initialize>");
-        if (configuration == null) {
-            logger.info("Creating new SolaceMonitor MonitorConfiguration because it doesn't exist.");
-            MetricWriteHelper metricWriter = MetricWriteHelperFactory.create(this);
-            MonitorConfiguration conf = new MonitorConfiguration(
-                    "Custom Metrics|Solace",
-                    new TaskRunner(),
-                    metricWriter);
-            final String configFilePath = argsMap.get("config-file");
-            conf.setConfigYml(configFilePath);
-            conf.checkIfInitialized(MonitorConfiguration.ConfItem.METRIC_PREFIX,
-                    MonitorConfiguration.ConfItem.CONFIG_YML,
-                    MonitorConfiguration.ConfItem.EXECUTOR_SERVICE);
-            this.configuration = conf;
-        }
-        logger.debug("</SolaceMonitor.initialize>");
-    }
-
-    private class TaskRunner implements Runnable {
-        public TaskRunner() { logger.info("Creating a new SolaceMonitor TaskRunner"); }
-        @Override
-        public void run () {
-            logger.debug("<SolaceMonitor.TaskRunner.run>");
-            Map<String, ?> config = configuration.getConfigYml();
-            List<Map> servers = (List) config.get("servers");
-            if (servers != null && !servers.isEmpty()) {
-                for (Map server : servers) {
-                    String mgmtUrl     = (String)server.get("mgmtUrl");
-                    String adminUser   = (String)server.get("adminUser");
-                    String adminPass   = CryptoUtil.getPassword(server);
-                    String displayName = (String)server.get("displayName");
-                    try {
-                        logger.info("Server:{}, Mgmt URL:{}, Admin User:{}",
-                                    displayName, mgmtUrl, adminUser);
-                        SempService sempService;
-                        if (url2svc.containsKey(mgmtUrl)) {
-                            sempService = url2svc.get(mgmtUrl);
-                        }
-                        else {
-                            Sempv1Connector connector = new Sempv1Connector(
-                                    mgmtUrl,
-                                    adminUser,
-                                    adminPass,
-                                    displayName);
-                            sempService = SempServiceFactory.createSempService(connector);
-                            url2svc.put(mgmtUrl, sempService);
-                        }
-                        SolaceGlobalMonitorTask task = new SolaceGlobalMonitorTask(configuration, sempService);
-                        configuration.getExecutorService().execute(task);
-                    }
-                    catch(MalformedURLException ex) {
-                        logger.error("Exception thrown creating and executing service request", ex);
-                        ex.printStackTrace();
-                    }
-                }
-            } else {
-                logger.error("The stats read from the metric xml is empty. Please make sure that the metrics xml is correct");
-            }
-            logger.debug("</SolaceMonitor.TaskRunner.run>");
-        }
-        final private Map<String,SempService> url2svc = new HashMap<>();
+    @Override
+    protected String getDefaultMetricPrefix() {
+        return DEFAULT_PREFIX;
     }
 
     @Override
-    public TaskOutput execute(Map<String, String> argMap, TaskExecutionContext context) {
-        logger.debug("<SolaceMonitor.execute>The raw arguments are {}", argMap);
-        try {
-            initialize(argMap);
-            configuration.executeTask();
+    public String getMonitorName() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
+    protected void doRun(TasksExecutionServiceProvider serviceProvider) {
+        String baseMetricPrefix  = (String) configuration.getConfigYml().get(METRIC_PREFIX);
+        List<String> vpnFilter   = Helper.getConfigListOrNew(configuration, EXCLUDE_MSG_VPNS);
+        List<String> queueFilter = Helper.getConfigListOrNew(configuration, EXCLUDE_QUEUES);
+        List<Map<String, String>> servers = Helper.getMonitorServerList(configuration);
+        MetricWriteHelper metricWriter = serviceProvider.getMetricWriteHelper();
+
+        if (logger.isDebugEnabled()) {
+            for (String excludedVpn : vpnFilter)
+                logger.debug("Excluded VPN: {}", excludedVpn);
         }
-        catch(Exception e){
-            if(configuration != null && configuration.getMetricWriter() != null) {
-                configuration.getMetricWriter().registerError(e.getMessage(), e);
+        if (logger.isDebugEnabled()) {
+            for (String excludedQueue : queueFilter)
+                logger.debug("Excluded Queue: {}", excludedQueue);
+        }
+
+        for (Map<String, String> server : servers) {
+            String mgmtUrl     = server.get(MGMT_URL);
+            String adminUser   = server.get(ADMIN_USER);
+            String adminPass   = Helper.getPassword(server);
+            String displayName = server.get(DISPLAY_NAME);
+            Integer timeout    = Helper.getIntOrDefault(server, TIMEOUT, Sempv1Connector.DEFAULT_TIMEOUT);
+            logger.info("Adding task to poll [Server:{}, Mgmt URL:{}, Admin User:{}]",
+                    displayName, mgmtUrl, adminUser);
+
+            // Validate the required server fields
+            if (!Helper.validateRequiredField(MGMT_URL, mgmtUrl, displayName))
+                continue;
+            if (!Helper.validateRequiredField(ADMIN_USER, adminUser, displayName))
+                continue;
+
+            try {
+                Sempv1Connector connector = new Sempv1Connector(
+                        mgmtUrl,
+                        adminUser,
+                        adminPass,
+                        displayName,
+                        timeout);
+                SempService sempService = SempServiceFactory.createSempService(connector);
+                if (sempService != null) {
+                    serviceProvider.submit(displayName,
+                            new SolaceGlobalMonitorTask(metricWriter, baseMetricPrefix, vpnFilter, queueFilter, sempService));
+                }
+                else {
+                    logger.error("Could not create SEMP Service due to exception; SKIPPED POLLING OF SERVER [{}]",
+                            displayName);
+                }
             }
-            logger.error("Exception thrown attempting to initialize and execute SolaceMonitor.", e);
+            catch(MalformedURLException ex) {
+                logger.error("MalformedURLException thrown creating and executing service request for server "+displayName, ex);
+            }
         }
-        logger.debug("</SolaceMonitor.execute>");
-        return null;
+    }
+
+    @Override
+    protected int getTaskCount() {
+        return Helper.getMonitorServerList(configuration).size();
     }
 
     public static void main( String[] args )
     {
         try {
-            SolaceMonitor monitor = new SolaceMonitor();
-            Map<String, String> taskArgs = new HashMap<>();
-            taskArgs.put("config-file", "src/main/resources/conf/config.yml");
-            monitor.execute(taskArgs, null);
-            Thread.sleep(3000);
+            final SolaceMonitor monitor = new SolaceMonitor();
+            final Map<String, String> taskArgs = new HashMap<>();
+
+            taskArgs.put(CONFIG_ARG, "src/main/resources/conf/config.yml");
+
+            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+            scheduler.scheduleAtFixedRate(() -> {
+                try {
+                    monitor.execute(taskArgs, null);
+                } catch (Exception e) {
+                    logger.error("Error while running the task", e);
+                }
+            }, 2, 10, TimeUnit.SECONDS);
         }
-        catch(InterruptedException ex) {
+        catch(Exception ex) {
+            logger.error("Exception while executing Solace Monitor", ex);
             ex.printStackTrace();
         }
     }
-    private MonitorConfiguration configuration;
 
 }

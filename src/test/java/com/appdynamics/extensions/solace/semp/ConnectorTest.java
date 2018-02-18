@@ -13,8 +13,7 @@ public class ConnectorTest {
     @Test
     public void versionTest() throws Exception {
         Sempv1Connector connector = new Sempv1Connector(
-                //"http://192.168.56.201:8080/SEMP",
-                "http://10.104.27.94:8080/SEMP",
+                "http://1.1.1.1:8080/SEMP",
                 "admin",
                 "admin",
                 "jimmy");
@@ -28,8 +27,7 @@ public class ConnectorTest {
     @Test (expected = IllegalArgumentException.class)
     public void emptyVersionTest() throws Exception {
         Sempv1Connector connector = new Sempv1Connector(
-                //"http://192.168.56.201:8080/SEMP",
-                "http://10.104.27.94:8080/SEMP",
+                "http://1.1.1.1:8080/SEMP",
                 "admin",
                 "admin",
                 "jimmy");

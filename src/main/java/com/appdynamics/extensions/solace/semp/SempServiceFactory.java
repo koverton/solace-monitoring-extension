@@ -6,11 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SempServiceFactory {
     private static final Logger logger = LoggerFactory.getLogger(SempServiceFactory.class);
@@ -25,7 +20,10 @@ public class SempServiceFactory {
         logger.debug("<SempServiceFactory.createSempService>");
         SempVersion sempVersion = connector.checkBrokerVersion();
 
-        if (sempVersion.getPlatform().equals(SempVersion.Platform.VMR)) {
+        if (!sempVersion.isValid()) {
+            logger.error("Not creating SempService because valid SEMP-version could not be detected");
+        }
+        else if (sempVersion.getPlatform().equals(SempVersion.Platform.VMR)) {
             logger.info("SempServiceFactory instantiating VMR SEMP-service");
 
             // Prefer newest version we can
@@ -36,7 +34,7 @@ public class SempServiceFactory {
                                     new SempRequestFactory_r8_6VMR(),
                                     new SempReplyFactory_r8_6VMR(),
                                     new SempMarshaller_r8_6VMR(),
-                                    SempVersion.v8_6VMR.getVersionString()));
+                                    sempVersion.getVersionString()));
                 } catch (JAXBException ex) {
                     logger.error("Exception thrown attempting to create SempService version: "
                             + SempVersion.v8_6VMR.getVersionString(), ex);
@@ -55,7 +53,7 @@ public class SempServiceFactory {
                                     new SempRequestFactory_r8_2_0(),
                                     new SempReplyFactory_r8_2_0(),
                                     new SempMarshaller_r8_2_0(),
-                                    SempVersion.v8_2_0.getVersionString()));
+                                    sempVersion.getVersionString()));
                 }
                 catch(JAXBException ex) {
                     logger.error("Exception thrown attempting to create SempService version: "

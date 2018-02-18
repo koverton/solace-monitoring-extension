@@ -1,8 +1,8 @@
 package com.appdynamics.extensions.solace;
 
-import com.appdynamics.extensions.conf.MonitorConfiguration;
+import com.appdynamics.extensions.AMonitorTaskRunnable;
+import com.appdynamics.extensions.MetricWriteHelper;
 import com.appdynamics.extensions.solace.semp.*;
-import com.appdynamics.extensions.util.MetricWriteHelper;
 import com.singularity.ee.agent.systemagent.api.MetricWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,43 +13,27 @@ import java.util.*;
  * Worker task for all Solace metrics gathering. Executes all desired metrics queries
  * on the SempService that is provided to it.
  */
-class SolaceGlobalMonitorTask implements Runnable {
+class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     private static final Logger logger = LoggerFactory.getLogger(SolaceGlobalMonitorTask.class);
 
     private static final char DELIM = '|';
     private static final String VPNS_PREFIX = "MsgVpns";
 
-    SolaceGlobalMonitorTask(MonitorConfiguration config, SempService svc) {
-        this.config = config;
-        this.svc    = svc;
-
-        this.vpnFilter   = getConfigListOrNew(config, MonitorConfigs.EXCLUDE_MSG_VPNS);
-        if (logger.isDebugEnabled()) {
-            for (String excludedVpn : vpnFilter)
-                logger.debug("Excluded VPN: {}", excludedVpn);
-        }
-        this.queueFilter = getConfigListOrNew(config, MonitorConfigs.EXCLUDE_QUEUES);
-        if (logger.isDebugEnabled()) {
-            for (String excludedQueue : vpnFilter)
-                logger.debug("Excluded Queue: {}", excludedQueue);
-        }
+    SolaceGlobalMonitorTask(MetricWriteHelper metricWriter, String basePrefix, List<String> vpnFilter, List<String> queueFilter, SempService svc) {
+        this.metricWriter = metricWriter;
+        this.basePrefix   = basePrefix;
+        this.vpnFilter    = vpnFilter;
+        this.queueFilter  = queueFilter;
+        this.svc          = svc;
     }
 
-    private List<String> getConfigListOrNew(MonitorConfiguration config, String key) {
-        if (config.getConfigYml().containsKey(key))
-            return (List<String>) config.getConfigYml().get(key);
-        else {
-            logger.warn("No list found configured for key [{}]", key);
-            return new ArrayList<>();
-        }
-    }
 
     @Override
     public void run() {
         logger.debug("<SolaceGlobalMonitorTask.run>");
         String serverName = svc.getDisplayName();
-        String metricPrefix = config.getConfigYml().get(MonitorConfigs.METRIC_PREFIX)  + serverName + DELIM;
-        logger.debug("Configured metricPrefix: " + config.getConfigYml().get(MonitorConfigs.METRIC_PREFIX));
+        String metricPrefix = basePrefix  + serverName + DELIM;
+        logger.debug("Configured metricPrefix: " + basePrefix);
         logger.debug("Full logging metricPrefix: " + metricPrefix);
 
         // Run Service check
@@ -108,12 +92,17 @@ class SolaceGlobalMonitorTask implements Runnable {
         logger.debug("</SolaceGlobalMonitorTask.run>");
     }
 
+
+    @Override
+    public void onTaskComplete() {
+    }
+
     private Map<String,Object> deriveMetrics(Map<String,Object> serviceStats, Map<String,Object> redundancyStats, Map<String,Object> spoolStats) {
         Map<String,Object> metrics = new HashMap<>();
 
         // These metrics are used for all top-level dashboard indicators
         Integer svcPortUp = (Integer) serviceStats.get(ServiceMetrics.SmfPortUp);
-        Integer redIsPrimary = (Integer) redundancyStats.get(RedundancyMetrics.IsPrimary);
+        //Integer redIsPrimary = (Integer) redundancyStats.get(RedundancyMetrics.IsPrimary);
         Integer redIsActive = (Integer) redundancyStats.get(RedundancyMetrics.IsActive);
         Integer spoolIsEnabled = (Integer) spoolStats.get(MsgSpoolMetrics.IsEnabled);
         Integer spoolIsActive = (Integer) spoolStats.get(MsgSpoolMetrics.IsActive);
@@ -156,12 +145,12 @@ class SolaceGlobalMonitorTask implements Runnable {
     }
 
     private void printMetric(String metricPrefix, String metricName, Object metricValue) {
-        MetricWriteHelper metricWriter = config.getMetricWriter();
 
         String metricPath = metricPrefix + DELIM + metricName;
         if (metricValue instanceof Double)
             metricValue = ((Double)metricValue).longValue();
 
+        //     public void printMetric(String metricPath, String metricValue, String aggregationType, String timeRollup, String clusterRollup)
         metricWriter.printMetric(metricPath, metricValue.toString(),
                 MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
                 MetricWriter.METRIC_TIME_ROLLUP_TYPE_AVERAGE,
@@ -175,8 +164,9 @@ class SolaceGlobalMonitorTask implements Runnable {
                 metricPath, metricValue);
     }
 
-    final private MonitorConfiguration config;
     final private SempService svc;
+    final private MetricWriteHelper metricWriter;
+    final private String basePrefix;
     final private List<String> vpnFilter;
     final private List<String> queueFilter;
 }

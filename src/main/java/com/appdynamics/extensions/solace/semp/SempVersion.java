@@ -1,5 +1,8 @@
 package com.appdynamics.extensions.solace.semp;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Responsible for parsing and representing logical attributes of a given SEMP
  * version including Platform (Hardware vs. VMR), Version String and Version Number.
@@ -12,10 +15,15 @@ package com.appdynamics.extensions.solace.semp;
  * appear as '7_2'
  */
 public class SempVersion {
+    private static final Logger logger = LoggerFactory.getLogger(SempVersion.class);
+
     public enum Platform {
         APPLIANCE,
-        VMR
+        VMR,
+        NONE
     }
+    public static final String INVALID_VERSION_STR = "INVALID";
+    public static final Float  INVALID_VERSION = 0.0f;
 
     // 4 versions of each going backwards
     public static SempVersion v8_3VMR = new SempVersion(Platform.VMR, "8_3VMR", 8.3f);
@@ -28,7 +36,9 @@ public class SempVersion {
     public static SempVersion v8_2_0 = new SempVersion(Platform.APPLIANCE, "8_2_0", 8.20f);
     public static SempVersion v8_3_0 = new SempVersion(Platform.APPLIANCE, "8_3_0", 8.30f);
 
-    public SempVersion(String schemaVersion) throws IllegalArgumentException {
+    public static SempVersion INVALID = new SempVersion(Platform.NONE, INVALID_VERSION_STR, INVALID_VERSION);
+
+    public SempVersion(String schemaVersion) {
         // Parse out the version details from the schema version, e.g. "soltr/8_6VMR" or "soltr/8_2_0"
         platform = parsePlatform(schemaVersion);
         versionString = parseVersionString(schemaVersion);
@@ -52,6 +62,13 @@ public class SempVersion {
         return platform;
     }
 
+    public boolean isValid() {
+        return platform != Platform.NONE
+                && versionNumber != INVALID_VERSION
+                && (!versionString.equals(INVALID_VERSION_STR));
+    }
+
+
     private Platform parsePlatform(String schemaVersion) {
         if (!schemaVersion.contains("VMR"))
             return Platform.APPLIANCE;
@@ -59,15 +76,15 @@ public class SempVersion {
         return Platform.VMR;
     }
 
-    private String parseVersionString(String schemaVersion) throws IllegalArgumentException {
+    private String parseVersionString(String schemaVersion) {
         int start = schemaVersion.indexOf('/');
         if (start == -1)
-            throw new IllegalArgumentException("Invalid schemaVersion string");
+            return INVALID_VERSION_STR;
         start++;
         return schemaVersion.substring(start);
     }
 
-    private float parseVersionNumber(String version) throws IllegalArgumentException {
+    private float parseVersionNumber(String version) {
         // Turn '8_2_0' or '8_6VMR' into '8.20' and '8.6' respectively
         StringBuilder sb = new StringBuilder();
         int decimalCount = 0;
@@ -89,8 +106,9 @@ public class SempVersion {
             return Float.parseFloat(sb.toString());
         }
         catch(NumberFormatException nex) {
-            throw new IllegalArgumentException("Invalid version number string");
+            logger.error("INVALID SEMP-VERSION: Exception attempting to parse version version-string: " + sb.toString(), nex);
         }
+        return INVALID_VERSION;
     }
 
     final private float versionNumber;

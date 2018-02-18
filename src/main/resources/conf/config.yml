@@ -1,17 +1,20 @@
 ### ANY CHANGES TO THIS FILE DOES NOT REQUIRE A RESTART ###
 
+#This will create this metric in all the tiers, under this path
+metricPrefix: "Custom Metrics|Solace|"
+
 # List of Solace Servers
 servers:
   - mgmtUrl: "http://192.168.56.201:8080/SEMP"
     adminUser: "admin"
     # password: "admin"
-    password-encrypted: "gD1962YptbA8bsaHmYXlSw=="
-    encryption-key: "na1jFUKT8euDXp1p7bgwIxhI6ZESLylz"
+    encryptedPassword: "gD1962YptbA8bsaHmYXlSw=="
+    encryptionKey: "na1jFUKT8euDXp1p7bgwIxhI6ZESLylz"
     #displayName is required. Displays your server name in metric path.
     displayName: "PrimaryVMR"
   - mgmtUrl: "http://192.168.56.202:8080/SEMP"
     adminUser: "admin"
-    adminPassword: "admin"
+    password: "admin"
     #displayName is required. Displays your server name in metric path.
     displayName: "BackupVMR"
 
@@ -24,10 +27,3 @@ numberOfThreads: 2
 
 # timeout for the thread
 # threadTimeout: 30
-
-
-#This will create this metric in all the tiers, under this path
-metricPrefix: "Custom Metrics|Solace|"
-#
-#This will create it in specific Tier. Replace <TIER_NAME>
-# metricPrefix: "Server|Component:13|Custom Metrics|Solace"
