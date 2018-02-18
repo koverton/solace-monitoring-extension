@@ -14,10 +14,19 @@ import java.net.*;
  */
 public class Sempv1Connector {
     private static final Logger logger = LoggerFactory.getLogger(Sempv1Connector.class);
+    public  static final Integer DEFAULT_TIMEOUT = 15000;
 
     public Sempv1Connector(final String url, final String username, final String password, String displayName) throws MalformedURLException {
         this.url = new URL(url);
         this.displayName = displayName;
+        this.timeout = DEFAULT_TIMEOUT;
+        Authenticator.setDefault(new MyAuthenticator(username, password));
+    }
+
+    public Sempv1Connector(final String url, final String username, final String password, String displayName, Integer timeout) throws MalformedURLException {
+        this.url = new URL(url);
+        this.displayName = displayName;
+        this.timeout = timeout;
         Authenticator.setDefault(new MyAuthenticator(username, password));
     }
 
@@ -31,6 +40,8 @@ public class Sempv1Connector {
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
             connection.setDoOutput(true);
+            connection.setConnectTimeout(timeout);
+            connection.setReadTimeout(timeout);
 
             OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
             logger.info("SEMP POST URL: {}", url);
@@ -53,11 +64,10 @@ public class Sempv1Connector {
                 in.close();
                 return total.toString();
             } else {
-                logger.error("Error: [{}] {}", responseCode , connection.getResponseMessage());
+                logger.error("Error parsing {} response: [{}] {}", url, responseCode , connection.getResponseMessage());
             }
         } catch (Exception e) {
-            logger.error("Exception thrown posting request", e);
-            e.printStackTrace();
+            logger.error("Exception thrown POSTing request to URL ["+url+"]", e);
         }
         return "";
     }
@@ -68,7 +78,7 @@ public class Sempv1Connector {
         return getSempVersion(result);
     }
 
-    public SempVersion getSempVersion(String result) throws IllegalArgumentException {
+    public SempVersion getSempVersion(String result) {
         int start = result.indexOf("semp-version");
         if (-1 != start) {
             // <rpc-reply semp-version="soltr/8_6VMR">
@@ -78,13 +88,13 @@ public class Sempv1Connector {
                 return new SempVersion(result.substring(start, end));
             }
         }
-        throw new IllegalArgumentException("Unrecognized semp schema version");
+        return SempVersion.INVALID;
     }
 
     private class MyAuthenticator extends Authenticator {
         String user;
         String pwd;
-        public MyAuthenticator(String username, String password) {
+        MyAuthenticator(String username, String password) {
             user = username;
             pwd = password;
         }
@@ -95,4 +105,5 @@ public class Sempv1Connector {
 
     final private URL url;
     final private String displayName;
+    final private Integer timeout;
 }

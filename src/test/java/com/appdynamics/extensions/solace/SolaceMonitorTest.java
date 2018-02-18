@@ -3,20 +3,29 @@ package com.appdynamics.extensions.solace;
 import org.junit.Test;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class SolaceMonitorTest {
 
-    // @Test
+    @Test
     public void testSolaceMonitor() throws Exception {
-        SolaceMonitor monitor = new SolaceMonitor();
-        Map<String, String> taskArgs = new HashMap<>();
-        taskArgs.put("config-file", "src/test/resources/conf/config.yml");
-        monitor.execute(taskArgs, null);
         try {
-            Thread.sleep(3000);
+            final SolaceMonitor monitor = new SolaceMonitor();
+            final Map<String, String> taskArgs = new HashMap<>();
+
+            taskArgs.put("config-file", "src/test/resources/conf/config.yml");
+
+                try {
+                    monitor.execute(taskArgs, null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
         }
-        catch(InterruptedException ex) {
+        catch(Exception ex) {
             ex.printStackTrace();
         }
+
     }
 }

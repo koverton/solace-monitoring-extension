@@ -3,6 +3,7 @@ package com.appdynamics.extensions.solace.semp;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class SempVersionTest {
     private static final String VMR86_SCHEMA = "soltr/8_6VMR";
@@ -26,13 +27,15 @@ public class SempVersionTest {
         assertEquals(8.20, v.getVersionNumber(), 0.01);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void emptyStringTest() {
         SempVersion v = new SempVersion("");
+        assertFalse(v.isValid());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void notASempVersion() {
         SempVersion v = new SempVersion("My name is Jimmy");
+        assertFalse(v.isValid());
     }
 }
