@@ -16,6 +16,8 @@ plane via HTTP. The following metrics are currently gathered by this monitor:
 * Global queue summaries
 * Global bridge summaries
 
+Detailed documentation of all available metrics can be found [here](docs/metrics.md).
+
 ## Installation
 
 The protocol for querying metrics is currently an XML-based POST request protocol. 
