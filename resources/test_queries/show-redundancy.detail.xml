@@ -1,3 +1,3 @@
-<rpc semp-version="soltr/8_6VMR">
+<rpc semp-version="soltr/7_2_2">
 	<show><redundancy><detail/></redundancy></show>
 </rpc>

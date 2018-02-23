@@ -1,6 +1,6 @@
-package com.appdynamics.extensions.solace.semp.r8_2_0;
+package com.appdynamics.extensions.solace.semp.r7_2_2;
 
-import com.solacesystems.semp_jaxb.r8_2_0.reply.*;
+import com.solacesystems.semp_jaxb.r7_2_2.reply.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -12,21 +12,21 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class SempMarshaller_r8_2_0Test
+public class SempMarshaller_r7_2_2Test
 {
 
     private String readFile(String filename) throws Exception {
-        String SEMP_VERSION = "r8_2_0";
+        String SEMP_VERSION = "r7_2_2";
         String replyFile = "resources/" + SEMP_VERSION + "/" + filename;
         return new String(Files.readAllBytes(Paths.get(replyFile)));
     }
-    private static SempMarshaller_r8_2_0 marshaller;
-    private static SempReplyFactory_r8_2_0 factory;
+    private static SempMarshaller_r7_2_2 marshaller;
+    private static SempReplyFactory_r7_2_2 factory;
 
     @BeforeClass
     public static void setup() throws JAXBException {
-        marshaller = new SempMarshaller_r8_2_0();
-        factory = new SempReplyFactory_r8_2_0();
+        marshaller = new SempMarshaller_r7_2_2();
+        factory = new SempReplyFactory_r7_2_2();
     }
 
     @Test
