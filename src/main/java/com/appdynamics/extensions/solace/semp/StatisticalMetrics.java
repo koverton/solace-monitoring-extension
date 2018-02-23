@@ -13,23 +13,25 @@ public class StatisticalMetrics {
 	public final static String EgressCompressionRatio = "EgressCompressionRatio";
 	public final static String CurrentIngressSslRatePerSecond = "CurrentIngressSslRatePerSecond";
 	public final static String CurrentEgressSslRatePerSecond = "CurrentEgressSslRatePerSecond";
-	public final static String TotalIngressDiscards = "TotalIngressDiscards";
-	public final static String NoSubscriptionMatch = "NoSubscriptionMatch";
-	public final static String TopicParseError = "TopicParseError";
-	public final static String ParseError = "ParseError";
-	public final static String MsgTooBig = "MsgTooBig";
-	public final static String TtlExceeded = "TtlExceeded";
-	public final static String WebParseError = "WebParseError";
-	public final static String PublishTopicAcl = "PublishTopicAcl";
-	public final static String MsgSpoolDiscards = "MsgSpoolDiscards";
-	public final static String IngressMessagePromotionCongestion = "IngressMessagePromotionCongestion";
-	public final static String IngressMessageSpoolCongestion = "IngressMessageSpoolCongestion";
-	public final static String TotalEgressDiscards = "TotalEgressDiscards";
-	public final static String TransmitCongestion = "TransmitCongestion";
-	public final static String CompressionCongestion = "CompressionCongestion";
-	public final static String MessageElided = "MessageElided";
-	public final static String PayloadCouldNotBeFormatted = "PayloadCouldNotBeFormatted";
-	public final static String EgressMessagePromotionCongestion = "EgressMessagePromotionCongestion";
-	public final static String EgressMessageSpoolCongestion = "EgressMessageSpoolCongestion";
-	public final static String MsgSpoolEgressDiscards = "MsgSpoolEgressDiscards";
+	// Ingress discards
+	public final static String TotalIngressDiscards = "Discards|TotalIngressDiscards";
+	public final static String NoSubscriptionMatch = "Discards|Ingress|NoSubscriptionMatch";
+	public final static String TopicParseError = "Discards|Ingress|TopicParseError";
+	public final static String ParseError = "Discards|Ingress|ParseError";
+	public final static String MsgTooBig = "Discards|Ingress|MsgTooBig";
+	public final static String TtlExceeded = "Discards|Ingress|TtlExceeded";
+	public final static String WebParseError = "Discards|Ingress|WebParseError";
+	public final static String PublishTopicAcl = "Discards|Ingress|PublishTopicAcl";
+	public final static String MsgSpoolDiscards = "Discards|Ingress|MsgSpoolDiscards";
+	public final static String IngressMessagePromotionCongestion = "Discards|Ingress|IngressMessagePromotionCongestion";
+	public final static String IngressMessageSpoolCongestion = "Discards|Ingress|IngressMessageSpoolCongestion";
+	// Egress discards
+	public final static String TotalEgressDiscards = "Discards|TotalEgressDiscards";
+	public final static String TransmitCongestion = "Discards|Egress|TransmitCongestion";
+	public final static String CompressionCongestion = "Discards|Egress|CompressionCongestion";
+	public final static String MessageElided = "Discards|Egress|MessageElided";
+	public final static String PayloadCouldNotBeFormatted = "Discards|Egress|PayloadCouldNotBeFormatted";
+	public final static String EgressMessagePromotionCongestion = "Discards|Egress|EgressMessagePromotionCongestion";
+	public final static String EgressMessageSpoolCongestion = "Discards|Egress|EgressMessageSpoolCongestion";
+	public final static String MsgSpoolEgressDiscards = "Discards|Egress|MsgSpoolEgressDiscards";
 }
