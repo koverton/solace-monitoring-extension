@@ -80,49 +80,49 @@ Global message-spool indicators and statistics.
 
 | Metric                           | Value | Description |
 |----------------------------------|-------|-------------|
-| MsgSpoolMetrics.IsEnabled        | Boolean | 1 indicates the msg-spool is enabled in the configuration. |
-| MsgSpoolMetrics.IsActive         | Boolean | 1 indicates the msg-spool is currently active in the HA-Cluster. |
-| MsgSpoolMetrics.IsDatapathUp     | Boolean | 1 indicates the msg-spool is currently actively using the storage volume. |
-| MsgSpoolMetrics.IsSynchronized   | Boolean | 1 indicates the msg-spool on this node is in sync with the peer node. |
-| MsgSpoolMetrics.MessageCountUtilizationPct          | Percent | Percent utilization of total available message reference count. |
-| MsgSpoolMetrics.TransactionResourceUtilizationPct   | Percent | Percent utilization of total available transactions. |
-| MsgSpoolMetrics.TransactedSessionCountUtilizationPct| Percent | Percent utilization of total available transacted sessions. |
-| MsgSpoolMetrics.DeliveredUnackedMsgsUtilizationPct  | Percent | Percent utilization of total available delivered but unacked messages. |
-| MsgSpoolMetrics.SpoolFilesUtilizationPercentage     | Percent | Percent utilization of total available spool files on this node. |
+| IsEnabled                        | Boolean | 1 indicates the msg-spool is enabled in the configuration. |
+| IsActive                         | Boolean | 1 indicates the msg-spool is currently active in the HA-Cluster. |
+| IsDatapathUp                     | Boolean | 1 indicates the msg-spool is currently actively using the storage volume. |
+| IsSynchronized                   | Boolean | 1 indicates the msg-spool on this node is in sync with the peer node. |
+| MessageCountUtilizationPct          | Percent | Percent utilization of total available message reference count. |
+| TransactionResourceUtilizationPct   | Percent | Percent utilization of total available transactions. |
+| TransactedSessionCountUtilizationPct| Percent | Percent utilization of total available transacted sessions. |
+| DeliveredUnackedMsgsUtilizationPct  | Percent | Percent utilization of total available delivered but unacked messages. |
+| SpoolFilesUtilizationPercentage     | Percent | Percent utilization of total available spool files on this node. |
 
 
 ## GLOBAL REDUNDANCY: `Custom Metrics|Solace|<instance-name>|Redundancy|`
 
 Global Redundancy indicators.
 
-| Metric                           | Value | Description |
-|----------------------------------|-------|-------------|
-| RedundancyMetrics.ConfiguredStatus | Boolean | 1 if redundancy is Enabled in the configuration in this node. |
-| RedundancyMetrics.OperationalStatus| Boolean | 1 if redundancy is currently operational in this node. |
-| RedundancyMetrics.IsActive         | Boolean | 1 if this node is currectly the Active message-routing node in its redundant cluster. |
+| Metric           | Value | Description |
+|------------------|-------|-------------|
+| ConfiguredStatus | Boolean | 1 if redundancy is Enabled in the configuration in this node. |
+| OperationalStatus| Boolean | 1 if redundancy is currently operational in this node. |
+| IsActive         | Boolean | 1 if this node is currectly the Active message-routing node in its redundant cluster. |
 
 
 ## GLOBAL SERVICE STATUS: `Custom Metrics|Solace|<instance-name>|Services|`
 
 Global Service status and indicators.
 
-| Metric                           | Value | Description |
-|----------------------------------|-------|-------------|
-| _SMF Service_ |
-| ServiceMetrics.SmfPort           | Integer | Port number for the Solace Message Format sessions. |
-| ServiceMetrics.SmfPortUp         | Boolean | 1 if the SMF port is accepting connections. |
-| _Compressed SMF Service_ |
-| ServiceMetrics.SmfCompressedPort | Integer | Port number for compressed SMF sessions. |
-| ServiceMetrics.SmfCompressedPortUp | Boolean | 1 if the Compressed-SMF port is accepting connections. |
-| _Encrypted SMF Service_ |
-| ServiceMetrics.SmfSslPort        | Integer | Port number for SMF over TLS sessions. |
-| ServiceMetrics.SmfSslPortUp      | Boolean | 1 if the TLS-SMF port is accepting connections. |
-| _Web-Socket Service_ |
-| ServiceMetrics.WebPort           | Integer | Port number for web-socket sessions. |
-| ServiceMetrics.WebPortUp         | Boolean | 1 if the Web-Socket port is accepting connections. |
+| Metric                         | Value | Description |
+|--------------------------------|-------|-------------|
+| _SMF Service_                  |
+| SmfPort                        | Integer | Port number for the Solace Message Format sessions. |
+| SmfPortUp                      | Boolean | 1 if the SMF port is accepting connections. |
+| _Compressed SMF Service_       |
+| SmfCompressedPort              | Integer | Port number for compressed SMF sessions. |
+| SmfCompressedPortUp            | Boolean | 1 if the Compressed-SMF port is accepting connections. |
+| _Encrypted SMF Service_        |
+| SmfSslPort                     | Integer | Port number for SMF over TLS sessions. |
+| SmfSslPortUp                   | Boolean | 1 if the TLS-SMF port is accepting connections. |
+| _Web-Socket Service_           |
+| WebPort                        | Integer | Port number for web-socket sessions. |
+| WebPortUp                      | Boolean | 1 if the Web-Socket port is accepting connections. |
 | _Encrypted Web-Socket Service_ |
-| ServiceMetrics.WebSslPort        | Integer | Port number for web-sockets over TLS sessions. |
-| ServiceMetrics.WebSslPortUp      | Boolean | 1 if the TLS Web-Socket port is accepting connections. |
+| WebSslPort                     | Integer | Port number for web-sockets over TLS sessions. |
+| WebSslPortUp                   | Boolean | 1 if the TLS Web-Socket port is accepting connections. |
 
 ## MSG-VPN SCOPED RESOURCES: `Custom Metrics|Solace|<instance-name>|MsgVpns|<vpn-name>|`
 
