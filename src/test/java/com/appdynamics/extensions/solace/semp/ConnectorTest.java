@@ -24,7 +24,7 @@ public class ConnectorTest {
         assertEquals("8_2_0", connector.getSempVersion(err820).getVersionString());
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test
     public void emptyVersionTest() throws Exception {
         Sempv1Connector connector = new Sempv1Connector(
                 "http://1.1.1.1:8080/SEMP",
@@ -32,6 +32,8 @@ public class ConnectorTest {
                 "admin",
                 "jimmy");
         // 2) empty semp-version throws
-        connector.getSempVersion("<rpc-reply semp-version=\"\">");
+        SempVersion ver = connector.getSempVersion("<rpc-reply semp-version=\"\">");
+        assertEquals(SempVersion.INVALID_VERSION_STR, ver.getVersionString());
+        assertEquals(SempVersion.INVALID_VERSION, ver.getVersionNumber(), 0.0001);
     }
 }

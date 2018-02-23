@@ -17,15 +17,33 @@ public class SolaceMonitorTest {
 
             taskArgs.put("config-file", "src/test/resources/conf/config.yml");
 
-                try {
-                    monitor.execute(taskArgs, null);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            try {
+                monitor.execute(taskArgs, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         catch(Exception ex) {
             ex.printStackTrace();
         }
+    }
 
+    @Test
+    public void testSolaceMonitorInvalidConfigs() throws Exception {
+        try {
+            final SolaceMonitor monitor = new SolaceMonitor();
+            final Map<String, String> taskArgs = new HashMap<>();
+
+            taskArgs.put("config-file", "src/test/resources/conf/invalid-servers-config.yml");
+
+            try {
+                monitor.execute(taskArgs, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

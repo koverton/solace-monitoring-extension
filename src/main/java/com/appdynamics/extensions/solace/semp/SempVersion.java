@@ -31,7 +31,7 @@ public class SempVersion {
     public static SempVersion v8_6VMR = new SempVersion(Platform.VMR, "8_6VMR", 8.6f);
     public static SempVersion v8_7VMR = new SempVersion(Platform.VMR, "8_7VMR", 8.7f);
 
-    public static SempVersion v7_2_1 = new SempVersion(Platform.APPLIANCE, "7_2_1", 7.21f);
+    public static SempVersion v7_2_2 = new SempVersion(Platform.APPLIANCE, "7_2_2", 7.22f);
     public static SempVersion v8_0_0 = new SempVersion(Platform.APPLIANCE, "8_0_0", 8.0f);
     public static SempVersion v8_2_0 = new SempVersion(Platform.APPLIANCE, "8_2_0", 8.20f);
     public static SempVersion v8_3_0 = new SempVersion(Platform.APPLIANCE, "8_3_0", 8.30f);

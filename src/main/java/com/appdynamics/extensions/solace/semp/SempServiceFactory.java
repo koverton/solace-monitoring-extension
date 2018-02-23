@@ -1,5 +1,6 @@
 package com.appdynamics.extensions.solace.semp;
 
+import com.appdynamics.extensions.solace.semp.r7_2_2.*;
 import com.appdynamics.extensions.solace.semp.r8_2_0.*;
 import com.appdynamics.extensions.solace.semp.r8_6VMR.*;
 import org.slf4j.Logger;
@@ -46,7 +47,7 @@ public class SempServiceFactory {
         else {
             logger.info("SempServiceFactory instantiating Hardware SEMP-service");
             // Prefer newest version we can
-            //if (sempVersion.getVersionNumber() >= SempVersion.v8_2_0.getVersionNumber()) {
+            if (sempVersion.getVersionNumber() >= SempVersion.v8_2_0.getVersionNumber()) {
                 try {
                     return new GenericSempService<>(
                             new SempConnectionContext<>(connector,
@@ -60,7 +61,22 @@ public class SempServiceFactory {
                             + SempVersion.v8_2_0.getVersionString(), ex);
                     ex.printStackTrace();
                 }
-            //}
+            }
+            else {
+                try {
+                    return new GenericSempService<>(
+                            new SempConnectionContext<>(connector,
+                                    new SempRequestFactory_r7_2_2(),
+                                    new SempReplyFactory_r7_2_2(),
+                                    new SempMarshaller_r7_2_2(),
+                                    sempVersion.getVersionString()));
+                }
+                catch(JAXBException ex) {
+                    logger.error("Exception thrown attempting to create SempService version: "
+                            + SempVersion.v7_2_2.getVersionString(), ex);
+                    ex.printStackTrace();
+                }
+            }
             // TBD: Support more here
         }
         logger.debug("</SempServiceFactory.createSempService>");

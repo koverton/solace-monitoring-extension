@@ -84,11 +84,16 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
         result.put(MsgSpoolMetrics.IsActive, stats.getOperationalStatus().equals("AD-Active") ? 1 : 0);
         result.put(MsgSpoolMetrics.IsDatapathUp, stats.isDatapathUp() ? 1 : 0);
         result.put(MsgSpoolMetrics.IsSynchronized, stats.getSynchronizationStatus().equals("Synced") ? 1 : 0);
-        result.put(MsgSpoolMetrics.MessageCountUtilizationPct, safeParseDouble("MessageCountUtilizationPct", stats.getMessageCountUtilizationPercentage()));
-        result.put(MsgSpoolMetrics.TransactionResourceUtilizationPct, safeParseDouble("TransactionResourceUtilizationPct", stats.getTransactionResourceUtilizationPercentage()));
-        result.put(MsgSpoolMetrics.TransactedSessionCountUtilizationPct, safeParseDouble("TransactedSessionCountUtilizationPct", stats.getTransactedSessionCountUtilizationPercentage()));
-        result.put(MsgSpoolMetrics.DeliveredUnackedMsgsUtilizationPct, safeParseDouble("DeliveredUnackedMsgsUtilizationPct", stats.getDeliveredUnackedMsgsUtilizationPercentage()));
-        result.put(MsgSpoolMetrics.SpoolFilesUtilizationPercentage, safeParseDouble("SpoolFilesUtilizationPercentage", stats.getSpoolFilesUtilizationPercentage()));
+        result.put(MsgSpoolMetrics.MessageCountUtilizationPct,
+                safeParseDouble("MessageCountUtilizationPct", stats.getMessageCountUtilizationPercentage()).longValue());
+        result.put(MsgSpoolMetrics.TransactionResourceUtilizationPct,
+                safeParseDouble("TransactionResourceUtilizationPct", stats.getTransactionResourceUtilizationPercentage()).longValue());
+        result.put(MsgSpoolMetrics.TransactedSessionCountUtilizationPct,
+                safeParseDouble("TransactedSessionCountUtilizationPct", stats.getTransactedSessionCountUtilizationPercentage()).longValue());
+        result.put(MsgSpoolMetrics.DeliveredUnackedMsgsUtilizationPct,
+                safeParseDouble("DeliveredUnackedMsgsUtilizationPct", stats.getDeliveredUnackedMsgsUtilizationPercentage()).longValue());
+        result.put(MsgSpoolMetrics.SpoolFilesUtilizationPercentage,
+                safeParseDouble("SpoolFilesUtilizationPercentage", stats.getSpoolFilesUtilizationPercentage()).longValue());
         return result;
     }
 
@@ -101,21 +106,23 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
         result.put(RedundancyMetrics.ConfiguredStatus, redundancy.getConfigStatus().equals("Enabled") ? 1 : 0);
         result.put(RedundancyMetrics.OperationalStatus, redundancy.getRedundancyStatus().equals("Up") ? 1 : 0);
         // result.put(RedundancyMetrics.IsPrimary, redundancy.getActiveStandbyRole().equals("Primary") ? 1 : 0);
+
         // TODO: Need a way to figure out if we are active or backup
-        if ((Integer) result.get(RedundancyMetrics.IsPrimary) == 1) {
-            result.put(RedundancyMetrics.IsActive,
-                    redundancy.getVirtualRouters()
+        // if ((Integer) result.get(RedundancyMetrics.IsPrimary) == 1) {
+        if (redundancy.getVirtualRouters()
                             .getPrimary()
                             .getStatus()
                             .getActivity()
-                            .equals("Local Active") ? 1 : 0);
-        } else {
-            result.put(RedundancyMetrics.IsActive,
-                    redundancy.getVirtualRouters()
+                            .equals("Local Active") ||
+            redundancy.getVirtualRouters()
                             .getBackup()
                             .getStatus()
                             .getActivity()
-                            .equals("Local Active") ? 1 : 0);
+                            .equals("Local Active")) {
+            result.put(RedundancyMetrics.IsActive, 1);
+        }
+        else {
+            result.put(RedundancyMetrics.IsActive, 0);
         }
         return result;
     }
