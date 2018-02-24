@@ -2,7 +2,9 @@
 
 The Following statistics are gathered per each Solace VMR or Messaging Appliance. The `<instance-name>` used in the Metrics Path is configured into the AD Solace Monitoring Agent configuration. It is not configured on the Solace node.
 
-## DERIVED INDICATORS: `Custom Metrics|Solace|<instance-name>|Derived|`
+## Derived Indicators: 
+
+Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Derived|`
 
 Top-level boolean indicators that are derived from of the below metrics. These indicators consist of complex boolean expressions that could not be easily expressed in AppD dashboards.
 
@@ -12,7 +14,9 @@ Top-level boolean indicators that are derived from of the below metrics. These i
 | MsgSpoolOk    | Boolean | 1 indicates this VMR or Messaging Appliance is UP and persisting messages to the message-spool as expected. |
 
 
-## GLOBAL STATISTICS: `Custom Metrics|Solace|<instance-name>|Statistics|`
+## Global Statistics: 
+
+Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Statistics|`
 
 Aggregate data throughput statistics gathered for the entire VMR or Messaging Appliance.
 
@@ -33,7 +37,9 @@ Aggregate data throughput statistics gathered for the entire VMR or Messaging Ap
 | CurrentEgressSslRatePerSecond    | Integer | Current SSL outbound byte rate per second |
 
 
-## GLOBAL DISCARD STATISTICS:  `Custom Metrics|Solace|<instance-name>|Statistics|Discards|`
+## Global Discard Statistics: 
+
+Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Statistics|Discards|`
 
 Aggregate discard statistics for all inbound and outbound traffic. These are counters incremented since the VMR or Messaging Appliance is booted or since the counter was administratively cleared.
 
@@ -42,7 +48,9 @@ Aggregate discard statistics for all inbound and outbound traffic. These are cou
 | TotalIngressDiscards             | Integer | Aggregate number of messages discarded upon arrival since boot time. |
 | TotalEgressDiscards              | Integer | Aggregate number of messages discarded after arrival since boot time. |
 
-### GLOBAL INGRESS-DISCARD STATISTICS:  `Custom Metrics|Solace|<instance-name>|Statistics|Discards|Ingress|`
+### Global Ingress-Discard Statistics:  
+
+Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Statistics|Discards|Ingress|`
 
 Aggregate inbound discard statistics. These are counters incremented since the VMR or Messaging Appliance is booted or since the counter was administratively cleared.
 
@@ -59,7 +67,9 @@ Aggregate inbound discard statistics. These are counters incremented since the V
 | IngressMessagePromotionCongestion| Integer | Aggregate number of messages discarded due to congestion from persisting DIRECT messages since boot time. |
 | IngressMessageSpoolCongestion    | Integer | Aggregate number of guaranteed messages discarded because of low-priority discard rules since boot time. |
 
-### GLOBAL EGRESS-DISCARD STATISTICS:  `Custom Metrics|Solace|<instance-name>|Statistics|Discards|Egress|`
+### Global Egress-Discard Statistics: 
+
+Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Statistics|Discards|Egress|`
 
 Aggregate outbound discard statistics. These are counters incremented since the VMR or Messaging Appliance is booted or since the counter was administratively cleared.
 
@@ -74,7 +84,9 @@ Aggregate outbound discard statistics. These are counters incremented since the 
 | MsgSpoolEgressDiscards           | Integer | Aggregate number of guaranteed messages discarded due to persistend endpoint overflow since boot time. |
 
 
-## GLOBAL MSG-SPOOL: `Custom Metrics|Solace|<instance-name>|MsgSpool|`
+## Global Msg-Spool: 
+
+Metrics Prefix: `Custom Metrics|Solace|<instance-name>|MsgSpool|`
 
 Global message-spool indicators and statistics.
 
@@ -91,7 +103,9 @@ Global message-spool indicators and statistics.
 | SpoolFilesUtilizationPercentage     | Percent | Percent utilization of total available spool files on this node. |
 
 
-## GLOBAL REDUNDANCY: `Custom Metrics|Solace|<instance-name>|Redundancy|`
+## Global Redundancy: 
+
+Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Redundancy|`
 
 Global Redundancy indicators.
 
@@ -102,7 +116,9 @@ Global Redundancy indicators.
 | IsActive         | Boolean | 1 if this node is currectly the Active message-routing node in its redundant cluster. |
 
 
-## GLOBAL SERVICE STATUS: `Custom Metrics|Solace|<instance-name>|Services|`
+## Global Service Status: 
+
+Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Services|`
 
 Global Service status and indicators.
 
@@ -128,7 +144,9 @@ Global Service status and indicators.
 
 The following statistics are gathered per each message-VPN configured on the VMR or Messaging Appliance.
 
-### QUEUE LIST: `Custom Metrics|Solace|<instance-name>|MsgVpns|<vpn-name>|Queues|`
+### Queue List: 
+
+Metrics Prefix: `Custom Metrics|Solace|<instance-name>|MsgVpns|<vpn-name>|Queues|`
 
 Statistics and indicators per each queue in a msg-VPN.
 
@@ -141,7 +159,9 @@ Statistics and indicators per each queue in a msg-VPN.
 | UsageInMB                        | Integer | Current spool-usage for this queue in MB. |
 | ConsumerCount                    | Integer | Current number of consumers bound to this queue. |
 
-### BRIDGE LIST: `Custom Metrics|Solace|<instance-name>|MsgVpns|<vpn-name>|Bridges|`
+### Bridge List: 
+
+Metrics Prefix: `Custom Metrics|Solace|<instance-name>|MsgVpns|<vpn-name>|Bridges|`
 
 Statistics and indicators per each bridge in a msg-VPN.
 
