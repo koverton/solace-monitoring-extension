@@ -2,6 +2,8 @@
 
 The Following statistics are gathered per each Solace VMR or Messaging Appliance. The `<instance-name>` used in the Metrics Path is configured into the AD Solace Monitoring Agent configuration. It is not configured on the Solace node.
 
+![](AD_ext_hierarchy.png)
+
 ## Derived Indicators: 
 
 Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Derived|`
