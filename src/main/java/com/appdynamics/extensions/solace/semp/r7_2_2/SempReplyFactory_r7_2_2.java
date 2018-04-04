@@ -146,8 +146,11 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
                 result.put(ServiceMetrics.WebPort, svc.getListenPort().intValue());
                 result.put(ServiceMetrics.WebPortUp, svc.getListenPortOperationalStatus().equals("Up") ? 1 : 0);
 
-                result.put(ServiceMetrics.WebSslPort, (int) svc.getSsl().getListenPort());
-                result.put(ServiceMetrics.WebSslPortUp, svc.getSsl().getListenPortOperationalStatus().equals("Up") ? 1 : 0);
+                RpcReply.Rpc.Show.Service.Services.Service2.Ssl ssl = svc.getSsl();
+                if (ssl != null) {
+                    result.put(ServiceMetrics.WebSslPort, (int) ssl.getListenPort());
+                    result.put(ServiceMetrics.WebSslPortUp, ssl.getListenPortOperationalStatus().equals("Up") ? 1 : 0);
+                }
             }
         }
 

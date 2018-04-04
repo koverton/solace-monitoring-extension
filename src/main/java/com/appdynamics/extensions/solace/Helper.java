@@ -43,9 +43,11 @@ class Helper {
 
     static Integer getIntOrDefault(Map<String,String> server, String fieldName, Integer defaultValue) {
         if (server.containsKey(fieldName)) {
-            String val = (String)server.get(fieldName);
+            Object o = server.get(fieldName);
+            if (o instanceof Integer)
+                return (Integer)o;
             try {
-                return Integer.parseInt(val);
+                return Integer.parseInt(o.toString());
             }
             catch(NumberFormatException ex) {
                 logger.warn("Could not parse valid Integer for [{}]; defaulting to [{}]",
