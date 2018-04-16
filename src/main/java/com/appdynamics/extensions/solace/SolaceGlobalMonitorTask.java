@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+import com.appdynamics.extensions.solace.MonitorConfigs.ExclusionPolicy;
+
 /**
  * Worker task for all Solace metrics gathering. Executes all desired metrics queries
  * on the SempService that is provided to it.
@@ -19,12 +21,14 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     private static final char DELIM = '|';
     private static final String VPNS_PREFIX = "MsgVpns";
 
-    SolaceGlobalMonitorTask(MetricWriteHelper metricWriter, String basePrefix, List<String> vpnFilter, List<String> queueFilter, SempService svc) {
-        this.metricWriter = metricWriter;
-        this.basePrefix   = basePrefix;
-        this.vpnFilter    = vpnFilter;
-        this.queueFilter  = queueFilter;
-        this.svc          = svc;
+    SolaceGlobalMonitorTask(MetricWriteHelper metricWriter, String basePrefix, MonitorConfigs.ExclusionPolicy vpnExclusionPolicy, List<String> vpnFilter, ExclusionPolicy queueExclusionPolicy, List<String> queueFilter, SempService svc) {
+        this.metricWriter        = metricWriter;
+        this.basePrefix          = basePrefix;
+        this.vpnExclusionPolicy  = vpnExclusionPolicy;
+        this.vpnFilter           = vpnFilter;
+        this.queueExclusionPolicy= queueExclusionPolicy;
+        this.queueFilter         = queueFilter;
+        this.svc                 = svc;
     }
 
 
@@ -55,15 +59,17 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         // Run queues check
         for(Map<String,Object> queue : svc.checkQueueList()) {
             String vpnname= (String) queue.get(QueueMetrics.VpnName);
-            if (this.vpnFilter.contains(vpnname)) {
-                logger.info("NOT writing metrics for queues in the {} MsgVPN because it is in the {} list.",
-                        MonitorConfigs.EXCLUDE_MSG_VPNS, vpnname);
+            if ( Helper.isExcluded(vpnname, this.vpnFilter, vpnExclusionPolicy) ) {
+                logger.info("NOT writing metrics for any queues in the '{}' MsgVPN because it did not match the exclusion policy. " +
+                        "If this was not expected, check your '{}' and '{}' configurations.",
+                        vpnname, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
                 continue;
             }
             String qname = (String) queue.get(QueueMetrics.QueueName);
-            if (this.queueFilter.contains(qname)) {
-                logger.info("NOT writing metrics for queues in the {} queue because it is in the {} list.",
-                        MonitorConfigs.EXCLUDE_QUEUES, qname);
+            if ( Helper.isExcluded(qname, this.queueFilter, queueExclusionPolicy) ) {
+                logger.info("NOT writing metrics for queue '{}' because it did not match the exclusion policy. " +
+                        "If this was not expected, check your '{}' and '{}' configurations.",
+                        qname, MonitorConfigs.QUEUE_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_QUEUES);
                 continue;
             }
             String prefix = metricPrefix
@@ -167,6 +173,8 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     final private SempService svc;
     final private MetricWriteHelper metricWriter;
     final private String basePrefix;
+    final private ExclusionPolicy vpnExclusionPolicy;
     final private List<String> vpnFilter;
+    final private ExclusionPolicy queueExclusionPolicy;
     final private List<String> queueFilter;
 }

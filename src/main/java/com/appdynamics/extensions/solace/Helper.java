@@ -14,9 +14,7 @@ import java.util.Map;
 
 import static com.appdynamics.extensions.TaskInputArgs.PASSWORD;
 import static com.appdynamics.extensions.TaskInputArgs.PASSWORD_ENCRYPTED;
-import static com.appdynamics.extensions.solace.MonitorConfigs.ENCRYPTED_PASSWORD;
-import static com.appdynamics.extensions.solace.MonitorConfigs.ENCRYPTION_KEY;
-import static com.appdynamics.extensions.solace.MonitorConfigs.SERVERS;
+import static com.appdynamics.extensions.solace.MonitorConfigs.*;
 
 class Helper {
     private static final Logger logger = LoggerFactory.getLogger(Helper.class);
@@ -66,13 +64,49 @@ class Helper {
     }
 
     @SuppressWarnings("unchecked")
-    static List<String> getConfigListOrNew(MonitorConfiguration config, String key) {
-        if (config.getConfigYml().containsKey(key))
-            return (List<String>) config.getConfigYml().get(key);
-        else {
-            logger.warn("No list found configured for key [{}]", key);
-            return new ArrayList<>();
+    static List<String> getConfigListOrNew(Map<String, String> config, String key) {
+        if (config.containsKey(key)) {
+            Object obj = config.get(key);
+            if (obj instanceof String)
+                return splitDelimitedString((String)obj);
+            else if (obj instanceof List)
+                return (List<String>) obj;
         }
+        logger.warn("No list found configured for key [{}]", key);
+        return new ArrayList<>();
+    }
+
+    static List<String> splitDelimitedString(String source) {
+        List<String> result = new ArrayList<>();
+        for(String s : source.split("," )) {
+            result.add(s.trim());
+        }
+        return result;
+    }
+
+    static ExclusionPolicy parseExclusionPolicy(String value) {
+        ExclusionPolicy result = ExclusionPolicy.BLACKLIST;
+        try {
+            result = ExclusionPolicy.valueOf(value);
+        }
+        catch(Exception e) {
+            logger.error("Exception parsing ExclusionPolicy configuration for value {}, defaulting to BLACKLIST", value);
+        }
+        return result;
+    }
+
+    static boolean isExcluded(String name, List<String> policyList, ExclusionPolicy policy) {
+        if (policy == ExclusionPolicy.BLACKLIST) {
+            // Exclude this item because it was found in the blacklist
+            if (policyList.contains(name))
+                return true;
+        }
+        else {
+            // Exclude this item because it was NOT found in the whitelist
+            if (!policyList.contains(name))
+                return true;
+        }
+        return false;
     }
 
     //
