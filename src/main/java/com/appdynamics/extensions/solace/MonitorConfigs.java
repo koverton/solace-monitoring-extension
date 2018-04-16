@@ -1,6 +1,10 @@
 package com.appdynamics.extensions.solace;
 
 public class MonitorConfigs {
+    public enum ExclusionPolicy { WHITELIST, BLACKLIST }
+
+    final public static String VPN_EXCLUSION_POLICY = "vpnExclusionPolicy";
+    final public static String QUEUE_EXCLUSION_POLICY = "queueExclusionPolicy";
     final public static String EXCLUDE_MSG_VPNS = "excludeMsgVpns";
     final public static String EXCLUDE_QUEUES = "excludeQueues";
     final public static String METRIC_PREFIX = "metricPrefix";

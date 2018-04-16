@@ -37,19 +37,9 @@ public class SolaceMonitor extends ABaseMonitor {
     @Override
     protected void doRun(TasksExecutionServiceProvider serviceProvider) {
         String baseMetricPrefix  = (String) configuration.getConfigYml().get(METRIC_PREFIX);
-        List<String> vpnFilter   = Helper.getConfigListOrNew(configuration, EXCLUDE_MSG_VPNS);
-        List<String> queueFilter = Helper.getConfigListOrNew(configuration, EXCLUDE_QUEUES);
         List<Map<String, String>> servers = Helper.getMonitorServerList(configuration);
         MetricWriteHelper metricWriter = serviceProvider.getMetricWriteHelper();
 
-        if (logger.isDebugEnabled()) {
-            for (String excludedVpn : vpnFilter)
-                logger.debug("Excluded VPN: {}", excludedVpn);
-        }
-        if (logger.isDebugEnabled()) {
-            for (String excludedQueue : queueFilter)
-                logger.debug("Excluded Queue: {}", excludedQueue);
-        }
 
         for (Map<String, String> server : servers) {
             String mgmtUrl     = server.get(MGMT_URL);
@@ -57,6 +47,21 @@ public class SolaceMonitor extends ABaseMonitor {
             String adminPass   = Helper.getPassword(server);
             String displayName = server.get(DISPLAY_NAME);
             Integer timeout    = Helper.getIntOrDefault(server, TIMEOUT, Sempv1Connector.DEFAULT_TIMEOUT);
+            ExclusionPolicy vpnExclusionPolicy = Helper.parseExclusionPolicy(server.get(VPN_EXCLUSION_POLICY));
+            List<String> vpnFilter   = Helper.getConfigListOrNew(server, EXCLUDE_MSG_VPNS);
+            ExclusionPolicy queueExclusionPolicy = Helper.parseExclusionPolicy(server.get(QUEUE_EXCLUSION_POLICY));
+            List<String> queueFilter = Helper.getConfigListOrNew(server, EXCLUDE_QUEUES);
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("VPN Exclusion policy: {}", vpnExclusionPolicy);
+                for (String excludedVpn : vpnFilter)
+                    logger.debug("VPN Exclusion List: {}", excludedVpn);
+            }
+            if (logger.isDebugEnabled()) {
+                logger.debug("Queue Exclusion policy: {}", queueExclusionPolicy);
+                for (String excludedQueue : queueFilter)
+                    logger.debug("Queue Exclusion List: {}", excludedQueue);
+            }
             logger.info("Adding task to poll [Server:{}, Mgmt URL:{}, Admin User:{}]",
                     displayName, mgmtUrl, adminUser);
 
@@ -76,7 +81,7 @@ public class SolaceMonitor extends ABaseMonitor {
                 SempService sempService = SempServiceFactory.createSempService(connector);
                 if (sempService != null) {
                     serviceProvider.submit(displayName,
-                            new SolaceGlobalMonitorTask(metricWriter, baseMetricPrefix, vpnFilter, queueFilter, sempService));
+                            new SolaceGlobalMonitorTask(metricWriter, baseMetricPrefix, vpnExclusionPolicy, vpnFilter, queueExclusionPolicy, queueFilter, sempService));
                 }
                 else {
                     logger.error("Could not create SEMP Service due to exception; SKIPPED POLLING OF SERVER [{}]",
