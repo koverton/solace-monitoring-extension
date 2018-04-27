@@ -16,7 +16,7 @@ servers:
     vpnExclusionPolicy: "blacklist"
     excludeMsgVpns: ["#config-sync", "default"]
     queueExclusionPolicy: "blacklist"
-    excludeQueues: ["excludeMe"]
+    excludeQueues: ["#P2P/.*"]
   - mgmtUrl: "http://192.168.56.202:8080/SEMP"
     adminUser: "admin"
     # password: "admin"
@@ -28,7 +28,7 @@ servers:
     vpnExclusionPolicy: "whitelist"
     excludeMsgVpns: ["test", "tmp"]
     queueExclusionPolicy: "whitelist"
-    excludeQueues: ["testq", "asdf"]
+    excludeQueues: ["queue1", "queue2"]
 
 
 # number of concurrent tasks
