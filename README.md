@@ -187,7 +187,9 @@ as a list of VPNs NOT to monitor.</td>
 </tr>
 <tr>
 <td class='confluenceTd'> <tt>excludeMsgVpns</tt> </td>
-<td class='confluenceTd'> List of MsgVPNs for which to <B>not</B> upload metrics for this server.</td>
+<td class='confluenceTd'> List of regex patterns of MsgVPNs either whitelisted or blacklisted on this server.
+See Java Regex Pattern documentation: https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
+</td>
 </tr>
 <tr>
 <td class='confluenceTd'> <tt>queueExclusionPolicy</tt> </td>
@@ -197,7 +199,9 @@ it as a list of queues NOT to monitor.</td>
 </tr>
 <tr>
 <td class='confluenceTd'> <tt>excludeQueues</tt> </td>
-<td class='confluenceTd'> List of Queues for which to <B>not</B> upload metrics for this server.</td>
+<td class='confluenceTd'> List of regex patterns of Queues either whitelisted or blacklisted on this server.
+See Java Regex Pattern documentation: https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
+</td>
 </tr>
 
 </tbody>
@@ -231,8 +235,8 @@ servers:
     displayName: "BackupVMR"
     vpnExclusionPolicy: "blacklist"
     excludeMsgVpns: ["#config-sync", "default"]
-    queueExclusionPolicy: "whitelist"
-    excludeQueues: ["onlyThis", "andThis"]
+    queueExclusionPolicy: "blacklist"
+    excludeQueues: ["#P2P/.*"]
   - mgmtUrl: "http://192.168.56.203:8080/SEMP"
     adminUser: "admin"
     password: "admin"
@@ -247,6 +251,7 @@ servers:
 ## Latest Updates
 1. Fix redundancy status for hardware queries (as of 8.2.0)
 2. Per-metric documentation
+3. Exclusion lists now accept regular-expression patterns
 
 
 ## Next Steps / TODO Items

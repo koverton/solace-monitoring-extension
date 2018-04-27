@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static com.appdynamics.extensions.TaskInputArgs.PASSWORD;
 import static com.appdynamics.extensions.TaskInputArgs.PASSWORD_ENCRYPTED;
@@ -64,13 +65,21 @@ class Helper {
     }
 
     @SuppressWarnings("unchecked")
-    static List<String> getConfigListOrNew(Map<String, String> config, String key) {
+    static List<Pattern> getRegexPatternListOrNew(Map<String, String> config, String key) {
         if (config.containsKey(key)) {
             Object obj = config.get(key);
-            if (obj instanceof String)
-                return splitDelimitedString((String)obj);
-            else if (obj instanceof List)
-                return (List<String>) obj;
+            List<Pattern> result = new ArrayList<>();
+            if (obj instanceof String) {
+                for(String s : splitDelimitedString((String)obj)) {
+                    result.add( Pattern.compile(s));
+                }
+            }
+            else if (obj instanceof List) {
+                for (String s : (List<String>)obj) {
+                    result.add(Pattern.compile(s));
+                }
+            }
+            return result;
         }
         logger.warn("No list found configured for key [{}]", key);
         return new ArrayList<>();
@@ -95,16 +104,25 @@ class Helper {
         return result;
     }
 
-    static boolean isExcluded(String name, List<String> policyList, ExclusionPolicy policy) {
+    static boolean isExcluded(String name, List<Pattern> policyList, ExclusionPolicy policy) {
         if (policy == ExclusionPolicy.BLACKLIST) {
             // Exclude this item because it was found in the blacklist
-            if (policyList.contains(name))
-                return true;
+//            if (policyList.contains(name))
+//                return true;
+            for(Pattern p : policyList) {
+                if (p.matcher(name).matches())
+                    return true;
+            }
         }
         else {
             // Exclude this item because it was NOT found in the whitelist
-            if (!policyList.contains(name))
-                return true;
+//            if (!policyList.contains(name))
+//                return true;
+            for(Pattern p : policyList) {
+                if (p.matcher(name).matches())
+                    return false;
+            }
+            return true;
         }
         return false;
     }

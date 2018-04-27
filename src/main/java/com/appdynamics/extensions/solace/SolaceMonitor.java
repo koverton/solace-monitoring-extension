@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import static com.appdynamics.extensions.solace.MonitorConfigs.*;
 
@@ -48,19 +49,19 @@ public class SolaceMonitor extends ABaseMonitor {
             String displayName = server.get(DISPLAY_NAME);
             Integer timeout    = Helper.getIntOrDefault(server, TIMEOUT, Sempv1Connector.DEFAULT_TIMEOUT);
             ExclusionPolicy vpnExclusionPolicy = Helper.parseExclusionPolicy(server.get(VPN_EXCLUSION_POLICY));
-            List<String> vpnFilter   = Helper.getConfigListOrNew(server, EXCLUDE_MSG_VPNS);
+            List<Pattern> vpnFilter   = Helper.getRegexPatternListOrNew(server, EXCLUDE_MSG_VPNS);
             ExclusionPolicy queueExclusionPolicy = Helper.parseExclusionPolicy(server.get(QUEUE_EXCLUSION_POLICY));
-            List<String> queueFilter = Helper.getConfigListOrNew(server, EXCLUDE_QUEUES);
+            List<Pattern> queueFilter = Helper.getRegexPatternListOrNew(server, EXCLUDE_QUEUES);
 
             if (logger.isDebugEnabled()) {
                 logger.debug("VPN Exclusion policy: {}", vpnExclusionPolicy);
-                for (String excludedVpn : vpnFilter)
+                for (Pattern excludedVpn : vpnFilter)
                     logger.debug("VPN Exclusion List: {}", excludedVpn);
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("Queue Exclusion policy: {}", queueExclusionPolicy);
-                for (String excludedQueue : queueFilter)
-                    logger.debug("Queue Exclusion List: {}", excludedQueue);
+                logger.debug("Queue Exclusion policy: {}", queueExclusionPolicy.toString());
+                for (Pattern excludedQueue : queueFilter)
+                    logger.debug("Queue Exclusion List: {}", excludedQueue.toString());
             }
             logger.info("Adding task to poll [Server:{}, Mgmt URL:{}, Admin User:{}]",
                     displayName, mgmtUrl, adminUser);

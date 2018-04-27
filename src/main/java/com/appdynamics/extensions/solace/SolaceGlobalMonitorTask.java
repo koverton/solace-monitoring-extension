@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 import com.appdynamics.extensions.solace.MonitorConfigs.ExclusionPolicy;
 
@@ -21,7 +22,7 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     private static final char DELIM = '|';
     private static final String VPNS_PREFIX = "MsgVpns";
 
-    SolaceGlobalMonitorTask(MetricWriteHelper metricWriter, String basePrefix, MonitorConfigs.ExclusionPolicy vpnExclusionPolicy, List<String> vpnFilter, ExclusionPolicy queueExclusionPolicy, List<String> queueFilter, SempService svc) {
+    SolaceGlobalMonitorTask(MetricWriteHelper metricWriter, String basePrefix, MonitorConfigs.ExclusionPolicy vpnExclusionPolicy, List<Pattern> vpnFilter, ExclusionPolicy queueExclusionPolicy, List<Pattern> queueFilter, SempService svc) {
         this.metricWriter        = metricWriter;
         this.basePrefix          = basePrefix;
         this.vpnExclusionPolicy  = vpnExclusionPolicy;
@@ -174,7 +175,7 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     final private MetricWriteHelper metricWriter;
     final private String basePrefix;
     final private ExclusionPolicy vpnExclusionPolicy;
-    final private List<String> vpnFilter;
+    final private List<Pattern> vpnFilter;
     final private ExclusionPolicy queueExclusionPolicy;
-    final private List<String> queueFilter;
+    final private List<Pattern> queueFilter;
 }

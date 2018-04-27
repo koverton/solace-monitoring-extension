@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SolaceMonitorTest {
 
-    @Test
+    //@Test
     public void testSolaceMonitor() throws Exception {
         try {
             final SolaceMonitor monitor = new SolaceMonitor();
@@ -17,10 +17,12 @@ public class SolaceMonitorTest {
 
             taskArgs.put("config-file", "src/test/resources/conf/config.yml");
 
-            try {
-                monitor.execute(taskArgs, null);
-            } catch (Exception e) {
-                e.printStackTrace();
+            while(true) {
+                try {
+                    monitor.execute(taskArgs, null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         catch(Exception ex) {
