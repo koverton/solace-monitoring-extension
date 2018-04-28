@@ -14,6 +14,7 @@ plane via HTTP. The following metrics are currently gathered by this monitor:
 * Global HA redundancy metrics
 * Global service status
 * Global queue summaries
+* Global durable topic endpoint summaries
 * Global bridge summaries
 
 Detailed documentation of all available metrics can be found [here](docs/metrics.md).

@@ -22,13 +22,19 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     private static final char DELIM = '|';
     private static final String VPNS_PREFIX = "MsgVpns";
 
-    SolaceGlobalMonitorTask(MetricWriteHelper metricWriter, String basePrefix, MonitorConfigs.ExclusionPolicy vpnExclusionPolicy, List<Pattern> vpnFilter, ExclusionPolicy queueExclusionPolicy, List<Pattern> queueFilter, SempService svc) {
+    SolaceGlobalMonitorTask(MetricWriteHelper metricWriter, String basePrefix,
+                            MonitorConfigs.ExclusionPolicy vpnExclusionPolicy, List<Pattern> vpnFilter,
+                            ExclusionPolicy queueExclusionPolicy, List<Pattern> queueFilter,
+                            ExclusionPolicy topicEndpointExclusionPolicy, List<Pattern> topicEndpointFilter,
+                            SempService svc) {
         this.metricWriter        = metricWriter;
         this.basePrefix          = basePrefix;
         this.vpnExclusionPolicy  = vpnExclusionPolicy;
         this.vpnFilter           = vpnFilter;
         this.queueExclusionPolicy= queueExclusionPolicy;
         this.queueFilter         = queueFilter;
+        this.topicEndpointExclusionPolicy= topicEndpointExclusionPolicy;
+        this.topicEndpointFilter = topicEndpointFilter;
         this.svc                 = svc;
     }
 
@@ -79,6 +85,30 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
             queue.remove(QueueMetrics.VpnName);
             queue.remove(QueueMetrics.QueueName);
             printMetrics(prefix, queue);
+        }
+
+        // Run topic-endpoints check
+        for(Map<String,Object> endpoint : svc.checkTopicEndpointList()) {
+            String vpnname= (String) endpoint.get(TopicEndpointMetrics.VpnName);
+            if ( Helper.isExcluded(vpnname, this.vpnFilter, vpnExclusionPolicy) ) {
+                logger.info("NOT writing metrics for any topic endpoints in the '{}' MsgVPN because it did not match the exclusion policy. " +
+                                "If this was not expected, check your '{}' and '{}' configurations.",
+                        vpnname, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
+                continue;
+            }
+            String tename = (String) endpoint.get(TopicEndpointMetrics.TopicEndpointName);
+            if ( Helper.isExcluded(tename, this.topicEndpointFilter, topicEndpointExclusionPolicy) ) {
+                logger.info("NOT writing metrics for topic endpoint '{}' because it did not match the exclusion policy. " +
+                                "If this was not expected, check your '{}' and '{}' configurations.",
+                        tename, MonitorConfigs.TOPIC_ENDPOINT_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_TOPIC_ENDPOINTS);
+                continue;
+            }
+            String prefix = metricPrefix
+                    + VPNS_PREFIX + DELIM + vpnname
+                    + DELIM + TopicEndpointMetrics.PREFIX + DELIM  + tename;
+            endpoint.remove(TopicEndpointMetrics.VpnName);
+            endpoint.remove(TopicEndpointMetrics.TopicEndpointName);
+            printMetrics(prefix, endpoint);
         }
 
         // Run bridges check
@@ -178,4 +208,6 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     final private List<Pattern> vpnFilter;
     final private ExclusionPolicy queueExclusionPolicy;
     final private List<Pattern> queueFilter;
+    final private ExclusionPolicy topicEndpointExclusionPolicy;
+    final private List<Pattern> topicEndpointFilter;
 }

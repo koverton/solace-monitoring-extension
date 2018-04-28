@@ -66,6 +66,14 @@ public class SempRequestFactory_r8_2_0Test {
     }
 
     @Test
+    public void getTopicEndpointListTest() {
+        Rpc request = factory.createTopicEndpointListRequest(SEMP_VERSION);
+        String xml = marshaller.toRequestXml(request);
+        System.out.println(xml);
+        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><topic-endpoint><name>*</name><detail/></topic-endpoint></show></rpc>", xml);
+    }
+
+    @Test
     public void getGlobalBridgeListTest() {
         Rpc request = factory.createGlobalBridgeListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);

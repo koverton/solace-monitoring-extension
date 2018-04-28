@@ -99,6 +99,13 @@ public class SempMarshaller_r7_2_2Test
     }
 
     @Test
+    public void showTopicEndpointListTest() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-topicendpoints.detail.xml"));
+        List<Map<String, Object>> endpoints = factory.getTopicEndpointList(reply);
+        assertNotNull(endpoints);
+    }
+
+    @Test
     public void showBridgeListTest() throws Exception {
         RpcReply reply = marshaller.fromReplyXml(readFile("show-bridges.xml"));
         List<Map<String, Object>> bridges = factory.getGlobalBridgeList(reply);
