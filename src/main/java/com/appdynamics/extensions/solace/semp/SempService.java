@@ -16,6 +16,8 @@ public interface SempService {
 
     List<Map<String,Object>> checkQueueList();
 
+    List<Map<String,Object>> checkTopicEndpointList();
+
     List<Map<String,Object>> checkGlobalBridgeList();
 
     String getDisplayName();

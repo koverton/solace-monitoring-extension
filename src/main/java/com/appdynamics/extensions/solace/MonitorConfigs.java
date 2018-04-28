@@ -5,8 +5,10 @@ public class MonitorConfigs {
 
     final public static String VPN_EXCLUSION_POLICY = "vpnExclusionPolicy";
     final public static String QUEUE_EXCLUSION_POLICY = "queueExclusionPolicy";
+    final public static String TOPIC_ENDPOINT_EXCLUSION_POLICY = "topicEndpointExclusionPolicy";
     final public static String EXCLUDE_MSG_VPNS = "excludeMsgVpns";
     final public static String EXCLUDE_QUEUES = "excludeQueues";
+    final public static String EXCLUDE_TOPIC_ENDPOINTS = "excludeTopicEndpoints";
     final public static String METRIC_PREFIX = "metricPrefix";
     final public static String SERVERS = "servers";
 

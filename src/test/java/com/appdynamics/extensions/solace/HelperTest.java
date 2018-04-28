@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 public class HelperTest {
@@ -24,6 +25,23 @@ public class HelperTest {
         for(String p : patternArray) {
             patternList.add(Pattern.compile(p));
         }
+    }
+
+    @Test
+    public void parseWhitelistTest() {
+        assertEquals(MonitorConfigs.ExclusionPolicy.WHITELIST, Helper.parseExclusionPolicy("whitelist"));
+        assertEquals(MonitorConfigs.ExclusionPolicy.WHITELIST, Helper.parseExclusionPolicy("WhItElIsT"));
+    }
+
+    @Test
+    public void parseBlacklistTest() {
+        assertEquals(MonitorConfigs.ExclusionPolicy.BLACKLIST, Helper.parseExclusionPolicy("blacklist"));
+        assertEquals(MonitorConfigs.ExclusionPolicy.BLACKLIST, Helper.parseExclusionPolicy("bLaCkLiSt"));
+    }
+
+    @Test
+    public void unrecognizedExclusionPolicyDefaultTest() {
+        assertEquals(MonitorConfigs.ExclusionPolicy.BLACKLIST, Helper.parseExclusionPolicy("Sarrusophone"));
     }
 
     @Test
