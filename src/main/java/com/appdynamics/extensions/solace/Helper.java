@@ -94,14 +94,13 @@ class Helper {
     }
 
     static ExclusionPolicy parseExclusionPolicy(String value) {
-        ExclusionPolicy result = ExclusionPolicy.BLACKLIST;
-        try {
-            result = ExclusionPolicy.valueOf(value);
+        for (ExclusionPolicy each : ExclusionPolicy.class.getEnumConstants()) {
+            if (each.name().compareToIgnoreCase(value) == 0) {
+                return each;
+            }
         }
-        catch(Exception e) {
-            logger.error("Exception parsing ExclusionPolicy configuration for value {}, defaulting to BLACKLIST", value);
-        }
-        return result;
+        logger.error("Failure parsing ExclusionPolicy configuration for value {}, defaulting to BLACKLIST", value);
+        return ExclusionPolicy.BLACKLIST;
     }
 
     static boolean isExcluded(String name, List<Pattern> policyList, ExclusionPolicy policy) {

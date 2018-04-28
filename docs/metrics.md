@@ -161,7 +161,22 @@ Statistics and indicators per each queue in a msg-VPN.
 | UsageInMB                        | Integer | Current spool-usage for this queue in MB. |
 | ConsumerCount                    | Integer | Current number of consumers bound to this queue. |
 
-### Bridge List: 
+### Durable TopicEndpoint List:
+
+Metrics Prefix: `Custom Metrics|Solace|<instance-name>|MsgVpns|<vpn-name>|TopicEndpoints|`
+
+Statistics and indicators per each durable topic endpoint in a msg-VPN.
+
+| Metric                           | Value | Description |
+|----------------------------------|-------|-------------|
+| IsIngressEnabled                 | Boolean | 1 if the endpoint configuration has enabled the endpoint for publishers. |
+| IsEgressEnabled                  | Boolean | 1 if the endpoint configuration has enabled the endpoint for consumers. |
+| QuotaInMB                        | Integer | Max spool-usage for this endpoint in MB. |
+| MessagesSpooled                  | Integer | Current number of messages spooled on this endpoint. |
+| UsageInMB                        | Integer | Current spool-usage for this endpoint in MB. |
+| ConsumerCount                    | Integer | Current number of consumers bound to this endpoint. |
+
+### Bridge List:
 
 Metrics Prefix: `Custom Metrics|Solace|<instance-name>|MsgVpns|<vpn-name>|Bridges|`
 

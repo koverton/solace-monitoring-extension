@@ -1,5 +1,6 @@
 package com.appdynamics.extensions.solace.semp.r8_6VMR;
 
+import com.appdynamics.extensions.solace.semp.TopicEndpointMetrics;
 import com.appdynamics.extensions.solace.semp.*;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.QueueType;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.RpcReply;
@@ -176,6 +177,30 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
         }
         return results;
     }
+
+    @Override
+    public List<Map<String, Object>> getTopicEndpointList(RpcReply rpcReply) {
+        List<Map<String,Object>> results = new ArrayList<>();
+        List<RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2> endpoints = rpcReply.getRpc()
+                .getShow()
+                .getTopicEndpoint()
+                .getTopicEndpoints()
+                .getTopicEndpoint();
+        for(RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2 t : endpoints) {
+            Map<String, Object> result = new HashMap<>();
+            result.put(TopicEndpointMetrics.TopicEndpointName, t.getName());
+            result.put(TopicEndpointMetrics.VpnName, t.getInfo().getMessageVpn());
+            result.put(TopicEndpointMetrics.IsIngressEnabled, t.getInfo().getIngressConfigStatus().equals("Up") ? 1 : 0);
+            result.put(TopicEndpointMetrics.IsEgressEnabled, t.getInfo().getEgressConfigStatus().equals("Up") ? 1 : 0);
+            result.put(TopicEndpointMetrics.QuotaInMB, t.getInfo().getQuota().longValue());
+            result.put(TopicEndpointMetrics.MessagesSpooled, t.getInfo().getNumMessagesSpooled().intValue());
+            result.put(TopicEndpointMetrics.UsageInMB, t.getInfo().getCurrentSpoolUsageInMb());
+            result.put(TopicEndpointMetrics.ConsumerCount, t.getInfo().getBindCount().intValue());
+            results.add(result);
+        }
+        return results;
+    }
+
 
     public List<Map<String,Object>> getGlobalBridgeList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
