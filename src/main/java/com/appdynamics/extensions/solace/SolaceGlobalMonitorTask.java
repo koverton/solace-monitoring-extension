@@ -38,12 +38,11 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         this.svc                 = svc;
     }
 
-
     @Override
     public void run() {
         logger.debug("<SolaceGlobalMonitorTask.run>");
-        String serverName = svc.getDisplayName();
-        String metricPrefix = basePrefix  + serverName + DELIM;
+        final String serverName = svc.getDisplayName();
+        final String metricPrefix = basePrefix  + serverName + DELIM;
         logger.debug("Configured metricPrefix: " + basePrefix);
         logger.debug("Full logging metricPrefix: " + metricPrefix);
 
@@ -64,54 +63,75 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         printMetrics(metricPrefix+StatisticalMetrics.PREFIX, clientStats);
 
         // Run queues check
+        checkQueues( metricPrefix );
+
+        // Run topic-endpoints check
+        checkTopicEndpoints( metricPrefix );
+
+        // Run bridges check
+        checkBridges( metricPrefix );
+
+        // Derive additional metrics
+        Map<String,Object> derivedMetrics = deriveMetrics(serviceStats, redundancyStats, spoolStats);
+        printMetrics(metricPrefix+DerivedMetrics.PREFIX, derivedMetrics);
+        logger.debug("</SolaceGlobalMonitorTask.run>");
+    }
+
+    @Override
+    public void onTaskComplete() {
+    }
+
+    private void checkQueues(String metricPrefix) {
         for(Map<String,Object> queue : svc.checkQueueList()) {
-            String vpnname= (String) queue.get(QueueMetrics.VpnName);
-            if ( Helper.isExcluded(vpnname, this.vpnFilter, vpnExclusionPolicy) ) {
+            String vpnName= (String) queue.get(QueueMetrics.VpnName);
+            if ( Helper.isExcluded(vpnName, this.vpnFilter, vpnExclusionPolicy) ) {
                 logger.info("NOT writing metrics for any queues in the '{}' MsgVPN because it did not match the exclusion policy. " +
-                        "If this was not expected, check your '{}' and '{}' configurations.",
-                        vpnname, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
+                                "If this was not expected, check your '{}' and '{}' configurations.",
+                        vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
                 continue;
             }
             String qname = (String) queue.get(QueueMetrics.QueueName);
             if ( Helper.isExcluded(qname, this.queueFilter, queueExclusionPolicy) ) {
                 logger.info("NOT writing metrics for queue '{}' because it did not match the exclusion policy. " +
-                        "If this was not expected, check your '{}' and '{}' configurations.",
+                                "If this was not expected, check your '{}' and '{}' configurations.",
                         qname, MonitorConfigs.QUEUE_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_QUEUES);
                 continue;
             }
             String prefix = metricPrefix
-                    + VPNS_PREFIX + DELIM + vpnname
+                    + VPNS_PREFIX + DELIM + vpnName
                     + DELIM + QueueMetrics.PREFIX + DELIM  + qname;
             queue.remove(QueueMetrics.VpnName);
             queue.remove(QueueMetrics.QueueName);
             printMetrics(prefix, queue);
         }
+    }
 
-        // Run topic-endpoints check
+    private void checkTopicEndpoints(String metricPrefix) {
         for(Map<String,Object> endpoint : svc.checkTopicEndpointList()) {
-            String vpnname= (String) endpoint.get(TopicEndpointMetrics.VpnName);
-            if ( Helper.isExcluded(vpnname, this.vpnFilter, vpnExclusionPolicy) ) {
+            String vpnName= (String) endpoint.get(TopicEndpointMetrics.VpnName);
+            if ( Helper.isExcluded(vpnName, this.vpnFilter, vpnExclusionPolicy) ) {
                 logger.info("NOT writing metrics for any topic endpoints in the '{}' MsgVPN because it did not match the exclusion policy. " +
                                 "If this was not expected, check your '{}' and '{}' configurations.",
-                        vpnname, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
+                        vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
                 continue;
             }
-            String tename = (String) endpoint.get(TopicEndpointMetrics.TopicEndpointName);
-            if ( Helper.isExcluded(tename, this.topicEndpointFilter, topicEndpointExclusionPolicy) ) {
+            String teName = (String) endpoint.get(TopicEndpointMetrics.TopicEndpointName);
+            if ( Helper.isExcluded(teName, this.topicEndpointFilter, topicEndpointExclusionPolicy) ) {
                 logger.info("NOT writing metrics for topic endpoint '{}' because it did not match the exclusion policy. " +
                                 "If this was not expected, check your '{}' and '{}' configurations.",
-                        tename, MonitorConfigs.TOPIC_ENDPOINT_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_TOPIC_ENDPOINTS);
+                        teName, MonitorConfigs.TOPIC_ENDPOINT_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_TOPIC_ENDPOINTS);
                 continue;
             }
             String prefix = metricPrefix
-                    + VPNS_PREFIX + DELIM + vpnname
-                    + DELIM + TopicEndpointMetrics.PREFIX + DELIM  + tename;
+                    + VPNS_PREFIX + DELIM + vpnName
+                    + DELIM + TopicEndpointMetrics.PREFIX + DELIM  + teName;
             endpoint.remove(TopicEndpointMetrics.VpnName);
             endpoint.remove(TopicEndpointMetrics.TopicEndpointName);
             printMetrics(prefix, endpoint);
         }
+    }
 
-        // Run bridges check
+    private void checkBridges(String metricPrefix) {
         for(Map<String,Object> bridge: svc.checkGlobalBridgeList()) {
             String vpnname= (String) bridge.get(BridgeMetrics.VpnName);
             String bridgename= (String) bridge.get(BridgeMetrics.BridgeName);
@@ -122,16 +142,6 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
             bridge.remove(BridgeMetrics.BridgeName);
             printMetrics(prefix, bridge);
         }
-
-        // Derive additional metrics
-        Map<String,Object> derivedMetrics = deriveMetrics(serviceStats, redundancyStats, spoolStats);
-        printMetrics(metricPrefix+DerivedMetrics.PREFIX, derivedMetrics);
-        logger.debug("</SolaceGlobalMonitorTask.run>");
-    }
-
-
-    @Override
-    public void onTaskComplete() {
     }
 
     private Map<String,Object> deriveMetrics(Map<String,Object> serviceStats, Map<String,Object> redundancyStats, Map<String,Object> spoolStats) {

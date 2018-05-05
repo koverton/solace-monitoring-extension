@@ -170,6 +170,7 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
             result.put(QueueMetrics.VpnName, q.getInfo().getMessageVpn());
             result.put(QueueMetrics.IsIngressEnabled, q.getInfo().getIngressConfigStatus().equals("Up") ? 1 : 0);
             result.put(QueueMetrics.IsEgressEnabled, q.getInfo().getEgressConfigStatus().equals("Up") ? 1 : 0);
+            result.put(QueueMetrics.IsDurable, q.getInfo().isDurable() ? 1 : 0);
             result.put(QueueMetrics.QuotaInMB, q.getInfo().getQuota().longValue());
             result.put(QueueMetrics.MessagesEnqueued, q.getInfo().getNumMessagesSpooled().intValue());
             result.put(QueueMetrics.UsageInMB, q.getInfo().getCurrentSpoolUsageInMb());
@@ -193,6 +194,7 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
             result.put(TopicEndpointMetrics.VpnName, t.getInfo().getMessageVpn());
             result.put(TopicEndpointMetrics.IsIngressEnabled, t.getInfo().getIngressConfigStatus().equals("Up") ? 1 : 0);
             result.put(TopicEndpointMetrics.IsEgressEnabled, t.getInfo().getEgressConfigStatus().equals("Up") ? 1 : 0);
+            result.put(TopicEndpointMetrics.IsDurable, t.getInfo().isDurable() ? 1 : 0);
             result.put(TopicEndpointMetrics.QuotaInMB, t.getInfo().getQuota().longValue());
             result.put(TopicEndpointMetrics.MessagesSpooled, t.getInfo().getNumMessagesSpooled().intValue());
             result.put(TopicEndpointMetrics.UsageInMB, t.getInfo().getCurrentSpoolUsageInMb());

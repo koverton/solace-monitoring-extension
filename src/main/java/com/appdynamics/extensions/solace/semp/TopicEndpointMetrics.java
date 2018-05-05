@@ -7,6 +7,7 @@ public class TopicEndpointMetrics {
     public final static String VpnName = "VpnName";
     public final static String IsIngressEnabled = "IsIngressEnabled";
     public final static String IsEgressEnabled = "IsEgressEnabled";
+    public final static String IsDurable = "IsDurable";
     public final static String QuotaInMB = "QuotaInMB";
     public final static String MessagesSpooled = "MessagesSpooled";
     public final static String UsageInMB = "UsageInMB";
