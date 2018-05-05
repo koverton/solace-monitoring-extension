@@ -56,6 +56,22 @@ class Helper {
         return defaultValue;
     }
 
+    static Boolean getBooleanOrDefault(Map<String,String> server, String fieldName, Boolean defaultValue) {
+        if (server.containsKey(fieldName)) {
+            Object o = server.get(fieldName);
+            if (o instanceof Boolean)
+                return (Boolean) o;
+            try {
+                return Boolean.parseBoolean(o.toString());
+            }
+            catch(Exception ex) {
+                logger.warn("Could not parse valid Boolean for [{}]; defaulting to [{}]",
+                        fieldName, defaultValue);
+            }
+        }
+        return defaultValue;
+    }
+
     @SuppressWarnings("unchecked")
     static List<Map<String,String>> getMonitorServerList(MonitorConfiguration config) {
         Object obj = config.getConfigYml().get(SERVERS);

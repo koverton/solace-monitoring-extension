@@ -195,13 +195,33 @@ See Java Regex Pattern documentation: https://docs.oracle.com/javase/7/docs/api/
 <tr>
 <td class='confluenceTd'> <tt>queueExclusionPolicy</tt> </td>
 <td class='confluenceTd'> <tt>[ WHITELIST | BLACKLIST ]</tt>: Determines how the <tt>excludeQueues</tt> configuration
-will be applied. a WHITELIST treats it as a list of specific queues to be monitored, a BLACKLIST treats
-it as a list of queues NOT to monitor.</td>
+will be applied. a WHITELIST treats it as a list of specific Queues to be monitored, a BLACKLIST treats
+it as a list of Queues NOT to monitor.</td>
 </tr>
 <tr>
 <td class='confluenceTd'> <tt>excludeQueues</tt> </td>
 <td class='confluenceTd'> List of regex patterns of Queues either whitelisted or blacklisted on this server.
 See Java Regex Pattern documentation: https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>topicEndpointExclusionPolicy</tt> </td>
+<td class='confluenceTd'> <tt>[ WHITELIST | BLACKLIST ]</tt>: Determines how the <tt>excludeTopicEndpoints</tt> configuration
+will be applied. a WHITELIST treats it as a list of specific Topic-Endpoints to be monitored, a BLACKLIST treats
+it as a list of Topic-Endpoints NOT to monitor.</td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>excludeTopicEndpoints</tt> </td>
+<td class='confluenceTd'> List of regex patterns of Topic-Endpoints either whitelisted or blacklisted on this server.
+See Java Regex Pattern documentation: https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
+</td>
+</tr>
+
+
+<tr>
+<td class='confluenceTd'> <tt>excludeTemporaries</tt> </td>
+<td class='confluenceTd'> [ Boolean : default TRUE ] Indicates whether or not to ignore temporary Queues and
+temporary Topic-Endpoints.
 </td>
 </tr>
 
@@ -229,6 +249,9 @@ servers:
     excludeMsgVpns: ["#config-sync", "default"]
     queueExclusionPolicy: "whitelist"
     excludeQueues: ["onlyThis", "andThis"]
+    topicEndpointExclusionPolicy: "blacklist"
+    excludeTopicEndpoints: ["log/.*"]
+    excludeTemporaries: true
   - mgmtUrl: "http://192.168.56.202:8080/SEMP"
     adminUser: "admin"
     encryptedPassword: "fHu/E8G0rGuCBXAWHvuoIA=="
@@ -238,6 +261,9 @@ servers:
     excludeMsgVpns: ["#config-sync", "default"]
     queueExclusionPolicy: "blacklist"
     excludeQueues: ["#P2P/.*"]
+    topicEndpointExclusionPolicy: "blacklist"
+    excludeTopicEndpoints: ["log/.*"]
+    excludeTemporaries: false
   - mgmtUrl: "http://192.168.56.203:8080/SEMP"
     adminUser: "admin"
     password: "admin"
@@ -247,12 +273,14 @@ servers:
     excludeMsgVpns: ["#config-sync", "default"]
     queueExclusionPolicy: "whitelist"
     excludeQueues: ["onlyThis", "andThis"]
+    excludeTopicEndpoints: ["selector1"]
 ```
 
 ## Latest Updates
 1. Fix redundancy status for hardware queries (as of 8.2.0)
 2. Per-metric documentation
 3. Exclusion lists now accept regular-expression patterns
+4. Optional setting to exclude monitoring all temporary endpoints
 
 
 ## Next Steps / TODO Items

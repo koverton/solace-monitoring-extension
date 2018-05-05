@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 import static com.appdynamics.extensions.solace.MonitorConfigs.*;
 
@@ -48,24 +47,8 @@ public class SolaceMonitor extends ABaseMonitor {
             String adminPass   = Helper.getPassword(server);
             String displayName = server.get(DISPLAY_NAME);
             Integer timeout    = Helper.getIntOrDefault(server, TIMEOUT, Sempv1Connector.DEFAULT_TIMEOUT);
-            ExclusionPolicy vpnExclusionPolicy = Helper.parseExclusionPolicy(server.get(VPN_EXCLUSION_POLICY));
-            List<Pattern> vpnFilter   = Helper.getRegexPatternListOrNew(server, EXCLUDE_MSG_VPNS);
-            ExclusionPolicy queueExclusionPolicy = Helper.parseExclusionPolicy(server.get(QUEUE_EXCLUSION_POLICY));
-            List<Pattern> queueFilter = Helper.getRegexPatternListOrNew(server, EXCLUDE_QUEUES);
-            ExclusionPolicy topicEndpointExclusionPolicy = Helper.parseExclusionPolicy(server.get(TOPIC_ENDPOINT_EXCLUSION_POLICY));
-            List<Pattern> topicEndpointFilter = Helper.getRegexPatternListOrNew(server, EXCLUDE_TOPIC_ENDPOINTS);
+            ServerExclusionPolicies exclusionPolicies = new ServerExclusionPolicies(server);
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("VPN Exclusion policy: {}", vpnExclusionPolicy);
-                for (Pattern excludedVpnPattern : vpnFilter)
-                    logger.debug("VPN Exclusion Pattern: {}", excludedVpnPattern);
-                logger.debug("Queue Exclusion policy: {}", queueExclusionPolicy.toString());
-                for (Pattern excludedQueuePattern : queueFilter)
-                    logger.debug("Queue Exclusion Pattern: {}", excludedQueuePattern.toString());
-                logger.debug("TopicEndpoint Exclusion policy: {}", topicEndpointExclusionPolicy.toString());
-                for (Pattern topicEndpointPattern : topicEndpointFilter)
-                    logger.debug("Queue Exclusion Pattern: {}", topicEndpointPattern.toString());
-            }
             logger.info("Adding task to poll [Server:{}, Mgmt URL:{}, Admin User:{}]",
                     displayName, mgmtUrl, adminUser);
 
@@ -87,9 +70,7 @@ public class SolaceMonitor extends ABaseMonitor {
                     serviceProvider.submit(displayName,
                             new SolaceGlobalMonitorTask(metricWriter,
                                     baseMetricPrefix,
-                                    vpnExclusionPolicy, vpnFilter,
-                                    queueExclusionPolicy, queueFilter,
-                                    topicEndpointExclusionPolicy, topicEndpointFilter,
+                                    exclusionPolicies,
                                     sempService));
                 }
                 else {
