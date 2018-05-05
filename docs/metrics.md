@@ -156,6 +156,7 @@ Statistics and indicators per each queue in a msg-VPN.
 |----------------------------------|-------|-------------|
 | IsIngressEnabled                 | Boolean | 1 if the queue configuration has enabled the queue for publishers. |
 | IsEgressEnabled                  | Boolean | 1 if the queue configuration has enabled the queue for consumers. |
+| IsDurable                        | Boolean | 1 if the queue is durable (i.e. not temporary) . |
 | QuotaInMB                        | Integer | Max spool-usage for this queue in MB. |
 | MessagesEnqueued                 | Integer | Current number of messages enqueued on this endpoint. |
 | UsageInMB                        | Integer | Current spool-usage for this queue in MB. |
@@ -165,12 +166,13 @@ Statistics and indicators per each queue in a msg-VPN.
 
 Metrics Prefix: `Custom Metrics|Solace|<instance-name>|MsgVpns|<vpn-name>|TopicEndpoints|`
 
-Statistics and indicators per each durable topic endpoint in a msg-VPN.
+Statistics and indicators per each topic endpoint in a msg-VPN.
 
 | Metric                           | Value | Description |
 |----------------------------------|-------|-------------|
 | IsIngressEnabled                 | Boolean | 1 if the endpoint configuration has enabled the endpoint for publishers. |
 | IsEgressEnabled                  | Boolean | 1 if the endpoint configuration has enabled the endpoint for consumers. |
+| IsDurable                        | Boolean | 1 if the endpoint is durable (i.e. not temporary) . |
 | QuotaInMB                        | Integer | Max spool-usage for this endpoint in MB. |
 | MessagesSpooled                  | Integer | Current number of messages spooled on this endpoint. |
 | UsageInMB                        | Integer | Current spool-usage for this endpoint in MB. |
