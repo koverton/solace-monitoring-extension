@@ -9,6 +9,7 @@ public class MonitorConfigs {
     final public static String EXCLUDE_MSG_VPNS = "excludeMsgVpns";
     final public static String EXCLUDE_QUEUES = "excludeQueues";
     final public static String EXCLUDE_TOPIC_ENDPOINTS = "excludeTopicEndpoints";
+    final public static String EXCLUDE_TEMPORARIES = "excludeTemporaries";
     final public static String METRIC_PREFIX = "metricPrefix";
     final public static String SERVERS = "servers";
 

@@ -19,6 +19,7 @@ servers:
     excludeQueues: ["#P2P/.*"]
     topicEndpointExclusionPolicy: "blacklist"
     excludeTopicEndpoints: ["#P2P/.*"]
+    excludeTemporaries: true
   - mgmtUrl: "http://192.168.56.202:8080/SEMP"
     adminUser: "admin"
     # password: "admin"
@@ -33,6 +34,7 @@ servers:
     excludeQueues: ["queue1", "queue2"]
     topicEndpointExclusionPolicy: "whitelist"
     excludeTopicEndpoints: ["dte1", "dte2"]
+    excludeTemporaries: true
 
 
 # number of concurrent tasks

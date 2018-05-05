@@ -23,19 +23,11 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     private static final String VPNS_PREFIX = "MsgVpns";
 
     SolaceGlobalMonitorTask(MetricWriteHelper metricWriter, String basePrefix,
-                            MonitorConfigs.ExclusionPolicy vpnExclusionPolicy, List<Pattern> vpnFilter,
-                            ExclusionPolicy queueExclusionPolicy, List<Pattern> queueFilter,
-                            ExclusionPolicy topicEndpointExclusionPolicy, List<Pattern> topicEndpointFilter,
-                            SempService svc) {
-        this.metricWriter        = metricWriter;
-        this.basePrefix          = basePrefix;
-        this.vpnExclusionPolicy  = vpnExclusionPolicy;
-        this.vpnFilter           = vpnFilter;
-        this.queueExclusionPolicy= queueExclusionPolicy;
-        this.queueFilter         = queueFilter;
-        this.topicEndpointExclusionPolicy= topicEndpointExclusionPolicy;
-        this.topicEndpointFilter = topicEndpointFilter;
-        this.svc                 = svc;
+                            ServerExclusionPolicies exclusionPolicies, SempService svc) {
+        this.metricWriter      = metricWriter;
+        this.basePrefix        = basePrefix;
+        this.exclusionPolicies = exclusionPolicies;
+        this.svc               = svc;
     }
 
     @Override
@@ -81,21 +73,33 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     public void onTaskComplete() {
     }
 
+    private Boolean getIsDurable(Map<String,Object> map, String fieldName) {
+        return 1 == ((Integer)map.getOrDefault(fieldName, 0));
+    }
+
     private void checkQueues(String metricPrefix) {
         for(Map<String,Object> queue : svc.checkQueueList()) {
             String vpnName= (String) queue.get(QueueMetrics.VpnName);
-            if ( Helper.isExcluded(vpnName, this.vpnFilter, vpnExclusionPolicy) ) {
+            if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
                 logger.info("NOT writing metrics for any queues in the '{}' MsgVPN because it did not match the exclusion policy. " +
                                 "If this was not expected, check your '{}' and '{}' configurations.",
                         vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
                 continue;
             }
             String qname = (String) queue.get(QueueMetrics.QueueName);
-            if ( Helper.isExcluded(qname, this.queueFilter, queueExclusionPolicy) ) {
+            if ( Helper.isExcluded(qname, exclusionPolicies.getQueueFilter(), exclusionPolicies.getQueueExclusionPolicy()) ) {
                 logger.info("NOT writing metrics for queue '{}' because it did not match the exclusion policy. " +
                                 "If this was not expected, check your '{}' and '{}' configurations.",
                         qname, MonitorConfigs.QUEUE_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_QUEUES);
                 continue;
+            }
+            if (exclusionPolicies.getExcludeTemporaries() ) {
+                if (!getIsDurable(queue, QueueMetrics.IsDurable)) {
+                    logger.info("NOT writing metrics for temporary queue '{}' because it did not match the exclusion policy. " +
+                                    "If this was not expected, check your '{}' configuration.",
+                            qname, MonitorConfigs.EXCLUDE_TEMPORARIES);
+                    continue;
+                }
             }
             String prefix = metricPrefix
                     + VPNS_PREFIX + DELIM + vpnName
@@ -109,18 +113,26 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     private void checkTopicEndpoints(String metricPrefix) {
         for(Map<String,Object> endpoint : svc.checkTopicEndpointList()) {
             String vpnName= (String) endpoint.get(TopicEndpointMetrics.VpnName);
-            if ( Helper.isExcluded(vpnName, this.vpnFilter, vpnExclusionPolicy) ) {
+            if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
                 logger.info("NOT writing metrics for any topic endpoints in the '{}' MsgVPN because it did not match the exclusion policy. " +
                                 "If this was not expected, check your '{}' and '{}' configurations.",
                         vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
                 continue;
             }
             String teName = (String) endpoint.get(TopicEndpointMetrics.TopicEndpointName);
-            if ( Helper.isExcluded(teName, this.topicEndpointFilter, topicEndpointExclusionPolicy) ) {
+            if ( Helper.isExcluded(teName, exclusionPolicies.getTopicEndpointFilter(), exclusionPolicies.getTopicEndpointExclusionPolicy()) ) {
                 logger.info("NOT writing metrics for topic endpoint '{}' because it did not match the exclusion policy. " +
                                 "If this was not expected, check your '{}' and '{}' configurations.",
                         teName, MonitorConfigs.TOPIC_ENDPOINT_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_TOPIC_ENDPOINTS);
                 continue;
+            }
+            if (exclusionPolicies.getExcludeTemporaries() ) {
+                if (!getIsDurable(endpoint, TopicEndpointMetrics.IsDurable)) {
+                    logger.info("NOT writing metrics for temporary topic-endpoint '{}' because it did not match the exclusion policy. " +
+                                    "If this was not expected, check your '{}' configuration.",
+                            teName, MonitorConfigs.EXCLUDE_TEMPORARIES);
+                    continue;
+                }
             }
             String prefix = metricPrefix
                     + VPNS_PREFIX + DELIM + vpnName
@@ -214,10 +226,5 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     final private SempService svc;
     final private MetricWriteHelper metricWriter;
     final private String basePrefix;
-    final private ExclusionPolicy vpnExclusionPolicy;
-    final private List<Pattern> vpnFilter;
-    final private ExclusionPolicy queueExclusionPolicy;
-    final private List<Pattern> queueFilter;
-    final private ExclusionPolicy topicEndpointExclusionPolicy;
-    final private List<Pattern> topicEndpointFilter;
+    final private ServerExclusionPolicies exclusionPolicies;
 }
