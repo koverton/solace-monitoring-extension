@@ -1,12 +1,11 @@
 package com.appdynamics.extensions.solace.semp.r8_6VMR;
 
-import com.appdynamics.extensions.solace.semp.MsgSpoolMetrics;
+import com.appdynamics.extensions.solace.semp.Metrics;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.xml.bind.JAXBException;
-import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -76,11 +75,11 @@ public class SempMarshaller_r8_6VMRTest
                 factory.getGlobalMsgSpool(reply);
         assertNotNull(info);
 
-        Integer isEnabled = (Integer)info.get(MsgSpoolMetrics.IsEnabled);
-        Integer isActive = (Integer)info.get(MsgSpoolMetrics.IsActive);
-        Integer isStandby = (Integer)info.get(MsgSpoolMetrics.IsStandby);
-        Integer isDatapathUp = (Integer)info.get(MsgSpoolMetrics.IsDatapathUp);
-        Integer isSynchronized = (Integer)info.get(MsgSpoolMetrics.IsSynchronized);
+        Integer isEnabled = (Integer)info.get(Metrics.MsgSpool.IsEnabled);
+        Integer isActive = (Integer)info.get(Metrics.MsgSpool.IsActive);
+        Integer isStandby = (Integer)info.get(Metrics.MsgSpool.IsStandby);
+        Integer isDatapathUp = (Integer)info.get(Metrics.MsgSpool.IsDatapathUp);
+        Integer isSynchronized = (Integer)info.get(Metrics.MsgSpool.IsSynchronized);
         assertEquals(1, isEnabled.intValue());
         assertEquals(1, isActive.intValue());
         assertEquals(0, isStandby.intValue());
@@ -95,11 +94,11 @@ public class SempMarshaller_r8_6VMRTest
                 factory.getGlobalMsgSpool(reply);
         assertNotNull(info);
 
-        Integer isEnabled = (Integer)info.get(MsgSpoolMetrics.IsEnabled);
-        Integer isActive = (Integer)info.get(MsgSpoolMetrics.IsActive);
-        Integer isStandby = (Integer)info.get(MsgSpoolMetrics.IsStandby);
-        Integer isDatapathUp = (Integer)info.get(MsgSpoolMetrics.IsDatapathUp);
-        Integer isSynchronized = (Integer)info.get(MsgSpoolMetrics.IsSynchronized);
+        Integer isEnabled = (Integer)info.get(Metrics.MsgSpool.IsEnabled);
+        Integer isActive = (Integer)info.get(Metrics.MsgSpool.IsActive);
+        Integer isStandby = (Integer)info.get(Metrics.MsgSpool.IsStandby);
+        Integer isDatapathUp = (Integer)info.get(Metrics.MsgSpool.IsDatapathUp);
+        Integer isSynchronized = (Integer)info.get(Metrics.MsgSpool.IsSynchronized);
         assertEquals(1, isEnabled.intValue());
         assertEquals(0, isActive.intValue());
         assertEquals(1, isStandby.intValue());
