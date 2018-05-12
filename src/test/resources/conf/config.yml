@@ -1,7 +1,9 @@
 ### ANY CHANGES TO THIS FILE DOES NOT REQUIRE A RESTART ###
 
-#This will create this metric in all the tiers, under this path
-metricPrefix: "Custom Metrics|Solace|"
+# This will create this metric in a specific component so that the same
+# custom metric name will be distinct under different applications
+# see: https://community.appdynamics.com/t5/Knowledge-Base/How-to-troubleshoot-missing-custom-metrics-or-extensions-metrics/ta-p/28695
+metricPrefix: "Server|Component:<Component_id>|Custom Metrics|Solace|"
 
 # List of Solace Servers
 servers:
