@@ -129,9 +129,11 @@ Solace deployment you want to monitor.
 </tr>
 <tr>
 <td class='confluenceTd'> <tt>metricPrefix</tt> </td>
-<td class='confluenceTd'> This will create this metric in all the tiers, 
-under this path; it should always start with "Custom Metrics|Solace", but can be varied 
-from there onwards.</td>
+<td class='confluenceTd'>
+This will create this metric in a specific component so that the same
+custom metric name will be distinct under different applications
+see [this AppDynamics KB post](https://community.appdynamics.com/t5/Knowledge-Base/How-to-troubleshoot-missing-custom-metrics-or-extensions-metrics/ta-p/28695)
+</td>
 </tr>
 <tr>
 <td class='confluenceTd'> <tt>Servers</tt> </td>
@@ -232,8 +234,11 @@ temporary Topic-Endpoints.
 
 ```yaml
 
+# This will create this metric in a specific component so that the same
+# custom metric name will be distinct under different applications
+# see: https://community.appdynamics.com/t5/Knowledge-Base/How-to-troubleshoot-missing-custom-metrics-or-extensions-metrics/ta-p/28695
 #This will create this metric in all the tiers, under this path
-metricPrefix: "Custom Metrics|Solace|"
+metricPrefix: "Server|Component:2345263|Custom Metrics|Solace|"
 
 # number of concurrent tasks
 numberOfThreads: 2
