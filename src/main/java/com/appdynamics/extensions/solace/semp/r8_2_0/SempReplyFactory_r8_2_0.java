@@ -179,6 +179,28 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
         return results;
     }
 
+    public List<Map<String, Object>> getQueueRatesList(RpcReply reply) {
+        List<Map<String,Object>> results = new ArrayList<>();
+        RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
+                .getShow()
+                .getQueue()
+                .getQueues();
+        for(QueueType q : queues.getQueue()) {
+            Map<String, Object> result = new HashMap<>();
+            List<QueueType.Rates> rates = q.getRates();
+            result.put(Metrics.Queue.QueueName, q.getName());
+            result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
+            for(QueueType.Rates r : rates) {
+                result.put(Metrics.Queue.CurrentIngressRatePerSecond, r.getQendptDataRates().getCurrentIngressRatePerSecond());
+                result.put(Metrics.Queue.CurrentIngressByteRatePerSecond, r.getQendptDataRates().getCurrentIngressByteRatePerSecond());
+                result.put(Metrics.Queue.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
+                result.put(Metrics.Queue.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
+            }
+            results.add(result);
+        }
+        return results;
+    }
+
     @Override
     public List<Map<String, Object>> getTopicEndpointList(RpcReply rpcReply) {
         List<Map<String,Object>> results = new ArrayList<>();
@@ -198,6 +220,27 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.TopicEndpoint.MessagesSpooled, t.getInfo().getNumMessagesSpooled().intValue());
             result.put(Metrics.TopicEndpoint.UsageInMB, t.getInfo().getCurrentSpoolUsageInMb());
             result.put(Metrics.TopicEndpoint.ConsumerCount, t.getInfo().getBindCount().intValue());
+            results.add(result);
+        }
+        return results;
+    }
+
+    public List<Map<String, Object>> getTopicEndpointRatesList(RpcReply reply) {
+        List<Map<String,Object>> results = new ArrayList<>();
+        RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints eps = reply.getRpc()
+                .getShow()
+                .getTopicEndpoint()
+                .getTopicEndpoints();
+        for(RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2 t : eps.getTopicEndpoint()) {
+            Map<String, Object> result = new HashMap<>();
+            result.put(Metrics.TopicEndpoint.TopicEndpointName, t.getName());
+            result.put(Metrics.TopicEndpoint.VpnName, t.getInfo().getMessageVpn());
+            for(RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2.Rates r : t.getRates()) {
+                result.put(Metrics.TopicEndpoint.CurrentIngressRatePerSecond, r.getQendptDataRates().getCurrentIngressRatePerSecond());
+                result.put(Metrics.TopicEndpoint.CurrentIngressByteRatePerSecond, r.getQendptDataRates().getCurrentIngressByteRatePerSecond());
+                result.put(Metrics.TopicEndpoint.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
+                result.put(Metrics.TopicEndpoint.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
+            }
             results.add(result);
         }
         return results;
