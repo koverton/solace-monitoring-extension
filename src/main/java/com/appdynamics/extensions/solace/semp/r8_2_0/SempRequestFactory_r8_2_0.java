@@ -55,11 +55,27 @@ public class SempRequestFactory_r8_2_0 implements SempRequestFactory<Rpc> {
         return request;
     }
 
+    public Rpc createQueueRatesListRequest(String sempVersion) {
+        final Rpc request = newShowRequest(sempVersion);
+        request.getShow().setQueue(factory.createRpcShowQueue());
+        request.getShow().getQueue().setName("*");
+        request.getShow().getQueue().setRates(factory.createKeywordType());
+        return request;
+    }
+
     public Rpc createTopicEndpointListRequest(String sempVersion) {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setTopicEndpoint(factory.createRpcShowTopicEndpoint());
         request.getShow().getTopicEndpoint().setName("*");
         request.getShow().getTopicEndpoint().setDetail(factory.createKeywordType());
+        return request;
+    }
+
+    public Rpc createTopicEndpointRatesListRequest(String sempVersion) {
+        final Rpc request = newShowRequest(sempVersion);
+        request.getShow().setTopicEndpoint(factory.createRpcShowTopicEndpoint());
+        request.getShow().getTopicEndpoint().setName("*");
+        request.getShow().getTopicEndpoint().setRates(factory.createKeywordType());
         return request;
     }
 
