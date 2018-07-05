@@ -1,0 +1,8 @@
+<rpc semp-version="soltr/7_1_1">
+    <show>
+        <queue>
+            <name>*</name>
+            <rates></rates>
+        </queue>
+    </show>
+</rpc>

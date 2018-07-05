@@ -128,9 +128,23 @@ public class SempMarshaller_r8_6VMRTest
     }
 
     @Test
+    public void showQueueRatesListTest() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-queues.rates.xml"));
+        List<Map<String, Object>> queues = factory.getQueueRatesList(reply);
+        assertNotNull(queues);
+    }
+
+    @Test
     public void showTopicEndpointListTest() throws Exception {
         RpcReply reply = marshaller.fromReplyXml(readFile("show-topicendpoints.detail.xml"));
         List<Map<String, Object>> endpoints = factory.getTopicEndpointList(reply);
+        assertNotNull(endpoints);
+    }
+
+    @Test
+    public void showTopicEndpointRatesListTest() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-topicendpoints.rates.xml"));
+        List<Map<String, Object>> endpoints = factory.getTopicEndpointRatesList(reply);
         assertNotNull(endpoints);
     }
 

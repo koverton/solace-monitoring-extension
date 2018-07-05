@@ -95,6 +95,10 @@ public final class Metrics {
         public final static String MessagesEnqueued = "MessagesEnqueued";
         public final static String UsageInMB = "UsageInMB";
         public final static String ConsumerCount = "ConsumerCount";
+        public final static String CurrentIngressRatePerSecond = "CurrentIngressRatePerSecond";
+        public final static String CurrentEgressRatePerSecond = "CurrentEgressRatePerSecond";
+        public final static String CurrentIngressByteRatePerSecond = "CurrentIngressByteRatePerSecond";
+        public final static String CurrentEgressByteRatePerSecond = "CurrentEgressByteRatePerSecond";
     }
 
     public class TopicEndpoint {
@@ -109,6 +113,10 @@ public final class Metrics {
         public final static String MessagesSpooled = "MessagesSpooled";
         public final static String UsageInMB = "UsageInMB";
         public final static String ConsumerCount = "ConsumerCount";
+        public final static String CurrentIngressRatePerSecond = "CurrentIngressRatePerSecond";
+        public final static String CurrentEgressRatePerSecond = "CurrentEgressRatePerSecond";
+        public final static String CurrentIngressByteRatePerSecond = "CurrentIngressByteRatePerSecond";
+        public final static String CurrentEgressByteRatePerSecond = "CurrentEgressByteRatePerSecond";
     }
 
     public final class Bridge {

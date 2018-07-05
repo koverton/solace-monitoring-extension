@@ -16,7 +16,11 @@ public interface SempService {
 
     List<Map<String,Object>> checkQueueList();
 
+    List<Map<String,Object>> checkQueueRatesList();
+
     List<Map<String,Object>> checkTopicEndpointList();
+
+    List<Map<String,Object>> checkTopicEndpointRatesList();
 
     List<Map<String,Object>> checkGlobalBridgeList();
 

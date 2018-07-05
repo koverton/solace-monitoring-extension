@@ -128,6 +128,27 @@ class GenericSempService<Request,Reply> implements SempService {
         return result;
     }
 
+    public List<Map<String,Object>> checkQueueRatesList() {
+        logger.debug("<GenericSempService.checkQueueRatesList>");
+        Request request = ctx.getReqFactory().createQueueRatesListRequest(ctx.getSchemaVersion());
+        String xml = ctx.getMarshaller().toRequestXml(request);
+
+        String response = ctx.getConnector().doPost(xml);
+        @SuppressWarnings("unchecked")
+        Reply reply = ctx.getMarshaller().fromReplyXml(response);
+
+        List<Map<String,Object>> result;
+        if (!ctx.getReplyFactory().isSuccess(reply)) {
+            logger.error("Empty QueueRatesList because no data in the response.");
+            result = new ArrayList<>();
+        }
+        else {
+            result = ctx.getReplyFactory().getQueueRatesList(reply);
+        }
+        logger.debug("</GenericSempService.checkQueueRatesList>");
+        return result;
+    }
+
     public List<Map<String,Object>> checkTopicEndpointList() {
         logger.debug("<GenericSempService.checkTopicEndpointList>");
         Request request = ctx.getReqFactory().createTopicEndpointListRequest(ctx.getSchemaVersion());
@@ -139,13 +160,34 @@ class GenericSempService<Request,Reply> implements SempService {
 
         List<Map<String,Object>> result;
         if (!ctx.getReplyFactory().isSuccess(reply)) {
-            logger.error("Empty QueueList because no data in the response.");
+            logger.error("Empty TopicEndpointList because no data in the response.");
             result = new ArrayList<>();
         }
         else {
             result = ctx.getReplyFactory().getTopicEndpointList(reply);
         }
         logger.debug("</GenericSempService.checkTopicEndpointList>");
+        return result;
+    }
+
+    public List<Map<String,Object>> checkTopicEndpointRatesList() {
+        logger.debug("<GenericSempService.checkTopicEndpointRatesList>");
+        Request request = ctx.getReqFactory().createTopicEndpointRatesListRequest(ctx.getSchemaVersion());
+        String xml = ctx.getMarshaller().toRequestXml(request);
+
+        String response = ctx.getConnector().doPost(xml);
+        @SuppressWarnings("unchecked")
+        Reply reply = ctx.getMarshaller().fromReplyXml(response);
+
+        List<Map<String,Object>> result;
+        if (!ctx.getReplyFactory().isSuccess(reply)) {
+            logger.error("Empty TopicEndpointRatesList because no data in the response.");
+            result = new ArrayList<>();
+        }
+        else {
+            result = ctx.getReplyFactory().getTopicEndpointRatesList(reply);
+        }
+        logger.debug("</GenericSempService.checkTopicEndpointRatesList>");
         return result;
     }
 

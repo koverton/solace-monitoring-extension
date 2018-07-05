@@ -51,11 +51,13 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         Map<String,Object> clientStats = svc.checkGlobalStats();
         printMetrics(metricPrefix+Metrics.Statistics.PREFIX, clientStats);
 
-        // Run queues check
+        // Run queues checks
         checkQueues( metricPrefix );
+        checkQueueRates( metricPrefix );
 
-        // Run topic-endpoints check
+        // Run topic-endpoints checks
         checkTopicEndpoints( metricPrefix );
+        checkTopicEndpointRates( metricPrefix );
 
         // Run bridges check
         checkBridges( metricPrefix );
@@ -107,6 +109,39 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         }
     }
 
+    private void checkQueueRates(String metricPrefix) {
+        for(Map<String,Object> queue : svc.checkQueueRatesList()) {
+            String vpnName= (String) queue.get(Metrics.Queue.VpnName);
+            if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
+                logger.info("NOT writing rate metrics for any queues in the '{}' MsgVPN because it did not match the exclusion policy. " +
+                                "If this was not expected, check your '{}' and '{}' configurations.",
+                        vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
+                continue;
+            }
+            String qname = (String) queue.get(Metrics.Queue.QueueName);
+            if ( Helper.isExcluded(qname, exclusionPolicies.getQueueFilter(), exclusionPolicies.getQueueExclusionPolicy()) ) {
+                logger.info("NOT writing rate metrics for queue '{}' because it did not match the exclusion policy. " +
+                                "If this was not expected, check your '{}' and '{}' configurations.",
+                        qname, MonitorConfigs.QUEUE_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_QUEUES);
+                continue;
+            }
+            if (exclusionPolicies.getExcludeTemporaries() ) {
+                if (!getIsDurable(queue, Metrics.Queue.IsDurable)) {
+                    logger.info("NOT writing rate metrics for temporary queue '{}' because it did not match the exclusion policy. " +
+                                    "If this was not expected, check your '{}' configuration.",
+                            qname, MonitorConfigs.EXCLUDE_TEMPORARIES);
+                    continue;
+                }
+            }
+            String prefix = metricPrefix
+                    + VPNS_PREFIX + DELIM + vpnName
+                    + DELIM + Metrics.Queue.PREFIX + DELIM  + qname;
+            queue.remove(Metrics.Queue.VpnName);
+            queue.remove(Metrics.Queue.QueueName);
+            printMetrics(prefix, queue);
+        }
+    }
+
     private void checkTopicEndpoints(String metricPrefix) {
         for(Map<String,Object> endpoint : svc.checkTopicEndpointList()) {
             String vpnName= (String) endpoint.get(Metrics.TopicEndpoint.VpnName);
@@ -126,6 +161,39 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
             if (exclusionPolicies.getExcludeTemporaries() ) {
                 if (!getIsDurable(endpoint, Metrics.TopicEndpoint.IsDurable)) {
                     logger.info("NOT writing metrics for temporary topic-endpoint '{}' because it did not match the exclusion policy. " +
+                                    "If this was not expected, check your '{}' configuration.",
+                            teName, MonitorConfigs.EXCLUDE_TEMPORARIES);
+                    continue;
+                }
+            }
+            String prefix = metricPrefix
+                    + VPNS_PREFIX + DELIM + vpnName
+                    + DELIM + Metrics.TopicEndpoint.PREFIX + DELIM  + teName;
+            endpoint.remove(Metrics.TopicEndpoint.VpnName);
+            endpoint.remove(Metrics.TopicEndpoint.TopicEndpointName);
+            printMetrics(prefix, endpoint);
+        }
+    }
+
+    private void checkTopicEndpointRates(String metricPrefix) {
+        for(Map<String,Object> endpoint : svc.checkTopicEndpointRatesList()) {
+            String vpnName= (String) endpoint.get(Metrics.TopicEndpoint.VpnName);
+            if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
+                logger.info("NOT writing rate metrics for any topic endpoints in the '{}' MsgVPN because it did not match the exclusion policy. " +
+                                "If this was not expected, check your '{}' and '{}' configurations.",
+                        vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
+                continue;
+            }
+            String teName = (String) endpoint.get(Metrics.TopicEndpoint.TopicEndpointName);
+            if ( Helper.isExcluded(teName, exclusionPolicies.getTopicEndpointFilter(), exclusionPolicies.getTopicEndpointExclusionPolicy()) ) {
+                logger.info("NOT writing rate metrics for topic endpoint '{}' because it did not match the exclusion policy. " +
+                                "If this was not expected, check your '{}' and '{}' configurations.",
+                        teName, MonitorConfigs.TOPIC_ENDPOINT_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_TOPIC_ENDPOINTS);
+                continue;
+            }
+            if (exclusionPolicies.getExcludeTemporaries() ) {
+                if (!getIsDurable(endpoint, Metrics.TopicEndpoint.IsDurable)) {
+                    logger.info("NOT writing rate metrics for temporary topic-endpoint '{}' because it did not match the exclusion policy. " +
                                     "If this was not expected, check your '{}' configuration.",
                             teName, MonitorConfigs.EXCLUDE_TEMPORARIES);
                     continue;

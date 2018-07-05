@@ -161,6 +161,10 @@ Statistics and indicators per each queue in a msg-VPN.
 | MessagesEnqueued                 | Integer | Current number of messages enqueued on this endpoint. |
 | UsageInMB                        | Integer | Current spool-usage for this queue in MB. |
 | ConsumerCount                    | Integer | Current number of consumers bound to this queue. |
+| CurrentIngressRatePerSecond      | Integer| Queue current inbound message rate per second |
+| CurrentEgressRatePerSecond       | Integer| Queue current outbound message rate per second |
+| CurrentIngressByteRatePerSecond  | Integer| Queue current inbound byte rate per second |
+| CurrentEgressByteRatePerSecond   | Integer| Queue current outbound byte rate per second |
 
 ### Durable TopicEndpoint List:
 
@@ -177,6 +181,10 @@ Statistics and indicators per each topic endpoint in a msg-VPN.
 | MessagesSpooled                  | Integer | Current number of messages spooled on this endpoint. |
 | UsageInMB                        | Integer | Current spool-usage for this endpoint in MB. |
 | ConsumerCount                    | Integer | Current number of consumers bound to this endpoint. |
+| CurrentIngressRatePerSecond      | Integer| Topic-Endpoint current inbound message rate per second |
+| CurrentEgressRatePerSecond       | Integer| Topic-Endpoint current outbound message rate per second |
+| CurrentIngressByteRatePerSecond  | Integer| Topic-Endpoint current inbound byte rate per second |
+| CurrentEgressByteRatePerSecond   | Integer| Topic-Endpoint current outbound byte rate per second |
 
 ### Bridge List:
 
