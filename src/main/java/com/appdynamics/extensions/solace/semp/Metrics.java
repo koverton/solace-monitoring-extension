@@ -95,6 +95,8 @@ public final class Metrics {
         public final static String MessagesEnqueued = "MessagesEnqueued";
         public final static String UsageInMB = "UsageInMB";
         public final static String ConsumerCount = "ConsumerCount";
+        public final static String OldestMsgId = "OldestMsgId";
+        public final static String NewestMsgId = "NewestMsgId";
         public final static String CurrentIngressRatePerSecond = "CurrentIngressRatePerSecond";
         public final static String CurrentEgressRatePerSecond = "CurrentEgressRatePerSecond";
         public final static String CurrentIngressByteRatePerSecond = "CurrentIngressByteRatePerSecond";
@@ -113,6 +115,8 @@ public final class Metrics {
         public final static String MessagesSpooled = "MessagesSpooled";
         public final static String UsageInMB = "UsageInMB";
         public final static String ConsumerCount = "ConsumerCount";
+        public final static String OldestMsgId = "OldestMsgId";
+        public final static String NewestMsgId = "NewestMsgId";
         public final static String CurrentIngressRatePerSecond = "CurrentIngressRatePerSecond";
         public final static String CurrentEgressRatePerSecond = "CurrentEgressRatePerSecond";
         public final static String CurrentIngressByteRatePerSecond = "CurrentIngressByteRatePerSecond";

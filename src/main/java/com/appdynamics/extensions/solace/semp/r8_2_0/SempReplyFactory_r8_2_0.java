@@ -7,6 +7,7 @@ import com.solacesystems.semp_jaxb.r8_2_0.reply.SolStatsType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -155,6 +156,11 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
         return result;
     }
 
+    private Long longOrDefault(BigInteger value, long defaultValue) {
+        if (value == null) return defaultValue;
+        return value.longValue();
+    }
+
     @Override
     public List<Map<String, Object>> getQueueList(RpcReply rpcReply) {
         List<Map<String,Object>> results = new ArrayList<>();
@@ -174,6 +180,8 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.Queue.MessagesEnqueued, q.getInfo().getNumMessagesSpooled().intValue());
             result.put(Metrics.Queue.UsageInMB, q.getInfo().getCurrentSpoolUsageInMb());
             result.put(Metrics.Queue.ConsumerCount, q.getInfo().getBindCount().intValue());
+            result.put(Metrics.Queue.OldestMsgId, longOrDefault(q.getInfo().getOldestMsgId(), 0));
+            result.put(Metrics.Queue.NewestMsgId, longOrDefault(q.getInfo().getNewestMsgId(), 0));
             results.add(result);
         }
         return results;
@@ -220,6 +228,8 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.TopicEndpoint.MessagesSpooled, t.getInfo().getNumMessagesSpooled().intValue());
             result.put(Metrics.TopicEndpoint.UsageInMB, t.getInfo().getCurrentSpoolUsageInMb());
             result.put(Metrics.TopicEndpoint.ConsumerCount, t.getInfo().getBindCount().intValue());
+            result.put(Metrics.TopicEndpoint.OldestMsgId, longOrDefault(t.getInfo().getOldestMsgId(), 0));
+            result.put(Metrics.TopicEndpoint.NewestMsgId, longOrDefault(t.getInfo().getNewestMsgId(), 0));
             results.add(result);
         }
         return results;
