@@ -60,6 +60,7 @@ public final class Metrics {
         public final static String EgressCompressionRatio = "EgressCompressionRatio";
         public final static String CurrentIngressSslRatePerSecond = "CurrentIngressSslRatePerSecond";
         public final static String CurrentEgressSslRatePerSecond = "CurrentEgressSslRatePerSecond";
+        public final static String TotalClientsConnected = "TotalClientsConnected";
         // Ingress discards
         public final static String TotalIngressDiscards = "Discards|TotalIngressDiscards";
         public final static String NoSubscriptionMatch = "Discards|Ingress|NoSubscriptionMatch";

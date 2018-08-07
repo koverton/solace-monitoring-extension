@@ -1,4 +1,4 @@
-package com.appdynamics.extensions.solace.semp.r8_2_0;
+package com.appdynamics.extensions.solace.semp.r8_4_0;
 
 import com.appdynamics.extensions.solace.semp.SempRequestFactory;
 import com.solacesystems.semp_jaxb.r8_2_0.request.ObjectFactory;
@@ -6,10 +6,10 @@ import com.solacesystems.semp_jaxb.r8_2_0.request.Rpc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SempRequestFactory_r8_2_0 implements SempRequestFactory<Rpc> {
-    private static final Logger logger = LoggerFactory.getLogger(SempRequestFactory_r8_2_0.class);
+public class SempRequestFactory_r8_4_0 implements SempRequestFactory<Rpc> {
+    private static final Logger logger = LoggerFactory.getLogger(SempRequestFactory_r8_4_0.class);
 
-    public SempRequestFactory_r8_2_0() {
+    public SempRequestFactory_r8_4_0() {
         factory = new ObjectFactory();
     }
 

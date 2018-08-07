@@ -62,7 +62,7 @@ public class SempRequestFactory_r7_2_2Test {
         Rpc request = factory.createQueueListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
         System.out.println(xml);
-        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><queue><name>*</name><detail/></queue></show></rpc>", xml);
+        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><queue><name>*</name><detail/><count/><num-elements>100</num-elements></queue></show></rpc>", xml);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class SempRequestFactory_r7_2_2Test {
         Rpc request = factory.createQueueRatesListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
         System.out.println(xml);
-        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><queue><name>*</name><rates/></queue></show></rpc>", xml);
+        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><queue><name>*</name><rates/><count/><num-elements>100</num-elements></queue></show></rpc>", xml);
     }
 
     @Test
@@ -78,7 +78,7 @@ public class SempRequestFactory_r7_2_2Test {
         Rpc request = factory.createTopicEndpointListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
         System.out.println(xml);
-        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><topic-endpoint><name>*</name><detail/></topic-endpoint></show></rpc>", xml);
+        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><topic-endpoint><name>*</name><detail/><count/><num-elements>100</num-elements></topic-endpoint></show></rpc>", xml);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class SempRequestFactory_r7_2_2Test {
         Rpc request = factory.createTopicEndpointRatesListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
         System.out.println(xml);
-        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><topic-endpoint><name>*</name><rates/></topic-endpoint></show></rpc>", xml);
+        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><topic-endpoint><name>*</name><rates/><count/><num-elements>100</num-elements></topic-endpoint></show></rpc>", xml);
     }
 
     @Test
