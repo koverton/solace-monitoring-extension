@@ -51,6 +51,8 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
         result.put(Metrics.Statistics.CurrentIngressSslRatePerSecond, stats.getSslStats().getCurrentIngressSslRatePerSecond());
         result.put(Metrics.Statistics.CurrentEgressSslRatePerSecond, stats.getSslStats().getCurrentEgressSslRatePerSecond());
 
+        result.put(Metrics.Statistics.TotalClientsConnected, stats.getTotalClientsConnected());
+
         result.put(Metrics.Statistics.TotalIngressDiscards, stats.getIngressDiscards().getTotalIngressDiscards());
         result.put(Metrics.Statistics.NoSubscriptionMatch, stats.getIngressDiscards().getNoSubscriptionMatch());
         result.put(Metrics.Statistics.TopicParseError, stats.getIngressDiscards().getTopicParseError());

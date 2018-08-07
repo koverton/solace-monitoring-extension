@@ -23,6 +23,7 @@ class GenericSempService<Request,Reply> implements SempService {
     public GenericSempService(SempConnectionContext<Request,Reply> ctx) {
         this.ctx = ctx;
     }
+
     public Map<String,Object> checkGlobalStats() {
         logger.debug("<GenericSempService.checkGlobalStats>");
         Request request = ctx.getReqFactory().createGlobalStatsRequest(ctx.getSchemaVersion());
@@ -110,19 +111,20 @@ class GenericSempService<Request,Reply> implements SempService {
     public List<Map<String,Object>> checkQueueList() {
         logger.debug("<GenericSempService.checkQueueList>");
         Request request = ctx.getReqFactory().createQueueListRequest(ctx.getSchemaVersion());
-        String xml = ctx.getMarshaller().toRequestXml(request);
+        String requestXml = ctx.getMarshaller().toRequestXml(request);
 
-        String response = ctx.getConnector().doPost(xml);
-        @SuppressWarnings("unchecked")
-        Reply reply = ctx.getMarshaller().fromReplyXml(response);
+        List<Map<String, Object>> result = new ArrayList<>();
+        while(requestXml != null) {
+            String replyXml = ctx.getConnector().doPost(requestXml);
+            @SuppressWarnings("unchecked")
+            Reply reply = ctx.getMarshaller().fromReplyXml(replyXml);
 
-        List<Map<String,Object>> result;
-        if (!ctx.getReplyFactory().isSuccess(reply)) {
-            logger.error("Empty QueueList because no data in the response.");
-            result = new ArrayList<>();
-        }
-        else {
-            result = ctx.getReplyFactory().getQueueList(reply);
+            if (!ctx.getReplyFactory().isSuccess(reply)) {
+                logger.error("Empty QueueList because no data in the response.");
+            } else {
+                result.addAll(ctx.getReplyFactory().getQueueList(reply));
+            }
+            requestXml = extractMoreCookie(replyXml);
         }
         logger.debug("</GenericSempService.checkQueueList>");
         return result;
@@ -131,19 +133,20 @@ class GenericSempService<Request,Reply> implements SempService {
     public List<Map<String,Object>> checkQueueRatesList() {
         logger.debug("<GenericSempService.checkQueueRatesList>");
         Request request = ctx.getReqFactory().createQueueRatesListRequest(ctx.getSchemaVersion());
-        String xml = ctx.getMarshaller().toRequestXml(request);
+        String requestXml = ctx.getMarshaller().toRequestXml(request);
 
-        String response = ctx.getConnector().doPost(xml);
-        @SuppressWarnings("unchecked")
-        Reply reply = ctx.getMarshaller().fromReplyXml(response);
+        List<Map<String, Object>> result = new ArrayList<>();
+        while(requestXml != null) {
+            String replyXml = ctx.getConnector().doPost(requestXml);
+            @SuppressWarnings("unchecked")
+            Reply reply = ctx.getMarshaller().fromReplyXml(replyXml);
 
-        List<Map<String,Object>> result;
-        if (!ctx.getReplyFactory().isSuccess(reply)) {
-            logger.error("Empty QueueRatesList because no data in the response.");
-            result = new ArrayList<>();
-        }
-        else {
-            result = ctx.getReplyFactory().getQueueRatesList(reply);
+            if (!ctx.getReplyFactory().isSuccess(reply)) {
+                logger.error("Empty QueueRatesList because no data in the response.");
+            } else {
+                result.addAll(ctx.getReplyFactory().getQueueRatesList(reply));
+            }
+            requestXml = extractMoreCookie(replyXml);
         }
         logger.debug("</GenericSempService.checkQueueRatesList>");
         return result;
@@ -152,19 +155,20 @@ class GenericSempService<Request,Reply> implements SempService {
     public List<Map<String,Object>> checkTopicEndpointList() {
         logger.debug("<GenericSempService.checkTopicEndpointList>");
         Request request = ctx.getReqFactory().createTopicEndpointListRequest(ctx.getSchemaVersion());
-        String xml = ctx.getMarshaller().toRequestXml(request);
+        String requestXml = ctx.getMarshaller().toRequestXml(request);
 
-        String response = ctx.getConnector().doPost(xml);
-        @SuppressWarnings("unchecked")
-        Reply reply = ctx.getMarshaller().fromReplyXml(response);
+        List<Map<String, Object>> result = new ArrayList<>();
+        while(requestXml != null) {
+            String replyXml = ctx.getConnector().doPost(requestXml);
+            @SuppressWarnings("unchecked")
+            Reply reply = ctx.getMarshaller().fromReplyXml(replyXml);
 
-        List<Map<String,Object>> result;
-        if (!ctx.getReplyFactory().isSuccess(reply)) {
-            logger.error("Empty TopicEndpointList because no data in the response.");
-            result = new ArrayList<>();
-        }
-        else {
-            result = ctx.getReplyFactory().getTopicEndpointList(reply);
+            if (!ctx.getReplyFactory().isSuccess(reply)) {
+                logger.error("Empty TopicEndpointList because no data in the response.");
+            } else {
+                result.addAll(ctx.getReplyFactory().getTopicEndpointList(reply));
+            }
+            requestXml = extractMoreCookie(replyXml);
         }
         logger.debug("</GenericSempService.checkTopicEndpointList>");
         return result;
@@ -173,19 +177,20 @@ class GenericSempService<Request,Reply> implements SempService {
     public List<Map<String,Object>> checkTopicEndpointRatesList() {
         logger.debug("<GenericSempService.checkTopicEndpointRatesList>");
         Request request = ctx.getReqFactory().createTopicEndpointRatesListRequest(ctx.getSchemaVersion());
-        String xml = ctx.getMarshaller().toRequestXml(request);
+        String requestXml = ctx.getMarshaller().toRequestXml(request);
 
-        String response = ctx.getConnector().doPost(xml);
-        @SuppressWarnings("unchecked")
-        Reply reply = ctx.getMarshaller().fromReplyXml(response);
+        List<Map<String, Object>> result = new ArrayList<>();
+        while(requestXml != null) {
+            String replyXml = ctx.getConnector().doPost(requestXml);
+            @SuppressWarnings("unchecked")
+            Reply reply = ctx.getMarshaller().fromReplyXml(replyXml);
 
-        List<Map<String,Object>> result;
-        if (!ctx.getReplyFactory().isSuccess(reply)) {
-            logger.error("Empty TopicEndpointRatesList because no data in the response.");
-            result = new ArrayList<>();
-        }
-        else {
-            result = ctx.getReplyFactory().getTopicEndpointRatesList(reply);
+            if (!ctx.getReplyFactory().isSuccess(reply)) {
+                logger.error("Empty TopicEndpointRatesList because no data in the response.");
+            } else {
+                result.addAll(ctx.getReplyFactory().getTopicEndpointRatesList(reply));
+            }
+            requestXml = extractMoreCookie(replyXml);
         }
         logger.debug("</GenericSempService.checkTopicEndpointRatesList>");
         return result;
@@ -216,6 +221,15 @@ class GenericSempService<Request,Reply> implements SempService {
         return ctx.getConnector().getDisplayName();
     }
 
+    private static final String AFTER_TOKEN = "<more-cookie>";
+    private static final String UNTIL_TOKEN = "</more-cookie>";
+    private static String extractMoreCookie(String input) {
+        int frompos = input.indexOf(AFTER_TOKEN) + AFTER_TOKEN.length();
+        int topos = input.indexOf(UNTIL_TOKEN);
+        if (-1 == frompos || -1 == topos) return null;
+        String extract = input.substring(frompos, topos);
+        return extract;
+    }
 
     final private SempConnectionContext<Request,Reply> ctx;
 }
