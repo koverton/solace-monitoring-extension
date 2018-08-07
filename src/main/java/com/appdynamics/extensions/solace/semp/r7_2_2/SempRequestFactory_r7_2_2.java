@@ -52,6 +52,8 @@ public class SempRequestFactory_r7_2_2 implements SempRequestFactory<Rpc> {
         request.getShow().setQueue(factory.createRpcShowQueue());
         request.getShow().getQueue().setName("*");
         request.getShow().getQueue().setDetail(factory.createKeywordType());
+        request.getShow().getQueue().setCount(factory.createKeywordType());
+        request.getShow().getQueue().setNumElements(100L);
         return request;
     }
 
@@ -60,6 +62,8 @@ public class SempRequestFactory_r7_2_2 implements SempRequestFactory<Rpc> {
         request.getShow().setQueue(factory.createRpcShowQueue());
         request.getShow().getQueue().setName("*");
         request.getShow().getQueue().setRates(factory.createKeywordType());
+        request.getShow().getQueue().setCount(factory.createKeywordType());
+        request.getShow().getQueue().setNumElements(100L);
         return request;
     }
 
@@ -68,6 +72,8 @@ public class SempRequestFactory_r7_2_2 implements SempRequestFactory<Rpc> {
         request.getShow().setTopicEndpoint(factory.createRpcShowTopicEndpoint());
         request.getShow().getTopicEndpoint().setName("*");
         request.getShow().getTopicEndpoint().setDetail(factory.createKeywordType());
+        request.getShow().getTopicEndpoint().setCount(factory.createKeywordType());
+        request.getShow().getTopicEndpoint().setNumElements(100L);
         return request;
     }
 
@@ -76,6 +82,8 @@ public class SempRequestFactory_r7_2_2 implements SempRequestFactory<Rpc> {
         request.getShow().setTopicEndpoint(factory.createRpcShowTopicEndpoint());
         request.getShow().getTopicEndpoint().setName("*");
         request.getShow().getTopicEndpoint().setRates(factory.createKeywordType());
+        request.getShow().getTopicEndpoint().setCount(factory.createKeywordType());
+        request.getShow().getTopicEndpoint().setNumElements(100L);
         return request;
     }
 

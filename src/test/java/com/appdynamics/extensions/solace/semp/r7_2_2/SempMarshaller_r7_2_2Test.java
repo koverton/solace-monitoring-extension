@@ -1,5 +1,6 @@
 package com.appdynamics.extensions.solace.semp.r7_2_2;
 
+import com.appdynamics.extensions.solace.semp.Metrics;
 import com.solacesystems.semp_jaxb.r7_2_2.reply.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -65,6 +66,7 @@ public class SempMarshaller_r7_2_2Test
         Map<String, Object> stats =
                 factory.getGlobalStats(reply);
         assertNotNull(stats);
+        assertEquals(487L, stats.get(Metrics.Statistics.TotalClientsConnected));
     }
 
     @Test

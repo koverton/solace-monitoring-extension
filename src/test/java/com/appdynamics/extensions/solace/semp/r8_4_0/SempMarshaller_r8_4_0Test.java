@@ -1,4 +1,4 @@
-package com.appdynamics.extensions.solace.semp.r8_2_0;
+package com.appdynamics.extensions.solace.semp.r8_4_0;
 
 import com.appdynamics.extensions.solace.semp.Metrics;
 import com.solacesystems.semp_jaxb.r8_2_0.reply.*;
@@ -13,21 +13,21 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class SempMarshaller_r8_2_0Test
+public class SempMarshaller_r8_4_0Test
 {
 
     private String readFile(String filename) throws Exception {
-        String SEMP_VERSION = "r8_2_0";
+        String SEMP_VERSION = "r8_4_0";
         String replyFile = "resources/" + SEMP_VERSION + "/" + filename;
         return new String(Files.readAllBytes(Paths.get(replyFile)));
     }
-    private static SempMarshaller_r8_2_0 marshaller;
-    private static SempReplyFactory_r8_2_0 factory;
+    private static SempMarshaller_r8_4_0 marshaller;
+    private static SempReplyFactory_r8_4_0 factory;
 
     @BeforeClass
     public static void setup() throws JAXBException {
-        marshaller = new SempMarshaller_r8_2_0();
-        factory = new SempReplyFactory_r8_2_0();
+        marshaller = new SempMarshaller_r8_4_0();
+        factory = new SempReplyFactory_r8_4_0();
     }
 
     @Test
@@ -66,12 +66,12 @@ public class SempMarshaller_r8_2_0Test
         Map<String, Object> stats =
                 factory.getGlobalStats(reply);
         assertNotNull(stats);
-        assertEquals(487L, stats.get(Metrics.Statistics.TotalClientsConnected));
+        assertEquals(367L, stats.get(Metrics.Statistics.TotalClientsConnected));
     }
 
     @Test
     public void showMessageSpoolTest() throws Exception {
-        RpcReply reply = marshaller.fromReplyXml(readFile("show-message-spool.detail.xml"));
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-message-spool.detail-primary.active.xml"));
         Map<String, Object> info =
                 factory.getGlobalMsgSpool(reply);
         assertNotNull(info);
@@ -80,7 +80,7 @@ public class SempMarshaller_r8_2_0Test
     // TODO: had no hardware config available to validate output against
     @Test
     public void showPrimaryRedundancyTest() throws Exception {
-        RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-primary.inactive.xml"));
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-primary.active.xml"));
         Map<String, Object> redundancy = factory.getGlobalRedundancy(reply);
         assertNotNull(redundancy);
     }
@@ -88,7 +88,7 @@ public class SempMarshaller_r8_2_0Test
     // TODO
     @Test
     public void showBackupRedundancyTest() throws Exception {
-        RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-backup.active.xml"));
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-backup.inactive.xml"));
         Map<String, Object> redundancy = factory.getGlobalRedundancy(reply);
         assertNotNull(redundancy);
     }

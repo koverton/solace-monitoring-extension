@@ -1,6 +1,6 @@
-package com.appdynamics.extensions.solace.semp.r8_6VMR;
+package com.appdynamics.extensions.solace.semp.r8_4_0;
 
-import com.solacesystems.semp_jaxb.r8_6VMR.request.Rpc;
+import com.solacesystems.semp_jaxb.r8_2_0.request.Rpc;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -8,17 +8,17 @@ import javax.xml.bind.JAXBException;
 
 import static org.junit.Assert.assertEquals;
 
-public class SempRequestFactory_r8_6VMRTest {
-    private static final String SEMP_VERSION = "soltr/8_6VMR";
-    private static SempRequestFactory_r8_6VMR factory;
-    private static SempMarshaller_r8_6VMR marshaller;
+public class SempRequestFactory_r8_4_0Test {
+    private static final String SEMP_VERSION = "soltr/8_4_0";
+    private static SempRequestFactory_r8_4_0 factory;
+    private static SempMarshaller_r8_4_0 marshaller;
 
     private static String xmltag = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>";
 
     @BeforeClass
     public static void setup() throws JAXBException {
-        factory = new SempRequestFactory_r8_6VMR();
-        marshaller = new SempMarshaller_r8_6VMR();
+        factory = new SempRequestFactory_r8_4_0();
+        marshaller = new SempMarshaller_r8_4_0();
     }
 
     @Test

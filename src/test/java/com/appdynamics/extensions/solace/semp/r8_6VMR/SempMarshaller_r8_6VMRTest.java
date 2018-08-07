@@ -66,6 +66,7 @@ public class SempMarshaller_r8_6VMRTest
         Map<String, Object> stats =
                 factory.getGlobalStats(reply);
         assertNotNull(stats);
+        assertEquals(487L, stats.get(Metrics.Statistics.TotalClientsConnected));
     }
 
     @Test
