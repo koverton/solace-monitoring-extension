@@ -24,6 +24,7 @@ Aggregate data throughput statistics gathered for the entire VMR or Messaging Ap
 
 | Metric                           | Value | Description |
 |----------------------------------|-------|-------------|
+| Total clients connected |Integer| Total clients connected across all protocols and msg-VPNs. |
 | _Aggregate Throughput Stats_ |
 | CurrentIngressRatePerSecond      | Integer| Current inbound message rate per second |
 | CurrentEgressRatePerSecond       | Integer| Current outbound message rate per second |
