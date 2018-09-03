@@ -11,7 +11,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-public class HelperTest {
+public class ExclusionListsTest {
     private final static String[] diseaseArray = new String[] {"Botulism", "Salmonella", "Anthrax"};
     private final static String[] patternArray = new String[] {"^Botu.*", "S[^o]*onella$", "^A.*$"};
     private final static List<Pattern> diseaseList = new ArrayList<>();

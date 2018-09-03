@@ -62,9 +62,9 @@ public class SempMarshaller_r7_2_2 implements SempMarshaller<Rpc, RpcReply> {
         return reply.getExecuteResult().getCode().equals("ok");
     }
 
-    private JAXBContext reqCtx;
-    private JAXBContext replyCtx;
-    private Marshaller marshaller;
+    private JAXBContext  reqCtx;
+    private JAXBContext  replyCtx;
+    private Marshaller   marshaller;
     private Unmarshaller unmarshaller;
 
     private StringWriter writer;

@@ -1,5 +1,6 @@
 package com.appdynamics.extensions.solace.semp.r8_6VMR;
 
+import com.appdynamics.extensions.solace.ServerExclusionPolicies;
 import com.appdynamics.extensions.solace.semp.Metrics;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.*;
 import org.junit.BeforeClass;
@@ -8,6 +9,7 @@ import org.junit.Test;
 import javax.xml.bind.JAXBException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +29,7 @@ public class SempMarshaller_r8_6VMRTest
     @BeforeClass
     public static void setup() throws JAXBException {
         marshaller = new SempMarshaller_r8_6VMR();
-        factory = new SempReplyFactory_r8_6VMR();
+        factory = new SempReplyFactory_r8_6VMR(new ServerExclusionPolicies(new HashMap<>()));
     }
 
     @Test
@@ -119,6 +121,13 @@ public class SempMarshaller_r8_6VMRTest
         RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-backup.xml"));
         Map<String, Object> redundancy = factory.getGlobalRedundancy(reply);
         assertNotNull(redundancy);
+    }
+
+    @Test
+    public void showVpnStatsListTest() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-vpn.stats.xml"));
+        List<Map<String, Object>> vpns = factory.getMsgVpnList(reply);
+        assertNotNull(vpns);
     }
 
     @Test

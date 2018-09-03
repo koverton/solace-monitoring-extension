@@ -225,6 +225,22 @@ See Java Regex Pattern documentation: https://docs.oracle.com/javase/7/docs/api/
 <td class='confluenceTd'> [ Boolean : default TRUE ] Indicates whether or not to ignore temporary Queues and
 temporary Topic-Endpoints.
 </td>
+<tr>
+<td class='confluenceTd'> <tt>excludeTlsMetrics</tt> </td>
+<td class='confluenceTd'> [ Boolean : default TRUE ] Indicates whether or not to ignore statistical metrics for TLS performance.
+If you aren't using TLS this can reduce the number of metrics uploaded to your controller.
+</td>
+<tr>
+<td class='confluenceTd'> <tt>excludeCompressionMetrics</tt> </td>
+<td class='confluenceTd'> [ Boolean : default TRUE ] Indicates whether or not to ignore statistical metrics for Compressed connections performance.
+If you aren't using compression this can reduce the number of metrics uploaded to your controller.
+</td>
+<tr>
+<td class='confluenceTd'> <tt>excludeDiscardMetrics</tt> </td>
+<td class='confluenceTd'> [ Boolean : default TRUE ] Indicates whether or not to ignore message-discard metrics.
+If discard metrics are not useful to you for high-level monitoring, this can reduce the number of metrics
+uploaded to your controller.
+</td>
 </tr>
 
 </tbody>
@@ -269,6 +285,8 @@ servers:
     topicEndpointExclusionPolicy: "blacklist"
     excludeTopicEndpoints: ["log/.*"]
     excludeTemporaries: false
+    excludeTlsMetrics: false
+    excludeDiscardMetrics: false
   - mgmtUrl: "http://192.168.56.203:8080/SEMP"
     adminUser: "admin"
     password: "admin"
@@ -279,6 +297,8 @@ servers:
     queueExclusionPolicy: "whitelist"
     excludeQueues: ["onlyThis", "andThis"]
     excludeTopicEndpoints: ["selector1"]
+    excludeCompressionMetrics: false
+    excludeDiscardMetrics: false
 ```
 
 ## Latest Updates

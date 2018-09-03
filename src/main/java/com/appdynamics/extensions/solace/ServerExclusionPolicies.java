@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 import static com.appdynamics.extensions.solace.MonitorConfigs.*;
 
-class ServerExclusionPolicies {
+public class ServerExclusionPolicies {
     private static final Logger logger = LoggerFactory.getLogger(ServerExclusionPolicies.class);
 
     public ServerExclusionPolicies(Map<String, String> server) {
@@ -19,6 +19,9 @@ class ServerExclusionPolicies {
         this.topicEndpointExclusionPolicy= Helper.parseExclusionPolicy(server.get(TOPIC_ENDPOINT_EXCLUSION_POLICY));
         this.topicEndpointFilter         = Helper.getRegexPatternListOrNew(server, EXCLUDE_TOPIC_ENDPOINTS);
         this.excludeTemporaries          = Helper.getBooleanOrDefault(server, EXCLUDE_TEMPORARIES, true);
+        this.excludeCompressionMetrics   = Helper.getBooleanOrDefault(server, EXCLUDE_COMPRESSION_METRICS, true);
+        this.excludeTlsMetrics           = Helper.getBooleanOrDefault(server, EXCLUDE_TLS_METRICS, true);
+        this.excludeDiscardMetrics       = Helper.getBooleanOrDefault(server, EXCLUDE_DISCARD_METRICS, true);
         this.log();
     }
 
@@ -65,6 +68,18 @@ class ServerExclusionPolicies {
         return excludeTemporaries;
     }
 
+    public Boolean getExcludeCompressionMetrics() {
+        return excludeCompressionMetrics;
+    }
+
+    public Boolean getExcludeTlsMetrics() {
+        return excludeTlsMetrics;
+    }
+
+    public Boolean getExcludeDiscardMetrics() {
+        return excludeDiscardMetrics;
+    }
+
     final private MonitorConfigs.ExclusionPolicy vpnExclusionPolicy;
     final private List<Pattern> vpnFilter;
 
@@ -75,4 +90,7 @@ class ServerExclusionPolicies {
     final private List<Pattern> topicEndpointFilter;
 
     final private Boolean excludeTemporaries;
+    final private Boolean excludeCompressionMetrics;
+    final private Boolean excludeTlsMetrics;
+    final private Boolean excludeDiscardMetrics;
 }

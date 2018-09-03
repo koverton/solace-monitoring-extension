@@ -1,5 +1,6 @@
 package com.appdynamics.extensions.solace.semp.r7_2_2;
 
+import com.appdynamics.extensions.solace.ServerExclusionPolicies;
 import com.appdynamics.extensions.solace.semp.Metrics;
 import com.solacesystems.semp_jaxb.r7_2_2.reply.*;
 import org.junit.BeforeClass;
@@ -8,6 +9,7 @@ import org.junit.Test;
 import javax.xml.bind.JAXBException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +29,7 @@ public class SempMarshaller_r7_2_2Test
     @BeforeClass
     public static void setup() throws JAXBException {
         marshaller = new SempMarshaller_r7_2_2();
-        factory = new SempReplyFactory_r7_2_2();
+        factory = new SempReplyFactory_r7_2_2(new ServerExclusionPolicies(new HashMap<>()));
     }
 
     @Test
