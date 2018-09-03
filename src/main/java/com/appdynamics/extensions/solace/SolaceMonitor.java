@@ -65,7 +65,7 @@ public class SolaceMonitor extends ABaseMonitor {
                         adminPass,
                         displayName,
                         timeout);
-                SempService sempService = SempServiceFactory.createSempService(connector);
+                SempService sempService = SempServiceFactory.createSempService(connector, exclusionPolicies);
                 if (sempService != null) {
                     serviceProvider.submit(displayName,
                             new SolaceGlobalMonitorTask(metricWriter,

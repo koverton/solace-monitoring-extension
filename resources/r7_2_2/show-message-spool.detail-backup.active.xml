@@ -13,7 +13,7 @@
           <datapath-up>true</datapath-up>
           <synchronization-status>Synced</synchronization-status>
           <max-message-count>500M</max-message-count>
-          <message-count-utilization-percentage>0.00</message-count-utilization-percentage>
+          <message-count-utilization-percentage>2.39</message-count-utilization-percentage>
           <transaction-resource-utilization-percentage>0.00</transaction-resource-utilization-percentage>
           <transacted-session-resource-utilization-percentage>0.00</transacted-session-resource-utilization-percentage>
           <transacted-session-count-utilization-percentage>0.00</transacted-session-count-utilization-percentage>

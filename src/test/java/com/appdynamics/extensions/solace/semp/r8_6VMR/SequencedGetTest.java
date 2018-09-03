@@ -1,11 +1,13 @@
 package com.appdynamics.extensions.solace.semp.r8_6VMR;
 
+import com.appdynamics.extensions.solace.ServerExclusionPolicies;
 import com.appdynamics.extensions.solace.semp.Sempv1Connector;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.RpcReply;
 import com.solacesystems.semp_jaxb.r8_6VMR.request.Rpc;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,10 +22,10 @@ public class SequencedGetTest {
         return extract;
     }
 
-    @Test
+    //@Test
     public void theTest() throws Exception {
-        SempRequestFactory_r8_6VMR reqfactory = new SempRequestFactory_r8_6VMR();
-        SempReplyFactory_r8_6VMR respfactory = new SempReplyFactory_r8_6VMR();
+        SempRequestFactory_r8_6VMR reqfactory = new SempRequestFactory_r8_6VMR(new ServerExclusionPolicies(new HashMap<>()));
+        SempReplyFactory_r8_6VMR respfactory = new SempReplyFactory_r8_6VMR(new ServerExclusionPolicies(new HashMap<>()));
         SempMarshaller_r8_6VMR marshaller = new SempMarshaller_r8_6VMR();
 
         Sempv1Connector connector = new Sempv1Connector(

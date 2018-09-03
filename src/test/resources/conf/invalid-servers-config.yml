@@ -12,6 +12,8 @@ servers:
     encryptionKey: "na1jFUKT8euDXp1p7bgwIxhI6ZESLylz"
     #displayName is required. Displays your server name in metric path.
     displayName: "PrimaryVMR"
+    excludeQueues: ["ignoreThis", "ignoreThat"]
+    excludeMsgVpns: ["#config-sync", "default"]
   - mgmtUrl: "http://192.168.56.202:8080/SEMP"
     # adminUser: "admin"
     # password: "admin"
@@ -19,9 +21,8 @@ servers:
     encryptionKey: "na1jFUKT8euDXp1p7bgwIxhI6ZESLylz"
     #displayName is required. Displays your server name in metric path.
     displayName: "BackupVMR"
-
-excludeQueues: ["ignoreThis", "ignoreThat"]
-excludeMsgVpns: ["#config-sync", "default"]
+    excludeQueues: ["ignoreThis", "ignoreThat"]
+    excludeMsgVpns: ["#config-sync", "default"]
 
 
 # number of concurrent tasks

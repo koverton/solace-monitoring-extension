@@ -84,6 +84,21 @@ public final class Metrics {
         public final static String MsgSpoolEgressDiscards = "Discards|Egress|MsgSpoolEgressDiscards";
     }
 
+    public class Vpn {
+        public final static String PREFIX = "Vpn";
+
+        public final static String VpnName = "VpnName";
+        public final static String IsEnabled = "IsEnabled";
+        public final static String OperationalStatus = "OperationalStatus";
+        public final static String QuotaInMB = "QuotaInMB";
+        public final static String UsageInMB = "UsageInMB";
+        public final static String TotalClientsConnected = "TotalClientsConnected";
+        public final static String CurrentIngressRatePerSecond = "CurrentIngressRatePerSecond";
+        public final static String CurrentEgressRatePerSecond = "CurrentEgressRatePerSecond";
+        public final static String CurrentIngressByteRatePerSecond = "CurrentIngressByteRatePerSecond";
+        public final static String CurrentEgressByteRatePerSecond = "CurrentEgressByteRatePerSecond";
+    }
+
     public class Queue {
         public final static String PREFIX = "Queues";
 
@@ -96,8 +111,6 @@ public final class Metrics {
         public final static String MessagesEnqueued = "MessagesEnqueued";
         public final static String UsageInMB = "UsageInMB";
         public final static String ConsumerCount = "ConsumerCount";
-        public final static String OldestMsgId = "OldestMsgId";
-        public final static String NewestMsgId = "NewestMsgId";
         public final static String CurrentIngressRatePerSecond = "CurrentIngressRatePerSecond";
         public final static String CurrentEgressRatePerSecond = "CurrentEgressRatePerSecond";
         public final static String CurrentIngressByteRatePerSecond = "CurrentIngressByteRatePerSecond";
@@ -116,8 +129,6 @@ public final class Metrics {
         public final static String MessagesSpooled = "MessagesSpooled";
         public final static String UsageInMB = "UsageInMB";
         public final static String ConsumerCount = "ConsumerCount";
-        public final static String OldestMsgId = "OldestMsgId";
-        public final static String NewestMsgId = "NewestMsgId";
         public final static String CurrentIngressRatePerSecond = "CurrentIngressRatePerSecond";
         public final static String CurrentEgressRatePerSecond = "CurrentEgressRatePerSecond";
         public final static String CurrentIngressByteRatePerSecond = "CurrentIngressByteRatePerSecond";

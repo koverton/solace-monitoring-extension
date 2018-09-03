@@ -1,12 +1,12 @@
 package com.appdynamics.extensions.solace.semp.r8_6VMR;
 
+import com.appdynamics.extensions.solace.ServerExclusionPolicies;
 import com.appdynamics.extensions.solace.semp.Metrics;
 import com.appdynamics.extensions.solace.semp.SempReplyFactory;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.QueueType;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.RpcReply;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.SolStatsType;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.RpcReply.Rpc.Show.Bridge.Bridges.Bridge2;
-import com.solacesystems.semp_jaxb.r8_6VMR.reply.WebTransportTypeStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +18,12 @@ import java.util.Map;
 
 public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
     private static final Logger logger = LoggerFactory.getLogger(SempReplyFactory_r8_6VMR.class);
+
+    final private ServerExclusionPolicies serverExclusionPolicies;
+
+    public SempReplyFactory_r8_6VMR(ServerExclusionPolicies serverExclusionPolicies) {
+        this.serverExclusionPolicies = serverExclusionPolicies;
+    }
 
     public boolean isSuccess(RpcReply reply) {
         if (reply.getParseError() != null && reply.getParseError().length()!=0)
@@ -45,36 +51,42 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
         result.put(Metrics.Statistics.CurrentIngressByteRatePerSecond, stats.getCurrentIngressByteRatePerSecond());
         result.put(Metrics.Statistics.CurrentEgressByteRatePerSecond, stats.getCurrentEgressByteRatePerSecond());
 
-        result.put(Metrics.Statistics.CurrentIngressCompressedRatePerSecond, stats.getZipStats().getCurrentIngressCompressedRatePerSecond());
-        result.put(Metrics.Statistics.CurrentEgressCompressedRatePerSecond, stats.getZipStats().getCurrentEgressCompressedRatePerSecond());
-        result.put(Metrics.Statistics.IngressCompressionRatio, stats.getZipStats().getIngressCompressionRatio());
-        result.put(Metrics.Statistics.EgressCompressionRatio, stats.getZipStats().getEgressCompressionRatio());
+        if (!serverExclusionPolicies.getExcludeCompressionMetrics()) {
+            result.put(Metrics.Statistics.CurrentIngressCompressedRatePerSecond, stats.getZipStats().getCurrentIngressCompressedRatePerSecond());
+            result.put(Metrics.Statistics.CurrentEgressCompressedRatePerSecond, stats.getZipStats().getCurrentEgressCompressedRatePerSecond());
+            result.put(Metrics.Statistics.IngressCompressionRatio, stats.getZipStats().getIngressCompressionRatio());
+            result.put(Metrics.Statistics.EgressCompressionRatio, stats.getZipStats().getEgressCompressionRatio());
+        }
 
-        result.put(Metrics.Statistics.CurrentIngressSslRatePerSecond, stats.getSslStats().getCurrentIngressSslRatePerSecond());
-        result.put(Metrics.Statistics.CurrentEgressSslRatePerSecond, stats.getSslStats().getCurrentEgressSslRatePerSecond());
+        if (!serverExclusionPolicies.getExcludeTlsMetrics()) {
+            result.put(Metrics.Statistics.CurrentIngressSslRatePerSecond, stats.getSslStats().getCurrentIngressSslRatePerSecond());
+            result.put(Metrics.Statistics.CurrentEgressSslRatePerSecond, stats.getSslStats().getCurrentEgressSslRatePerSecond());
+        }
 
         result.put(Metrics.Statistics.TotalClientsConnected, stats.getTotalClientsConnected());
 
-        result.put(Metrics.Statistics.TotalIngressDiscards, stats.getIngressDiscards().getTotalIngressDiscards());
-        result.put(Metrics.Statistics.NoSubscriptionMatch, stats.getIngressDiscards().getNoSubscriptionMatch());
-        result.put(Metrics.Statistics.TopicParseError, stats.getIngressDiscards().getTopicParseError());
-        result.put(Metrics.Statistics.ParseError, stats.getIngressDiscards().getParseError());
-        result.put(Metrics.Statistics.MsgTooBig, stats.getIngressDiscards().getMsgTooBig());
-        result.put(Metrics.Statistics.TtlExceeded, stats.getIngressDiscards().getTtlExceeded());
-        result.put(Metrics.Statistics.WebParseError, stats.getIngressDiscards().getWebParseError());
-        result.put(Metrics.Statistics.PublishTopicAcl, stats.getIngressDiscards().getPublishTopicAcl());
-        result.put(Metrics.Statistics.MsgSpoolDiscards, stats.getIngressDiscards().getMsgSpoolDiscards());
-        result.put(Metrics.Statistics.IngressMessagePromotionCongestion, stats.getIngressDiscards().getMessagePromotionCongestion());
-        result.put(Metrics.Statistics.IngressMessageSpoolCongestion, stats.getIngressDiscards().getMessageSpoolCongestion());
+        if (!serverExclusionPolicies.getExcludeDiscardMetrics()) {
+            result.put(Metrics.Statistics.TotalIngressDiscards, stats.getIngressDiscards().getTotalIngressDiscards());
+            result.put(Metrics.Statistics.NoSubscriptionMatch, stats.getIngressDiscards().getNoSubscriptionMatch());
+            result.put(Metrics.Statistics.TopicParseError, stats.getIngressDiscards().getTopicParseError());
+            result.put(Metrics.Statistics.ParseError, stats.getIngressDiscards().getParseError());
+            result.put(Metrics.Statistics.MsgTooBig, stats.getIngressDiscards().getMsgTooBig());
+            result.put(Metrics.Statistics.TtlExceeded, stats.getIngressDiscards().getTtlExceeded());
+            result.put(Metrics.Statistics.WebParseError, stats.getIngressDiscards().getWebParseError());
+            result.put(Metrics.Statistics.PublishTopicAcl, stats.getIngressDiscards().getPublishTopicAcl());
+            result.put(Metrics.Statistics.MsgSpoolDiscards, stats.getIngressDiscards().getMsgSpoolDiscards());
+            result.put(Metrics.Statistics.IngressMessagePromotionCongestion, stats.getIngressDiscards().getMessagePromotionCongestion());
+            result.put(Metrics.Statistics.IngressMessageSpoolCongestion, stats.getIngressDiscards().getMessageSpoolCongestion());
 
-        result.put(Metrics.Statistics.TotalEgressDiscards, stats.getEgressDiscards().getTotalEgressDiscards());
-        result.put(Metrics.Statistics.TransmitCongestion, stats.getEgressDiscards().getTransmitCongestion());
-        result.put(Metrics.Statistics.CompressionCongestion, stats.getEgressDiscards().getCompressionCongestion());
-        result.put(Metrics.Statistics.MessageElided, stats.getEgressDiscards().getMessageElided());
-        result.put(Metrics.Statistics.PayloadCouldNotBeFormatted, stats.getEgressDiscards().getPayloadCouldNotBeFormatted());
-        result.put(Metrics.Statistics.EgressMessagePromotionCongestion, stats.getEgressDiscards().getMessagePromotionCongestion());
-        result.put(Metrics.Statistics.EgressMessageSpoolCongestion, stats.getEgressDiscards().getMessageSpoolCongestion());
-        result.put(Metrics.Statistics.MsgSpoolEgressDiscards, stats.getEgressDiscards().getMsgSpoolEgressDiscards());
+            result.put(Metrics.Statistics.TotalEgressDiscards, stats.getEgressDiscards().getTotalEgressDiscards());
+            result.put(Metrics.Statistics.TransmitCongestion, stats.getEgressDiscards().getTransmitCongestion());
+            result.put(Metrics.Statistics.CompressionCongestion, stats.getEgressDiscards().getCompressionCongestion());
+            result.put(Metrics.Statistics.MessageElided, stats.getEgressDiscards().getMessageElided());
+            result.put(Metrics.Statistics.PayloadCouldNotBeFormatted, stats.getEgressDiscards().getPayloadCouldNotBeFormatted());
+            result.put(Metrics.Statistics.EgressMessagePromotionCongestion, stats.getEgressDiscards().getMessagePromotionCongestion());
+            result.put(Metrics.Statistics.EgressMessageSpoolCongestion, stats.getEgressDiscards().getMessageSpoolCongestion());
+            result.put(Metrics.Statistics.MsgSpoolEgressDiscards, stats.getEgressDiscards().getMsgSpoolEgressDiscards());
+        }
 
         return result;
     }
@@ -165,6 +177,36 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
         return value.longValue();
     }
 
+    @Override
+    public List<Map<String, Object>> getMsgVpnList(RpcReply reply) {
+        List<Map<String,Object>> results = new ArrayList<>();
+        List<RpcReply.Rpc.Show.MessageVpn.Vpn> vpns = reply.getRpc()
+                .getShow()
+                .getMessageVpn()
+                .getVpn();
+
+        for(RpcReply.Rpc.Show.MessageVpn.Vpn vpn : vpns) {
+            SolStatsType stats = vpn.getStats();
+
+            Map<String, Object> result = new HashMap<>();
+            result.put(Metrics.Vpn.VpnName, vpn.getName());
+            result.put(Metrics.Vpn.IsEnabled, (vpn.isEnabled() ? 1 : 0) );
+            result.put(Metrics.Vpn.OperationalStatus, (vpn.isOperational() ? 1 : 0) );
+            result.put(Metrics.Vpn.QuotaInMB, vpn.getMaximumSpoolUsageMb() );
+            result.put(Metrics.Vpn.UsageInMB, vpn.getMaximumSpoolUsageMb() );
+
+            result.put(Metrics.Vpn.CurrentIngressRatePerSecond, stats.getCurrentIngressRatePerSecond());
+            result.put(Metrics.Vpn.CurrentEgressRatePerSecond, stats.getCurrentEgressRatePerSecond());
+            result.put(Metrics.Vpn.CurrentIngressByteRatePerSecond, stats.getCurrentIngressByteRatePerSecond());
+            result.put(Metrics.Vpn.CurrentEgressByteRatePerSecond, stats.getCurrentEgressByteRatePerSecond());
+
+            result.put(Metrics.Vpn.TotalClientsConnected, vpn.getConnections());
+
+            results.add(result);
+        }
+        return results;
+    }
+
     public List<Map<String, Object>> getQueueList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
         List<QueueType> queues = reply.getRpc()
@@ -183,8 +225,6 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
             result.put(Metrics.Queue.MessagesEnqueued, q.getInfo().getNumMessagesSpooled().intValue());
             result.put(Metrics.Queue.UsageInMB, q.getInfo().getCurrentSpoolUsageInMb());
             result.put(Metrics.Queue.ConsumerCount, q.getInfo().getBindCount().intValue());
-            result.put(Metrics.Queue.OldestMsgId, longOrDefault(q.getInfo().getOldestMsgId(), 0));
-            result.put(Metrics.Queue.NewestMsgId, longOrDefault(q.getInfo().getNewestMsgId(), 0));
 
             results.add(result);
         }
@@ -231,8 +271,6 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
             result.put(Metrics.TopicEndpoint.MessagesSpooled, t.getInfo().getNumMessagesSpooled().intValue());
             result.put(Metrics.TopicEndpoint.UsageInMB, t.getInfo().getCurrentSpoolUsageInMb());
             result.put(Metrics.TopicEndpoint.ConsumerCount, t.getInfo().getBindCount().intValue());
-            result.put(Metrics.TopicEndpoint.OldestMsgId, longOrDefault(t.getInfo().getOldestMsgId(), 0));
-            result.put(Metrics.TopicEndpoint.NewestMsgId, longOrDefault(t.getInfo().getNewestMsgId(), 0));
             results.add(result);
         }
         return results;

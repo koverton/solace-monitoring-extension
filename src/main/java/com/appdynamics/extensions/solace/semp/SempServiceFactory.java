@@ -1,5 +1,6 @@
 package com.appdynamics.extensions.solace.semp;
 
+import com.appdynamics.extensions.solace.ServerExclusionPolicies;
 import com.appdynamics.extensions.solace.semp.r7_2_2.*;
 import com.appdynamics.extensions.solace.semp.r8_2_0.*;
 import com.appdynamics.extensions.solace.semp.r8_6VMR.*;
@@ -17,7 +18,7 @@ public class SempServiceFactory {
      * @param connector transport connector to the service we want to query.
      * @return SempService object defining the platform and version number of the service we are connected to.
      */
-    static public SempService createSempService(Sempv1Connector connector) {
+    static public SempService createSempService(Sempv1Connector connector, ServerExclusionPolicies exclusionPolicies) {
         logger.debug("<SempServiceFactory.createSempService>");
         SempVersion sempVersion = connector.checkBrokerVersion();
 
@@ -32,8 +33,8 @@ public class SempServiceFactory {
                 try {
                     return new GenericSempService<>(
                             new SempConnectionContext<>(connector,
-                                    new SempRequestFactory_r8_6VMR(),
-                                    new SempReplyFactory_r8_6VMR(),
+                                    new SempRequestFactory_r8_6VMR(exclusionPolicies),
+                                    new SempReplyFactory_r8_6VMR(exclusionPolicies),
                                     new SempMarshaller_r8_6VMR(),
                                     sempVersion.getVersionString()));
                 } catch (JAXBException ex) {
@@ -51,8 +52,8 @@ public class SempServiceFactory {
                 try {
                     return new GenericSempService<>(
                             new SempConnectionContext<>(connector,
-                                    new SempRequestFactory_r8_2_0(),
-                                    new SempReplyFactory_r8_2_0(),
+                                    new SempRequestFactory_r8_2_0(exclusionPolicies),
+                                    new SempReplyFactory_r8_2_0(exclusionPolicies),
                                     new SempMarshaller_r8_2_0(),
                                     sempVersion.getVersionString()));
                 }
@@ -66,8 +67,8 @@ public class SempServiceFactory {
                 try {
                     return new GenericSempService<>(
                             new SempConnectionContext<>(connector,
-                                    new SempRequestFactory_r7_2_2(),
-                                    new SempReplyFactory_r7_2_2(),
+                                    new SempRequestFactory_r7_2_2(exclusionPolicies),
+                                    new SempReplyFactory_r7_2_2(exclusionPolicies),
                                     new SempMarshaller_r7_2_2(),
                                     sempVersion.getVersionString()));
                 }
