@@ -110,6 +110,8 @@ class Helper {
     }
 
     static ExclusionPolicy parseExclusionPolicy(String value) {
+        if (value == null) return ExclusionPolicy.BLACKLIST;
+
         for (ExclusionPolicy each : ExclusionPolicy.class.getEnumConstants()) {
             if (each.name().compareToIgnoreCase(value) == 0) {
                 return each;

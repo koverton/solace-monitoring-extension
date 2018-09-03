@@ -15,6 +15,8 @@ public interface SempReplyFactory<Reply> {
 
     Map<String,Object> getGlobalService(Reply reply);
 
+    List<Map<String,Object>> getMsgVpnList(Reply reply);
+
     List<Map<String,Object>> getQueueList(Reply reply);
 
     List<Map<String,Object>> getQueueRatesList(Reply reply);

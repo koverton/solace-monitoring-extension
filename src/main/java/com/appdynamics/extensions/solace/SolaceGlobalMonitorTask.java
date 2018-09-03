@@ -76,6 +76,22 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         return 1 == ((Integer)map.getOrDefault(fieldName, 0));
     }
 
+    private void checkMsgVpns(String metricPrefix) {
+        for(Map<String,Object> vpn : svc.checkMsgVpnList()) {
+            String vpnName= (String) vpn.get(Metrics.Vpn.VpnName);
+            if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
+                logger.info("NOT writing metrics for the '{}' MsgVPN because it did not match the exclusion policy. " +
+                                "If this was not expected, check your '{}' and '{}' configurations.",
+                        vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
+                continue;
+            }
+            String prefix = metricPrefix
+                    + VPNS_PREFIX + DELIM + vpnName;
+            vpn.remove(Metrics.Vpn.VpnName);
+            printMetrics(prefix, vpn);
+        }
+    }
+
     private void checkQueues(String metricPrefix) {
         for(Map<String,Object> queue : svc.checkQueueList()) {
             String vpnName= (String) queue.get(Metrics.Queue.VpnName);

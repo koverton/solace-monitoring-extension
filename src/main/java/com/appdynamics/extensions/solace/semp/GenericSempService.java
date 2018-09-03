@@ -3,8 +3,6 @@ package com.appdynamics.extensions.solace.semp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,199 +18,127 @@ import java.util.Map;
 class GenericSempService<Request,Reply> implements SempService {
     private static final Logger logger = LoggerFactory.getLogger(GenericSempService.class);
 
-    public GenericSempService(SempConnectionContext<Request,Reply> ctx) {
+    GenericSempService(SempConnectionContext<Request,Reply> ctx) {
         this.ctx = ctx;
-    }
-
-    public Map<String,Object> checkGlobalStats() {
-        logger.debug("<GenericSempService.checkGlobalStats>");
-        Request request = ctx.getReqFactory().createGlobalStatsRequest(ctx.getSchemaVersion());
-        String xml = ctx.getMarshaller().toRequestXml(request);
-
-        String response = ctx.getConnector().doPost(xml);
-        @SuppressWarnings("unchecked")
-        Reply reply = ctx.getMarshaller().fromReplyXml(response);
-
-        Map<String,Object> result;
-        if (!ctx.getReplyFactory().isSuccess(reply)) {
-            logger.error("Empty GlobalStats because no data in the response.");
-            result = new HashMap<>();
-        }
-        else {
-            result = ctx.getReplyFactory().getGlobalStats(reply);
-        }
-        logger.debug("</GenericSempService.checkGlobalStats>");
-        return result;
+        this.processor = new GenericSempProcessor<>(ctx);
     }
 
     public Map<String,Object> checkGlobalRedundancy() {
         logger.debug("<GenericSempService.checkGlobalRedundancy>");
-        Request request = ctx.getReqFactory().createGlobalRedundancyRequest(ctx.getSchemaVersion());
-        String xml = ctx.getMarshaller().toRequestXml(request);
 
-        String response = ctx.getConnector().doPost(xml);
-        @SuppressWarnings("unchecked")
-        Reply reply = ctx.getMarshaller().fromReplyXml(response);
+        Map<String,Object> result = processor.singleLevelQuery(
+                () -> ctx.getReqFactory().createGlobalRedundancyRequest(ctx.getSchemaVersion()),
+                (Reply reply) -> ctx.getReplyFactory().getGlobalRedundancy(reply)
+        );
 
-        Map<String,Object> result;
-        if (!ctx.getReplyFactory().isSuccess(reply)) {
-            logger.error("Empty GlobalRedundancy because no data in the response.");
-            result = new HashMap<>();
-        }
-        else {
-            result = ctx.getReplyFactory().getGlobalRedundancy(reply);
-        }
         logger.debug("</GenericSempService.checkGlobalRedundancy>");
         return result;
     }
 
     public Map<String,Object> checkGlobalServiceStatus() {
         logger.debug("<GenericSempService.checkGlobalServiceStatus>");
-        Request request = ctx.getReqFactory().createGlobalServiceRequest(ctx.getSchemaVersion());
-        String xml = ctx.getMarshaller().toRequestXml(request);
 
-        String response = ctx.getConnector().doPost(xml);
-        @SuppressWarnings("unchecked")
-        Reply reply = ctx.getMarshaller().fromReplyXml(response);
+        Map<String,Object> result = processor.singleLevelQuery(
+                () -> ctx.getReqFactory().createGlobalServiceRequest(ctx.getSchemaVersion()),
+                (Reply reply) -> ctx.getReplyFactory().getGlobalService(reply)
+        );
 
-        Map<String,Object> result;
-        if (!ctx.getReplyFactory().isSuccess(reply)) {
-            logger.error("Empty GlobalService because no data in the response.");
-            result = new HashMap<>();
-        }
-        else {
-            result = ctx.getReplyFactory().getGlobalService(reply);
-        }
         logger.debug("</GenericSempService.checkGlobalServiceStatus>");
         return result;
     }
 
     public Map<String,Object> checkGlobalMsgSpoolStats() {
         logger.debug("<GenericSempService.checkGlobalMsgSpoolStats>");
-        Request request = ctx.getReqFactory().createGlobalMsgSpoolRequest(ctx.getSchemaVersion());
-        String xml = ctx.getMarshaller().toRequestXml(request);
 
-        String response = ctx.getConnector().doPost(xml);
-        @SuppressWarnings("unchecked")
-        Reply reply = ctx.getMarshaller().fromReplyXml(response);
+        Map<String,Object> result = processor.singleLevelQuery(
+                () -> ctx.getReqFactory().createGlobalMsgSpoolRequest(ctx.getSchemaVersion()),
+                (Reply reply) -> ctx.getReplyFactory().getGlobalMsgSpool(reply)
+        );
 
-        Map<String,Object> result;
-        if (!ctx.getReplyFactory().isSuccess(reply)) {
-            logger.error("Empty GlobalMsgSpool because no data in the response.");
-            result = new HashMap<>();
-        }
-        else {
-            result = ctx.getReplyFactory().getGlobalMsgSpool(reply);
-        }
         logger.debug("</GenericSempService.checkGlobalMsgSpoolStats>");
+        return result;
+    }
+
+    public Map<String,Object> checkGlobalStats() {
+        logger.debug("<GenericSempService.checkGlobalStats>");
+
+        Map<String,Object> result = processor.singleLevelQuery(
+                () -> ctx.getReqFactory().createGlobalStatsRequest(ctx.getSchemaVersion()),
+                (Reply reply) -> ctx.getReplyFactory().getGlobalStats(reply)
+        );
+
+        logger.debug("</GenericSempService.checkGlobalStats>");
+        return result;
+    }
+
+    public List<Map<String,Object>> checkMsgVpnList() {
+        logger.debug("<GenericSempService.checkMsgVpnList>");
+
+        List<Map<String,Object>> result = processor.repeatingQuery(
+                () -> ctx.getReqFactory().createMsgVpnListRequest(ctx.getSchemaVersion()),
+                (Reply reply) -> ctx.getReplyFactory().getMsgVpnList(reply)
+        );
+
+        logger.debug("</GenericSempService.checkMsgVpnList>");
         return result;
     }
 
     public List<Map<String,Object>> checkQueueList() {
         logger.debug("<GenericSempService.checkQueueList>");
-        Request request = ctx.getReqFactory().createQueueListRequest(ctx.getSchemaVersion());
-        String requestXml = ctx.getMarshaller().toRequestXml(request);
 
-        List<Map<String, Object>> result = new ArrayList<>();
-        while(requestXml != null) {
-            String replyXml = ctx.getConnector().doPost(requestXml);
-            @SuppressWarnings("unchecked")
-            Reply reply = ctx.getMarshaller().fromReplyXml(replyXml);
+        List<Map<String,Object>> result = processor.repeatingQuery(
+                () -> ctx.getReqFactory().createQueueListRequest(ctx.getSchemaVersion()),
+                (Reply reply) -> ctx.getReplyFactory().getQueueList(reply)
+        );
 
-            if (!ctx.getReplyFactory().isSuccess(reply)) {
-                logger.error("Empty QueueList because no data in the response.");
-            } else {
-                result.addAll(ctx.getReplyFactory().getQueueList(reply));
-            }
-            requestXml = extractMoreCookie(replyXml);
-        }
         logger.debug("</GenericSempService.checkQueueList>");
         return result;
     }
 
     public List<Map<String,Object>> checkQueueRatesList() {
         logger.debug("<GenericSempService.checkQueueRatesList>");
-        Request request = ctx.getReqFactory().createQueueRatesListRequest(ctx.getSchemaVersion());
-        String requestXml = ctx.getMarshaller().toRequestXml(request);
 
-        List<Map<String, Object>> result = new ArrayList<>();
-        while(requestXml != null) {
-            String replyXml = ctx.getConnector().doPost(requestXml);
-            @SuppressWarnings("unchecked")
-            Reply reply = ctx.getMarshaller().fromReplyXml(replyXml);
+        List<Map<String,Object>> result = processor.repeatingQuery(
+                () -> ctx.getReqFactory().createQueueRatesListRequest(ctx.getSchemaVersion()),
+                (Reply reply) -> ctx.getReplyFactory().getQueueRatesList(reply)
+        );
 
-            if (!ctx.getReplyFactory().isSuccess(reply)) {
-                logger.error("Empty QueueRatesList because no data in the response.");
-            } else {
-                result.addAll(ctx.getReplyFactory().getQueueRatesList(reply));
-            }
-            requestXml = extractMoreCookie(replyXml);
-        }
         logger.debug("</GenericSempService.checkQueueRatesList>");
         return result;
     }
 
     public List<Map<String,Object>> checkTopicEndpointList() {
         logger.debug("<GenericSempService.checkTopicEndpointList>");
-        Request request = ctx.getReqFactory().createTopicEndpointListRequest(ctx.getSchemaVersion());
-        String requestXml = ctx.getMarshaller().toRequestXml(request);
 
-        List<Map<String, Object>> result = new ArrayList<>();
-        while(requestXml != null) {
-            String replyXml = ctx.getConnector().doPost(requestXml);
-            @SuppressWarnings("unchecked")
-            Reply reply = ctx.getMarshaller().fromReplyXml(replyXml);
+        List<Map<String,Object>> result = processor.repeatingQuery(
+                () -> ctx.getReqFactory().createTopicEndpointListRequest(ctx.getSchemaVersion()),
+                (Reply reply) -> ctx.getReplyFactory().getTopicEndpointList(reply)
+        );
 
-            if (!ctx.getReplyFactory().isSuccess(reply)) {
-                logger.error("Empty TopicEndpointList because no data in the response.");
-            } else {
-                result.addAll(ctx.getReplyFactory().getTopicEndpointList(reply));
-            }
-            requestXml = extractMoreCookie(replyXml);
-        }
         logger.debug("</GenericSempService.checkTopicEndpointList>");
         return result;
     }
 
     public List<Map<String,Object>> checkTopicEndpointRatesList() {
         logger.debug("<GenericSempService.checkTopicEndpointRatesList>");
-        Request request = ctx.getReqFactory().createTopicEndpointRatesListRequest(ctx.getSchemaVersion());
-        String requestXml = ctx.getMarshaller().toRequestXml(request);
 
-        List<Map<String, Object>> result = new ArrayList<>();
-        while(requestXml != null) {
-            String replyXml = ctx.getConnector().doPost(requestXml);
-            @SuppressWarnings("unchecked")
-            Reply reply = ctx.getMarshaller().fromReplyXml(replyXml);
+        List<Map<String,Object>> result = processor.repeatingQuery(
+                () -> ctx.getReqFactory().createTopicEndpointRatesListRequest(ctx.getSchemaVersion()),
+                (Reply reply) -> ctx.getReplyFactory().getTopicEndpointRatesList(reply)
+        );
 
-            if (!ctx.getReplyFactory().isSuccess(reply)) {
-                logger.error("Empty TopicEndpointRatesList because no data in the response.");
-            } else {
-                result.addAll(ctx.getReplyFactory().getTopicEndpointRatesList(reply));
-            }
-            requestXml = extractMoreCookie(replyXml);
-        }
         logger.debug("</GenericSempService.checkTopicEndpointRatesList>");
         return result;
     }
 
     public List<Map<String,Object>> checkGlobalBridgeList() {
         logger.debug("<GenericSempService.checkGlobalBridgeList>");
-        Request request = ctx.getReqFactory().createGlobalBridgeListRequest(ctx.getSchemaVersion());
-        String xml = ctx.getMarshaller().toRequestXml(request);
 
-        String response = ctx.getConnector().doPost(xml);
-        @SuppressWarnings("unchecked")
-        Reply reply = ctx.getMarshaller().fromReplyXml(response);
+        List<Map<String,Object>> result = processor.repeatingQuery(
+                () -> ctx.getReqFactory().createGlobalBridgeListRequest(ctx.getSchemaVersion()),
+                (Reply reply) -> ctx.getReplyFactory().getGlobalBridgeList(reply)
+        );
 
-        List<Map<String,Object>> result;
-        if (!ctx.getReplyFactory().isSuccess(reply)) {
-            logger.error("Empty BridgeList because no data in the response.");
-            result = new ArrayList<>();
-        }
-        else {
-            result = ctx.getReplyFactory().getGlobalBridgeList(reply);
-        }
         logger.debug("</GenericSempService.checkGlobalBridgeList>");
         return result;
     }
@@ -221,15 +147,6 @@ class GenericSempService<Request,Reply> implements SempService {
         return ctx.getConnector().getDisplayName();
     }
 
-    private static final String AFTER_TOKEN = "<more-cookie>";
-    private static final String UNTIL_TOKEN = "</more-cookie>";
-    private static String extractMoreCookie(String input) {
-        int frompos = input.indexOf(AFTER_TOKEN) + AFTER_TOKEN.length();
-        int topos = input.indexOf(UNTIL_TOKEN);
-        if (-1 == frompos || -1 == topos) return null;
-        String extract = input.substring(frompos, topos);
-        return extract;
-    }
-
     final private SempConnectionContext<Request,Reply> ctx;
+    final private GenericSempProcessor<Request,Reply> processor;
 }
