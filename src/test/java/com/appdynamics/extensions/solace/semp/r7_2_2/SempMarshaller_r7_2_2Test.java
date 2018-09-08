@@ -96,6 +96,20 @@ public class SempMarshaller_r7_2_2Test
     }
 
     @Test
+    public void showMsgVpnListTest() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-vpn.stats.xml"));
+        List<Map<String, Object>> vpns = factory.getMsgVpnList(reply);
+        assertNotNull(vpns);
+    }
+
+    @Test
+    public void showMsgVpnSpoolListTest() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-vpn.spool.xml"));
+        List<Map<String, Object>> vpns = factory.getMsgVpnSpoolList(reply);
+        assertNotNull(vpns);
+    }
+
+    @Test
     public void showQueueListTest() throws Exception {
         RpcReply reply = marshaller.fromReplyXml(readFile("show-queues.detail.xml"));
         List<Map<String, Object>> queues = factory.getQueueList(reply);

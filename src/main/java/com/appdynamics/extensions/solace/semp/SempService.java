@@ -16,6 +16,8 @@ public interface SempService {
 
     List<Map<String,Object>> checkMsgVpnList();
 
+    List<Map<String,Object>> checkMsgVpnSpoolList();
+
     List<Map<String,Object>> checkQueueList();
 
     List<Map<String,Object>> checkQueueRatesList();

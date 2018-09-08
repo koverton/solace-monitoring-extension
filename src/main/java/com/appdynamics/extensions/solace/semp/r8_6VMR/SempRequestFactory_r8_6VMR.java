@@ -59,6 +59,13 @@ public class SempRequestFactory_r8_6VMR implements SempRequestFactory<Rpc> {
         return request;
     }
 
+    public Rpc createMsgVpnSpoolListRequest(String sempVersion) {
+        final Rpc request = newShowRequest(sempVersion);
+        request.getShow().setMessageSpool(factory.createRpcShowMessageSpool());
+        request.getShow().getMessageSpool().setVpnName("*");
+        return request;
+    }
+
     public Rpc createQueueListRequest(String sempVersion) {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setQueue(factory.createRpcShowQueue());

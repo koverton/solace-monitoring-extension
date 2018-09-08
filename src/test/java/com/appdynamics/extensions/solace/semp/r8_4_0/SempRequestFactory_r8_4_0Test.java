@@ -68,6 +68,13 @@ public class SempRequestFactory_r8_4_0Test {
     }
 
     @Test
+    public void getVpnSpoolListTest() {
+        Rpc request = factory.createMsgVpnSpoolListRequest(SEMP_VERSION);
+        String xml = marshaller.toRequestXml(request);
+        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><message-spool><vpn-name>*</vpn-name></message-spool></show></rpc>", xml);
+    }
+
+    @Test
     public void getQueueListTest() {
         Rpc request = factory.createQueueListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);

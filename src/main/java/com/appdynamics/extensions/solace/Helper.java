@@ -138,8 +138,6 @@ public class Helper {
     static boolean isExcluded(String name, List<Pattern> policyList, ExclusionPolicy policy) {
         if (policy == ExclusionPolicy.BLACKLIST) {
             // Exclude this item because it was found in the blacklist
-//            if (policyList.contains(name))
-//                return true;
             for(Pattern p : policyList) {
                 if (p.matcher(name).matches())
                     return true;
@@ -147,8 +145,6 @@ public class Helper {
         }
         else {
             // Exclude this item because it was NOT found in the whitelist
-//            if (!policyList.contains(name))
-//                return true;
             for(Pattern p : policyList) {
                 if (p.matcher(name).matches())
                     return false;
