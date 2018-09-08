@@ -14,6 +14,8 @@ public interface SempRequestFactory<Request> {
 
     Request createMsgVpnListRequest(String sempVersion);
 
+    Request createMsgVpnSpoolListRequest(String sempVersion);
+
     Request createQueueListRequest(String sempVersion);
 
     Request createQueueRatesListRequest(String sempVersion);

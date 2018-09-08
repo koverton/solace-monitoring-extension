@@ -83,6 +83,18 @@ class GenericSempService<Request,Reply> implements SempService {
         return result;
     }
 
+    public List<Map<String,Object>> checkMsgVpnSpoolList() {
+        logger.debug("<GenericSempService.checkMsgVpnSpoolList>");
+
+        List<Map<String,Object>> result = processor.repeatingQuery(
+                () -> ctx.getReqFactory().createMsgVpnSpoolListRequest(ctx.getSchemaVersion()),
+                (Reply reply) -> ctx.getReplyFactory().getMsgVpnSpoolList(reply)
+        );
+
+        logger.debug("</GenericSempService.checkMsgVpnSpoolList>");
+        return result;
+    }
+
     public List<Map<String,Object>> checkQueueList() {
         logger.debug("<GenericSempService.checkQueueList>");
 

@@ -80,7 +80,19 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     }
 
     private void checkMsgVpns(String serverName) {
+        // vpn stats
         for(Map<String,Object> vpn : svc.checkMsgVpnList()) {
+            String vpnName= (String) vpn.get(Metrics.Vpn.VpnName);
+            if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
+                logger.info("NOT writing metrics for the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
+                        vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
+                continue;
+            }
+            vpn.remove(Metrics.Vpn.VpnName);
+            metricPrinter.printMetrics(vpn, basePrefix, serverName, VPNS_PREFIX, vpnName);
+        }
+        // vpn spool stats
+        for(Map<String,Object> vpn : svc.checkMsgVpnSpoolList()) {
             String vpnName= (String) vpn.get(Metrics.Vpn.VpnName);
             if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
                 logger.info("NOT writing metrics for the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
