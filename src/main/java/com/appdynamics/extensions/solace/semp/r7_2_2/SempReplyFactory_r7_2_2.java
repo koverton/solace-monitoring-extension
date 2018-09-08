@@ -3,6 +3,7 @@ package com.appdynamics.extensions.solace.semp.r7_2_2;
 import com.appdynamics.extensions.solace.Helper;
 import com.appdynamics.extensions.solace.ServerExclusionPolicies;
 import com.appdynamics.extensions.solace.semp.*;
+import com.solacesystems.semp_jaxb.r7_2_2.reply.MessageSpoolMessageVpnEntry;
 import com.solacesystems.semp_jaxb.r7_2_2.reply.QueueType;
 import com.solacesystems.semp_jaxb.r7_2_2.reply.RpcReply;
 import com.solacesystems.semp_jaxb.r7_2_2.reply.RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2;
@@ -217,7 +218,6 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.Vpn.IsEnabled, (vpn.isEnabled() ? 1 : 0) );
             result.put(Metrics.Vpn.OperationalStatus, (vpn.isOperational() ? 1 : 0) );
             result.put(Metrics.Vpn.QuotaInMB, vpn.getMaximumSpoolUsageMb() );
-            result.put(Metrics.Vpn.UsageInMB, vpn.getMaximumSpoolUsageMb() );
 
             result.put(Metrics.Vpn.CurrentIngressRatePerSecond, stats.getCurrentIngressRatePerSecond());
             result.put(Metrics.Vpn.CurrentEgressRatePerSecond, stats.getCurrentEgressRatePerSecond());
@@ -231,7 +231,25 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
         return results;
     }
 
-    @Override
+    public List<Map<String, Object>> getMsgVpnSpoolList(RpcReply reply) {
+        List<Map<String,Object>> results = new ArrayList<>();
+        List<Object> vpns = reply.getRpc()
+                .getShow()
+                .getMessageSpool()
+                .getMessageVpn()
+                .getVpnOrMessageSpoolRatesOrTotalMessageSpoolRates();
+
+        for(Object o : vpns) {
+            MessageSpoolMessageVpnEntry vpn = (MessageSpoolMessageVpnEntry)o;
+            Map<String, Object> result = new HashMap<>();
+            result.put(Metrics.Vpn.VpnName , vpn.getName());
+            result.put(Metrics.Vpn.UsageInMB , vpn.getCurrentSpoolUsageMb());
+            // result.put(Metrics.Vpn.MessagesSpooled , vpn.getCurrentMessagesSpooled());
+            results.add(result);
+        }
+        return results;
+    }
+
     public List<Map<String, Object>> getQueueList(RpcReply rpcReply) {
         List<Map<String,Object>> results = new ArrayList<>();
         List<QueueType> queues = rpcReply.getRpc()

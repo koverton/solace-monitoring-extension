@@ -124,7 +124,7 @@ public class SempMarshaller_r8_6VMRTest
     }
 
     @Test
-    public void showVpnStatsListTest() throws Exception {
+    public void showMsgVpnListTest() throws Exception {
         RpcReply reply = marshaller.fromReplyXml(readFile("show-vpn.stats.xml"));
         List<Map<String, Object>> vpns = factory.getMsgVpnList(reply);
         assertNotNull(vpns);
