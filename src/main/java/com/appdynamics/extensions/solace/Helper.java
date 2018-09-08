@@ -8,6 +8,7 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ import static com.appdynamics.extensions.TaskInputArgs.PASSWORD;
 import static com.appdynamics.extensions.TaskInputArgs.PASSWORD_ENCRYPTED;
 import static com.appdynamics.extensions.solace.MonitorConfigs.*;
 
-class Helper {
+public class Helper {
     private static final Logger logger = LoggerFactory.getLogger(Helper.class);
 
     //
@@ -38,6 +39,19 @@ class Helper {
             return defaultStr;
         }
         return field.toString();
+    }
+
+    public static Long longOrDefault(Long value, long defaultValue) {
+        if (value == null) return defaultValue;
+        return value;
+    }
+    public static Long longOrDefault(Double value, long defaultValue) {
+        if (value == null) return defaultValue;
+        return value.longValue();
+    }
+    public static Long longOrDefault(BigInteger value, long defaultValue) {
+        if (value == null) return defaultValue;
+        return value.longValue();
     }
 
     static Integer getIntOrDefault(Map<String,String> server, String fieldName, Integer defaultValue) {

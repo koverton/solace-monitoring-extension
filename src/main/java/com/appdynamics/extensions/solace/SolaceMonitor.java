@@ -21,7 +21,7 @@ import static com.appdynamics.extensions.solace.MonitorConfigs.*;
 
 public class SolaceMonitor extends ABaseMonitor {
     private static final Logger logger = LoggerFactory.getLogger(SolaceMonitor.class);
-    private static final String DEFAULT_PREFIX = "Custom Metrics|Solace|";
+    private static final String DEFAULT_PREFIX = "Custom Metrics|Solace";
     private static final String CONFIG_ARG = "config-file";
 
     @Override
@@ -36,7 +36,8 @@ public class SolaceMonitor extends ABaseMonitor {
 
     @Override
     protected void doRun(TasksExecutionServiceProvider serviceProvider) {
-        String baseMetricPrefix  = (String) configuration.getConfigYml().get(METRIC_PREFIX);
+        String baseMetricPrefix  = getBasePrefix();
+        // Internally, we don't want prefixes to end with delimiters, so strip off
         List<Map<String, String>> servers = Helper.getMonitorServerList(configuration);
         MetricWriteHelper metricWriter = serviceProvider.getMetricWriteHelper();
 
@@ -68,7 +69,8 @@ public class SolaceMonitor extends ABaseMonitor {
                 SempService sempService = SempServiceFactory.createSempService(connector, exclusionPolicies);
                 if (sempService != null) {
                     serviceProvider.submit(displayName,
-                            new SolaceGlobalMonitorTask(metricWriter,
+                            new SolaceGlobalMonitorTask(
+                                    new ADMetricPrinter(metricWriter),
                                     baseMetricPrefix,
                                     exclusionPolicies,
                                     sempService));
@@ -87,6 +89,13 @@ public class SolaceMonitor extends ABaseMonitor {
     @Override
     protected int getTaskCount() {
         return Helper.getMonitorServerList(configuration).size();
+    }
+
+    private String getBasePrefix() {
+        String baseMetricPrefix  = (String) configuration.getConfigYml().get(METRIC_PREFIX);
+        if (baseMetricPrefix.endsWith("|"))
+            return baseMetricPrefix.substring(0, baseMetricPrefix.lastIndexOf("|"));
+        return baseMetricPrefix;
     }
 
     public static void main( String[] args )

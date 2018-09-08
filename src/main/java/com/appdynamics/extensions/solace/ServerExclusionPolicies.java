@@ -2,6 +2,8 @@ package com.appdynamics.extensions.solace;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -12,6 +14,8 @@ public class ServerExclusionPolicies {
     private static final Logger logger = LoggerFactory.getLogger(ServerExclusionPolicies.class);
 
     public ServerExclusionPolicies(Map<String, String> server) {
+        if (server == null)
+            server = new HashMap<>();
         this.vpnExclusionPolicy          = Helper.parseExclusionPolicy(server.get(VPN_EXCLUSION_POLICY));
         this.vpnFilter                   = Helper.getRegexPatternListOrNew(server, EXCLUDE_MSG_VPNS);
         this.queueExclusionPolicy        = Helper.parseExclusionPolicy(server.get(QUEUE_EXCLUSION_POLICY));

@@ -13,13 +13,21 @@ plane via HTTP. The following metrics are currently gathered by this monitor:
 * Global messaging statistics
 * Global HA redundancy metrics
 * Global service status
-* Global queue summaries
-* Global durable topic endpoint summaries
-* Global bridge summaries
+* Global msg-spool status and statistics
+* Msg-VPN messaging status and statistics
+* Msg-VPN queue summaries
+* Msg-VPN durable topic endpoint summaries
+* Msg-VPN bridge summaries
 
 Detailed documentation of all available metrics can be found [here](docs/metrics.md).
 
 ## Installation
+
+The plugin is designed to run under the AppDynamics MachineAgent. You will
+need to install one first before installing the plugin. For details
+about downloading and installing that, we've documented it [here](docs/machine-agent.md).
+
+## Solace SEMP Libraries
 
 The protocol for querying metrics is currently an XML-based POST request protocol. 
 Schemas for request and reply messages are provided by Solace, which can be used 
@@ -36,7 +44,7 @@ cd mvn_libs
 ```
 
 You will also need to obtain the AppDynamics `machine-agent.jar` and `appd-exts-commons.jar` 
-appropriate to the version of your AppDynamics MachineAgent. You should get this from AppDynamics.
+appropriate to the version of your AppDynamics MachineAgent. You should get them from AppDynamics.
 
 ### Build and Deploy Steps
 
