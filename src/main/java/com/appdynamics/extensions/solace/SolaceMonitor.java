@@ -36,13 +36,12 @@ public class SolaceMonitor extends ABaseMonitor {
 
     @Override
     protected void doRun(TasksExecutionServiceProvider serviceProvider) {
-        String baseMetricPrefix  = getBasePrefix();
         // Internally, we don't want prefixes to end with delimiters, so strip off
-        List<Map<String, String>> servers = Helper.getMonitorServerList(configuration);
+        String baseMetricPrefix  = getBasePrefix();
         MetricWriteHelper metricWriter = serviceProvider.getMetricWriteHelper();
 
-
-        for (Map<String, String> server : servers) {
+        // Each Solace server monitored comes with a number of configurations
+        for (Map<String, String> server : Helper.getMonitorServerList(configuration)) {
             String mgmtUrl     = server.get(MGMT_URL);
             String adminUser   = server.get(ADMIN_USER);
             String adminPass   = Helper.getPassword(server);
@@ -91,6 +90,10 @@ public class SolaceMonitor extends ABaseMonitor {
         return Helper.getMonitorServerList(configuration).size();
     }
 
+    /**
+     * Makes sure the configured metric prefix does NOT end with a delimiter.
+     * @return
+     */
     private String getBasePrefix() {
         String baseMetricPrefix  = (String) configuration.getConfigYml().get(METRIC_PREFIX);
         if (baseMetricPrefix.endsWith("|"))
