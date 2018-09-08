@@ -54,8 +54,8 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
         if (!serverExclusionPolicies.getExcludeCompressionMetrics()) {
             result.put(Metrics.Statistics.CurrentIngressCompressedRatePerSecond, stats.getZipStats().getCurrentIngressCompressedRatePerSecond());
             result.put(Metrics.Statistics.CurrentEgressCompressedRatePerSecond, stats.getZipStats().getCurrentEgressCompressedRatePerSecond());
-            result.put(Metrics.Statistics.IngressCompressionRatio, stats.getZipStats().getIngressCompressionRatio());
-            result.put(Metrics.Statistics.EgressCompressionRatio, stats.getZipStats().getEgressCompressionRatio());
+            result.put(Metrics.Statistics.IngressCompressionRatio, stats.getZipStats().getIngressCompressionRatio()*100);
+            result.put(Metrics.Statistics.EgressCompressionRatio, stats.getZipStats().getEgressCompressionRatio()*100);
         }
 
         if (!serverExclusionPolicies.getExcludeTlsMetrics()) {
