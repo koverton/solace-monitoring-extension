@@ -11,12 +11,12 @@ import java.util.Map;
 public class MonitorTaskTest {
     //@Test
     public void sempTaskIntegrationTest() throws MalformedURLException {
-        String mgmtUrl = "http://192.168.56.203:8080/SEMP";
+        String mgmtUrl = "http://192.168.56.201:8080/SEMP";
         String adminUser = "admin";
         String adminPass = "admin";
         String displayName = "primary";
         Integer timeout = 5000;
-        String baseMetricPrefix = "Solace|Test";
+        String baseMetricPrefix = "Server|Component:125573|Custom Metrics|Solace|Test";
 
         Sempv1Connector connector = new Sempv1Connector(
                 mgmtUrl,
