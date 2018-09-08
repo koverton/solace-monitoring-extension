@@ -2,8 +2,6 @@
 This monitoring plugin is designed to run under the **AppDynamics Standalone MachineAgent**.
 For more information about the MachineAgent, see the [AppDynamics MachineAgent Website](https://docs.appdynamics.com/display/PRO45/Standalone+Machine+Agents).
 
-    NOTE: Your AD account must be licensed for Server Visibility.
-
 ## Assumptions
 
 AppDynamics best-practice is to create an **Application** in your controller,
@@ -23,8 +21,9 @@ to monitor. It will iterate through a list of Solace brokers
 ## Installing the MachineAgent
 
 1. Download the MachineAgent appropriate to your system; the system bundle
-comes with bundled Java 1.8 JRE, otherwise you can just download the
-non-bundled MachineAgent. [Download Link](https://download.appdynamics.com/download/#version=&apm=machine&os=&platform_admin_os=&events=&eum=&page=1
+comes with bundled Java 1.8 JRE, or you can just download the
+non-bundled MachineAgent and point it at your own Java installation.
+[Download Link](https://download.appdynamics.com/download/#version=&apm=machine&os=&platform_admin_os=&events=&eum=&page=1
 )
 
     NOTE1: The user running the machine-agent must have read/write privileges to the MachineAgent installation directory.
@@ -77,7 +76,7 @@ at system boot time. For example:
     ```
 
 Any additional arguments you'd like to customize your comandline with
-can be added to the JAVA_OPTS environment variable, e.g.:
+can be added to the `JAVA_OPTS` environment variable, e.g.:
 
     ```bash
     JAVA_OPTS="-Dappdynamics.agent.applicationName=<appname>"

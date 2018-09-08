@@ -1,5 +1,6 @@
 package com.appdynamics.extensions.solace.semp.r8_4_0;
 
+import com.appdynamics.extensions.solace.Helper;
 import com.appdynamics.extensions.solace.ServerExclusionPolicies;
 import com.appdynamics.extensions.solace.semp.*;
 import com.solacesystems.semp_jaxb.r8_2_0.reply.QueueType;
@@ -193,11 +194,6 @@ public class SempReplyFactory_r8_4_0 implements SempReplyFactory<RpcReply> {
         return result;
     }
 
-    private Long longOrDefault(BigInteger value, long defaultValue) {
-        if (value == null) return defaultValue;
-        return value.longValue();
-    }
-
     @Override
     public List<Map<String, Object>> getMsgVpnList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
@@ -244,9 +240,9 @@ public class SempReplyFactory_r8_4_0 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.Queue.IsEgressEnabled, q.getInfo().getEgressConfigStatus().equals("Up") ? 1 : 0);
             result.put(Metrics.Queue.IsDurable, q.getInfo().isDurable() ? 1 : 0);
             result.put(Metrics.Queue.QuotaInMB, q.getInfo().getQuota().longValue());
-            result.put(Metrics.Queue.MessagesEnqueued, q.getInfo().getNumMessagesSpooled().intValue());
-            result.put(Metrics.Queue.UsageInMB, q.getInfo().getCurrentSpoolUsageInMb());
-            result.put(Metrics.Queue.ConsumerCount, q.getInfo().getBindCount().intValue());
+            result.put(Metrics.Queue.MessagesEnqueued, Helper.longOrDefault(q.getInfo().getNumMessagesSpooled(),0L).intValue());
+            result.put(Metrics.Queue.UsageInMB, Helper.longOrDefault(q.getInfo().getCurrentSpoolUsageInMb(), 0));
+            result.put(Metrics.Queue.ConsumerCount, Helper.longOrDefault(q.getInfo().getBindCount(), 0).intValue());
             results.add(result);
         }
         return results;
@@ -290,9 +286,9 @@ public class SempReplyFactory_r8_4_0 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.TopicEndpoint.IsEgressEnabled, t.getInfo().getEgressConfigStatus().equals("Up") ? 1 : 0);
             result.put(Metrics.TopicEndpoint.IsDurable, t.getInfo().isDurable() ? 1 : 0);
             result.put(Metrics.TopicEndpoint.QuotaInMB, t.getInfo().getQuota().longValue());
-            result.put(Metrics.TopicEndpoint.MessagesSpooled, t.getInfo().getNumMessagesSpooled().intValue());
-            result.put(Metrics.TopicEndpoint.UsageInMB, t.getInfo().getCurrentSpoolUsageInMb());
-            result.put(Metrics.TopicEndpoint.ConsumerCount, t.getInfo().getBindCount().intValue());
+            result.put(Metrics.TopicEndpoint.MessagesSpooled, Helper.longOrDefault(t.getInfo().getNumMessagesSpooled(),0).intValue());
+            result.put(Metrics.TopicEndpoint.UsageInMB, Helper.longOrDefault(t.getInfo().getCurrentSpoolUsageInMb(),0));
+            result.put(Metrics.TopicEndpoint.ConsumerCount, Helper.longOrDefault(t.getInfo().getBindCount(),0).intValue());
             results.add(result);
         }
         return results;
