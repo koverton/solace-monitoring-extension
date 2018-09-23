@@ -10,7 +10,7 @@
     </formats>
     <files>
         <file>
-            <source>target/solace-monitoring-extension-1.0.jar</source>
+            <source>target/solace-monitoring-extension-1.1.jar</source>
             <outputDirectory>lib</outputDirectory>
         </file>
         <file>

@@ -9,6 +9,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBException;
 
+/**
+ * Constructs a SempService for a given Solace broker that uses the appropriate SEMP library for version supported by that broker.
+ *
+ */
 public class SempServiceFactory {
     private static final Logger logger = LoggerFactory.getLogger(SempServiceFactory.class);
 
@@ -16,9 +20,10 @@ public class SempServiceFactory {
      * Constructs a SempService for a given Solace broker that uses the appropriate SEMP library for version supported by that broker.
      *
      * @param connector transport connector to the service we want to query.
+     * @param ServerExclusionPolicies encapsulates all exclusion policies used by the SempService.
      * @return SempService object defining the platform and version number of the service we are connected to.
      */
-    static public SempService createSempService(Sempv1Connector connector, ServerExclusionPolicies exclusionPolicies) {
+    static public SempService createSempService(SempConnector connector, ServerExclusionPolicies exclusionPolicies) {
         logger.debug("<SempServiceFactory.createSempService>");
         SempVersion sempVersion = connector.checkBrokerVersion();
 

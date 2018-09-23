@@ -10,6 +10,11 @@ import java.util.regex.Pattern;
 
 import static com.appdynamics.extensions.solace.MonitorConfigs.*;
 
+/**
+ * Encapsulates all supported filtering and exclusion of metrics before writing them to the AD Controller.
+ *
+ * ExclusionPolicy instances can support wildcard-based blacklisting and whitelisting.
+ */
 public class ServerExclusionPolicies {
     private static final Logger logger = LoggerFactory.getLogger(ServerExclusionPolicies.class);
 

@@ -54,6 +54,31 @@ public class Helper {
         return value.longValue();
     }
 
+
+    public static Double safeParseDouble(String fieldName, String input) {
+        try {
+            return Double.parseDouble(input);
+        }
+        catch(NumberFormatException ex) {
+            logger.error("NumberFormatException parsing field {} value {}", fieldName, input);
+        }
+        return 0.0;
+    }
+
+    public static Long calcPercentage(Double numerator, Double denominator) {
+        if (denominator == 0 || numerator == 0) return 0L;
+        return ((Double) (100.0* numerator / denominator)).longValue();
+    }
+    public static Long calcPercentage(BigInteger numerator, BigInteger denominator) {
+        if (denominator.longValue() == 0 || numerator.longValue() == 0) return 0L;
+        return ((Double)(100.0* numerator.doubleValue() / denominator.doubleValue())).longValue();
+    }
+    public static Long calcPercentage(Long numerator, Long denominator) {
+        if (denominator.longValue() == 0 || numerator.longValue() == 0) return 0L;
+        return ((Double)(100.0* numerator.doubleValue() / denominator.doubleValue())).longValue();
+    }
+
+
     static Integer getIntOrDefault(Map<String,String> server, String fieldName, Integer defaultValue) {
         if (server.containsKey(fieldName)) {
             Object o = server.get(fieldName);
