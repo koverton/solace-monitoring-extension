@@ -8,20 +8,19 @@ package com.appdynamics.extensions.solace.semp;
  * @param <Reply> The SEMP version-specific Reply type
  */
 class SempConnectionContext<Request,Reply> {
-    public SempConnectionContext(Sempv1Connector connector,
+    public SempConnectionContext(SempConnector connector,
                                  SempRequestFactory<Request> reqFactory,
                                  SempReplyFactory<Reply> replyFactory,
                                  SempMarshaller<Request, Reply> marshaller,
                                  String sempVersion) {
-        this.connector = connector;
-        this.reqFactory = reqFactory;
+        this.connector    = connector;
+        this.reqFactory   = reqFactory;
         this.replyFactory = replyFactory;
-        this.marshaller = marshaller;
-        this.sempVersion = sempVersion;
-        this.schemaVersion= "soltr/"+this.sempVersion;
+        this.marshaller   = marshaller;
+        this.schemaVersion= "soltr/"+sempVersion;
     }
 
-    public Sempv1Connector getConnector() {
+    public SempConnector getConnector() {
         return connector;
     }
 
@@ -37,17 +36,13 @@ class SempConnectionContext<Request,Reply> {
         return marshaller;
     }
 
-    public String getSempVersion() {
-        return sempVersion;
-    }
     public String getSchemaVersion() {
         return schemaVersion;
     }
 
-    final private Sempv1Connector connector;
+    final private SempConnector connector;
     final private SempRequestFactory<Request> reqFactory;
     final private SempReplyFactory<Reply> replyFactory;
     final private SempMarshaller<Request,Reply> marshaller;
-    final private String sempVersion;
     final private String schemaVersion;
 }

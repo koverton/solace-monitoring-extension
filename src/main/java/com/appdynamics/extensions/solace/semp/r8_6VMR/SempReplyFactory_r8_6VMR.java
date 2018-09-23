@@ -1,13 +1,8 @@
 package com.appdynamics.extensions.solace.semp.r8_6VMR;
 
 import com.appdynamics.extensions.solace.ServerExclusionPolicies;
-import com.appdynamics.extensions.solace.Helper;
-import com.appdynamics.extensions.solace.semp.Metrics;
-import com.appdynamics.extensions.solace.semp.SempReplyFactory;
-import com.solacesystems.semp_jaxb.r8_6VMR.reply.MessageSpoolMessageVpnEntry;
-import com.solacesystems.semp_jaxb.r8_6VMR.reply.QueueType;
-import com.solacesystems.semp_jaxb.r8_6VMR.reply.RpcReply;
-import com.solacesystems.semp_jaxb.r8_6VMR.reply.SolStatsType;
+import com.appdynamics.extensions.solace.semp.*;
+import com.solacesystems.semp_jaxb.r8_6VMR.reply.*;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.RpcReply.Rpc.Show.Bridge.Bridges.Bridge2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.appdynamics.extensions.solace.Helper.*;
+import static com.appdynamics.extensions.solace.semp.r8_6VMR.StatsHelper.*;
 
 public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
     private static final Logger logger = LoggerFactory.getLogger(SempReplyFactory_r8_6VMR.class);
@@ -65,6 +63,7 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
         }
 
         result.put(Metrics.Statistics.TotalClientsConnected, stats.getTotalClientsConnected());
+        result.put(Metrics.Statistics.TotalSmfClientsConnected, stats.getTotalClientsConnectedServiceSmf());
 
         if (!serverExclusionPolicies.getExcludeDiscardMetrics()) {
             result.put(Metrics.Statistics.TotalIngressDiscards, stats.getIngressDiscards().getTotalIngressDiscards());
@@ -104,16 +103,30 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
         result.put(Metrics.MsgSpool.IsStandby, stats.getOperationalStatus().equals("AD-Standby") ? 1:0);
         result.put(Metrics.MsgSpool.IsDatapathUp, stats.isDatapathUp() ? 1:0);
         result.put(Metrics.MsgSpool.IsSynchronized, stats.getSynchronizationStatus().equals("Synced") ? 1:0);
+        result.put(Metrics.MsgSpool.CurrentIngressFlowsCount, stats.getIngressFlowCount());
+        result.put(Metrics.MsgSpool.CurrentEgressFlowsCount,
+                longOrDefault(stats.getActiveFlowCount(),0)
+                        +longOrDefault(stats.getInactiveFlowCount(),0)
+                        +longOrDefault(stats.getBrowserFlowCount(),0));
+        result.put(Metrics.MsgSpool.TotalEndpointsCount,
+                longOrDefault(stats.getMessageSpoolEntitiesUsedByQueue(),0)
+                        +longOrDefault(stats.getMessageSpoolEntitiesUsedByDte(),0));
+        result.put(Metrics.MsgSpool.TotalMessagesSpooledCount, longOrDefault(stats.getTotalMessagesCurrentlySpooled(), 0));
+        result.put(Metrics.MsgSpool.TotalMessagesSpooledInMB, Math.round(stats.getCurrentPersistUsage()));
+
+        result.put(Metrics.MsgSpool.ActiveDiskPartitionUsagePct,
+                safeParseDouble(Metrics.MsgSpool.ActiveDiskPartitionUsagePct, stats.getMessageCountUtilizationPercentage()).longValue());
         result.put(Metrics.MsgSpool.MessageCountUtilizationPct,
-                safeParseDouble("MessageCountUtilizationPct", stats.getMessageCountUtilizationPercentage()).longValue());
+                safeParseDouble(Metrics.MsgSpool.MessageCountUtilizationPct, stats.getMessageCountUtilizationPercentage()).longValue());
         result.put(Metrics.MsgSpool.TransactionResourceUtilizationPct,
-                safeParseDouble("TransactionResourceUtilizationPct", stats.getTransactionResourceUtilizationPercentage()).longValue());
+                safeParseDouble(Metrics.MsgSpool.TransactionResourceUtilizationPct, stats.getTransactionResourceUtilizationPercentage()).longValue());
         result.put(Metrics.MsgSpool.TransactedSessionCountUtilizationPct,
-                safeParseDouble("TransactedSessionCountUtilizationPct", stats.getTransactedSessionCountUtilizationPercentage()).longValue());
+                safeParseDouble(Metrics.MsgSpool.TransactedSessionCountUtilizationPct, stats.getTransactedSessionCountUtilizationPercentage()).longValue());
         result.put(Metrics.MsgSpool.DeliveredUnackedMsgsUtilizationPct,
-                safeParseDouble("DeliveredUnackedMsgsUtilizationPct", stats.getDeliveredUnackedMsgsUtilizationPercentage()).longValue());
+                safeParseDouble(Metrics.MsgSpool.DeliveredUnackedMsgsUtilizationPct, stats.getDeliveredUnackedMsgsUtilizationPercentage()).longValue());
         result.put(Metrics.MsgSpool.SpoolFilesUtilizationPercentage,
-                safeParseDouble("SpoolFilesUtilizationPercentage", stats.getSpoolFilesUtilizationPercentage()).longValue());
+                safeParseDouble(Metrics.MsgSpool.SpoolFilesUtilizationPercentage, stats.getSpoolFilesUtilizationPercentage()).longValue());
+
         return result;
     }
 
@@ -126,22 +139,37 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
         result.put(Metrics.Redundancy.ConfiguredStatus, redundancy.getConfigStatus().equals("Enabled") ? 1:0);
         result.put(Metrics.Redundancy.OperationalStatus, redundancy.getRedundancyStatus().equals("Up") ? 1:0);
         //result.put(Metrics.Redundancy.IsPrimary, redundancy.getActiveStandbyRole().equals("Primary") ? 1:0);
+        // TODO: Need a way to figure out if we are active or backup
         // if ((Integer) result.get(Metrics.Redundancy.IsPrimary) == 1) {
-        if (redundancy.getVirtualRouters()
-                .getPrimary()
-                .getStatus()
-                .getActivity()
-                .equals("Local Active") ||
-                redundancy.getVirtualRouters()
-                        .getBackup()
-                        .getStatus()
-                        .getActivity()
-                        .equals("Local Active")) {
-            result.put(Metrics.Redundancy.IsActive, 1);
+        try {
+            if (redundancy.getVirtualRouters()
+                    .getPrimary()
+                    .getStatus()
+                    .getDetail()
+                    .getMessageSpoolStatus()
+                    .equals("AD-Active")) {
+                // We are Primary and AD-Active
+                result.put(Metrics.Redundancy.IsActive, 1);
+            }
+            else if (redundancy.getVirtualRouters()
+                    .getBackup()
+                    .getStatus()
+                    .getDetail()
+                    .getMessageSpoolStatus()
+                    .equals("AD-Active")) {
+                // We are Backup and AD-Active
+                result.put(Metrics.Redundancy.IsActive, 1);
+            } else {
+                // We are not AD-Active
+                result.put(Metrics.Redundancy.IsActive, 0);
+            }
+            directMessagingOnly(redundancy, result);
         }
-        else {
+        catch(Throwable t) {
             result.put(Metrics.Redundancy.IsActive, 0);
+            logger.error("Exception thrown processing Redundancy info.", t);
         }
+
         return result;
     }
 
@@ -153,27 +181,27 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
         Map<String,Object> result = new HashMap<>();
         for (RpcReply.Rpc.Show.Service.Services.Service2 svc : service.getServices().getService()) {
             if (svc.getName().equals("SMF")) {
-                result.put(Metrics.Service.SmfPort,svc.getListenPort().intValue());
                 result.put(Metrics.Service.SmfPortUp, svc.getListenPortOperationalStatus().equals("Up") ? 1:0 );
-
-                result.put(Metrics.Service.SmfCompressedPort,svc.getCompressionListenPort().intValue());
                 result.put(Metrics.Service.SmfCompressedPortUp, svc.getCompressionListenPortOperationalStatus().equals("Up") ? 1:0 );
-
-                result.put(Metrics.Service.SmfSslPort,(int)svc.getSsl().getListenPort());
                 result.put(Metrics.Service.SmfSslPortUp, svc.getSsl().getListenPortOperationalStatus().equals("Up") ? 1:0 );
-            }
-            else if (svc.getName().equals("WEB")) {
-                result.put(Metrics.Service.WebPort,svc.getListenPort().intValue());
+            } else if (svc.getName().equals("WEB")) {
                 result.put(Metrics.Service.WebPortUp, svc.getListenPortOperationalStatus().equals("Up") ? 1:0 );
-
-                result.put(Metrics.Service.WebSslPort,(int)svc.getSsl().getListenPort());
-                result.put(Metrics.Service.WebSslPortUp, svc.getSsl().getListenPortOperationalStatus().equals("Up") ? 1:0 );
+                RpcReply.Rpc.Show.Service.Services.Service2.Ssl ssl = svc.getSsl();
+                if (ssl != null) {
+                    result.put(Metrics.Service.WebSslPortUp, ssl.getListenPortOperationalStatus().equals("Up") ? 1 : 0);
+                }
+            } else if (svc.getName().equals("REST")) {
+                int isUp = svc.getListenPortOperationalStatus().equals("Up") ? 1 : 0;
+                String vpnName = svc.getVpnName();
+                // HACK: this should really make use of the MetricPrinter which knows the platform-specific
+                // way to structure a metric address
+                result.put(Metrics.Vpn.PREFIX +'|'+vpnName+'|'+Metrics.Vpn.RestPortUp, isUp);
             }
         }
+
         return result;
     }
 
-    @Override
     public List<Map<String, Object>> getMsgVpnList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
         List<RpcReply.Rpc.Show.MessageVpn.Vpn> vpns = reply.getRpc()
@@ -197,6 +225,29 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
 
             result.put(Metrics.Vpn.TotalClientsConnected, vpn.getConnections());
 
+            if (!serverExclusionPolicies.getExcludeDiscardMetrics()) {
+                result.put(Metrics.Vpn.TotalIngressDiscards, stats.getIngressDiscards().getTotalIngressDiscards());
+                result.put(Metrics.Vpn.NoSubscriptionMatch, stats.getIngressDiscards().getNoSubscriptionMatch());
+                result.put(Metrics.Vpn.TopicParseError, stats.getIngressDiscards().getTopicParseError());
+                result.put(Metrics.Vpn.ParseError, stats.getIngressDiscards().getParseError());
+                result.put(Metrics.Vpn.MsgTooBig, stats.getIngressDiscards().getMsgTooBig());
+                result.put(Metrics.Vpn.TtlExceeded, stats.getIngressDiscards().getTtlExceeded());
+                result.put(Metrics.Vpn.WebParseError, stats.getIngressDiscards().getWebParseError());
+                result.put(Metrics.Vpn.PublishTopicAcl, stats.getIngressDiscards().getPublishTopicAcl());
+                result.put(Metrics.Vpn.MsgSpoolDiscards, stats.getIngressDiscards().getMsgSpoolDiscards());
+                result.put(Metrics.Vpn.IngressMessagePromotionCongestion, stats.getIngressDiscards().getMessagePromotionCongestion());
+                result.put(Metrics.Vpn.IngressMessageSpoolCongestion, stats.getIngressDiscards().getMessageSpoolCongestion());
+
+                result.put(Metrics.Vpn.TotalEgressDiscards, stats.getEgressDiscards().getTotalEgressDiscards());
+                result.put(Metrics.Vpn.TransmitCongestion, stats.getEgressDiscards().getTransmitCongestion());
+                result.put(Metrics.Vpn.CompressionCongestion, stats.getEgressDiscards().getCompressionCongestion());
+                result.put(Metrics.Vpn.MessageElided, stats.getEgressDiscards().getMessageElided());
+                result.put(Metrics.Vpn.PayloadCouldNotBeFormatted, stats.getEgressDiscards().getPayloadCouldNotBeFormatted());
+                result.put(Metrics.Vpn.EgressMessagePromotionCongestion, stats.getEgressDiscards().getMessagePromotionCongestion());
+                result.put(Metrics.Vpn.EgressMessageSpoolCongestion, stats.getEgressDiscards().getMessageSpoolCongestion());
+                result.put(Metrics.Vpn.MsgSpoolEgressDiscards, stats.getEgressDiscards().getMsgSpoolEgressDiscards());
+            }
+
             results.add(result);
         }
         return results;
@@ -215,7 +266,14 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
             Map<String, Object> result = new HashMap<>();
             result.put(Metrics.Vpn.VpnName , vpn.getName());
             result.put(Metrics.Vpn.UsageInMB , vpn.getCurrentSpoolUsageMb());
-            // result.put(Metrics.Vpn.MessagesSpooled , vpn.getCurrentMessagesSpooled());
+
+            result.put(Metrics.Vpn.TotalEndpointsCount,
+                    longOrDefault(vpn.getCurrentQueuesAndTopicEndpoints(),0));
+            result.put(Metrics.Vpn.TotalMessagesSpooledCount, vpn.getCurrentMessagesSpooled());
+
+            result.put(Metrics.Vpn.CurrentIngressFlowsCount, vpn.getCurrentIngressFlows());
+            result.put(Metrics.Vpn.CurrentEgressFlowsCount, vpn.getCurrentEgressFlows());
+
             results.add(result);
         }
         return results;
@@ -232,14 +290,12 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
             Map<String, Object> result = new HashMap<>();
             result.put(Metrics.Queue.QueueName, q.getName());
             result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
-            result.put(Metrics.Queue.IsIngressEnabled, q.getInfo().getIngressConfigStatus().equals("Up") ? 1 : 0);
-            result.put(Metrics.Queue.IsEgressEnabled, q.getInfo().getEgressConfigStatus().equals("Up") ? 1 : 0);
+            result.put(Metrics.Queue.IsEnabled, combineConfigStatus(q.getInfo()));
             result.put(Metrics.Queue.IsDurable, q.getInfo().isDurable() ? 1 : 0);
             result.put(Metrics.Queue.QuotaInMB, q.getInfo().getQuota().longValue());
-            result.put(Metrics.Queue.MessagesEnqueued, Helper.longOrDefault(q.getInfo().getNumMessagesSpooled(),0L).intValue());
-            result.put(Metrics.Queue.UsageInMB, Helper.longOrDefault(q.getInfo().getCurrentSpoolUsageInMb(), 0));
-            result.put(Metrics.Queue.ConsumerCount, Helper.longOrDefault(q.getInfo().getBindCount(), 0).intValue());
-
+            result.put(Metrics.Queue.MessagesSpooled, longOrDefault(q.getInfo().getNumMessagesSpooled(),0L).intValue());
+            result.put(Metrics.Queue.UsageInMB, longOrDefault(q.getInfo().getCurrentSpoolUsageInMb(), 0));
+            result.put(Metrics.Queue.ConsumerCount, longOrDefault(q.getInfo().getBindCount(), 0).intValue());
             results.add(result);
         }
         return results;
@@ -267,6 +323,26 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
         return results;
     }
 
+    public List<Map<String, Object>> getQueueStatsList(RpcReply reply) {
+        List<Map<String,Object>> results = new ArrayList<>();
+        RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
+                .getShow()
+                .getQueue()
+                .getQueues();
+        for(QueueType q : queues.getQueue()) {
+            QueueType.Stats stats = q.getStats();
+            MessageSpoolStatsType spoolStats = stats.getMessageSpoolStats();
+            Map<String, Object> result = new HashMap<>();
+            result.put(Metrics.Queue.QueueName, q.getName());
+            result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
+            result.put(Metrics.Queue.TotalIngressDiscards, countIngressDiscards(spoolStats));
+            result.put(Metrics.Queue.TotalEgressDiscards, countEgressDiscards(spoolStats));
+            result.put(Metrics.Queue.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
+            results.add(result);
+        }
+        return results;
+    }
+
     public List<Map<String, Object>> getTopicEndpointList(RpcReply rpcReply) {
         List<Map<String,Object>> results = new ArrayList<>();
         List<RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2> endpoints = rpcReply.getRpc()
@@ -278,13 +354,12 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
             Map<String, Object> result = new HashMap<>();
             result.put(Metrics.TopicEndpoint.TopicEndpointName, t.getName());
             result.put(Metrics.TopicEndpoint.VpnName, t.getInfo().getMessageVpn());
-            result.put(Metrics.TopicEndpoint.IsIngressEnabled, t.getInfo().getIngressConfigStatus().equals("Up") ? 1 : 0);
-            result.put(Metrics.TopicEndpoint.IsEgressEnabled, t.getInfo().getEgressConfigStatus().equals("Up") ? 1 : 0);
+            result.put(Metrics.TopicEndpoint.IsEnabled, combineConfigStatus(t.getInfo()));
             result.put(Metrics.TopicEndpoint.IsDurable, t.getInfo().isDurable() ? 1 : 0);
             result.put(Metrics.TopicEndpoint.QuotaInMB, t.getInfo().getQuota().longValue());
-            result.put(Metrics.TopicEndpoint.MessagesSpooled, Helper.longOrDefault(t.getInfo().getNumMessagesSpooled(),0).intValue());
-            result.put(Metrics.TopicEndpoint.UsageInMB, Helper.longOrDefault(t.getInfo().getCurrentSpoolUsageInMb(),0));
-            result.put(Metrics.TopicEndpoint.ConsumerCount, Helper.longOrDefault(t.getInfo().getBindCount(),0).intValue());
+            result.put(Metrics.TopicEndpoint.MessagesSpooled, longOrDefault(t.getInfo().getNumMessagesSpooled(),0).intValue());
+            result.put(Metrics.TopicEndpoint.UsageInMB, longOrDefault(t.getInfo().getCurrentSpoolUsageInMb(),0));
+            result.put(Metrics.TopicEndpoint.ConsumerCount, longOrDefault(t.getInfo().getBindCount(),0).intValue());
             results.add(result);
         }
         return results;
@@ -306,6 +381,26 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
                 result.put(Metrics.TopicEndpoint.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
                 result.put(Metrics.TopicEndpoint.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
             }
+            results.add(result);
+        }
+        return results;
+    }
+
+    public List<Map<String, Object>> getTopicEndpointStatsList(RpcReply reply) {
+        List<Map<String,Object>> results = new ArrayList<>();
+        RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints endpoints = reply.getRpc()
+                .getShow()
+                .getTopicEndpoint()
+                .getTopicEndpoints();
+        for(RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2 e : endpoints.getTopicEndpoint()) {
+            RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2.Stats stats = e.getStats();
+            MessageSpoolStatsType spoolStats = stats.getMessageSpoolStats();
+            Map<String, Object> result = new HashMap<>();
+            result.put(Metrics.TopicEndpoint.TopicEndpointName, e.getName());
+            result.put(Metrics.TopicEndpoint.VpnName, e.getInfo().getMessageVpn());
+            result.put(Metrics.TopicEndpoint.TotalIngressDiscards, countIngressDiscards(spoolStats));
+            result.put(Metrics.TopicEndpoint.TotalEgressDiscards, countEgressDiscards(spoolStats));
+            result.put(Metrics.TopicEndpoint.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
             results.add(result);
         }
         return results;
@@ -336,13 +431,4 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
         return results;
     }
 
-    private Double safeParseDouble(String fieldName, String input) {
-        try {
-            return Double.parseDouble(input);
-        }
-        catch(NumberFormatException ex) {
-            logger.error("NumberFormatException parsing field {} value {}", fieldName, input);
-        }
-        return 0.0;
-    }
 }

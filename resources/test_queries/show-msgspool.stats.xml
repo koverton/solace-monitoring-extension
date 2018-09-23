@@ -1,0 +1,8 @@
+<rpc semp-version="soltr/8_12VMR">
+    <show>
+        <message-spool>
+		<stats/>
+		<detail/>
+        </message-spool>
+    </show>
+</rpc>

@@ -1,12 +1,16 @@
 # Solace Monitor Statistics
 
-The Following statistics are gathered per each Solace VMR or Messaging Appliance. The `<instance-name>` used in the Metrics Path is configured into the AD Solace Monitoring Agent configuration. It is not configured on the Solace node.
+The Following statistics are gathered per each Solace VMR or Messaging Appliance.
+The `<component-id>` is the ID of the appropriate AppDynamics Tier as configured on
+the AppDynamics controller. The `<instance-name>` used in the Metrics Path is
+configured into the AD Solace Monitoring Agent configuration. Neither are
+configured on the Solace node.
 
 ![](AD_ext_hierarchy.png)
 
 ## Derived Indicators: 
 
-Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Derived|`
+Metrics Prefix: `Custom Metrics|<component-id>|Solace|<instance-name>|Derived|`
 
 Top-level boolean indicators that are derived from of the below metrics. These indicators consist of complex boolean expressions that could not be easily expressed in AppD dashboards.
 
@@ -18,13 +22,14 @@ Top-level boolean indicators that are derived from of the below metrics. These i
 
 ## Global Statistics: 
 
-Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Statistics|`
+Metrics Prefix: `Custom Metrics|<component-id>|Solace|<instance-name>|Statistics|`
 
 Aggregate data throughput statistics gathered for the entire VMR or Messaging Appliance.
 
-| Metric                           | Value | Description |
-|----------------------------------|-------|-------------|
-| Total clients connected |Integer| Total clients connected across all protocols and msg-VPNs. |
+| Metric                           | Value  | Description |
+|----------------------------------|--------|-------------|
+| TotalClientsConnected            | Integer| Total clients connected across all protocols and msg-VPNs. |
+| TotalSmfClientsConnected         | Integer| Total clients connected via the native SMF protocol only, across all msg-VPNs. |
 | _Aggregate Throughput Stats_ |
 | CurrentIngressRatePerSecond      | Integer| Current inbound message rate per second |
 | CurrentEgressRatePerSecond       | Integer| Current outbound message rate per second |
@@ -42,7 +47,7 @@ Aggregate data throughput statistics gathered for the entire VMR or Messaging Ap
 
 ## Global Discard Statistics: 
 
-Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Statistics|Discards|`
+Metrics Prefix: `Custom Metrics|<component-id>|Solace|<instance-name>|Statistics|Discards|`
 
 Aggregate discard statistics for all inbound and outbound traffic. These are counters incremented since the VMR or Messaging Appliance is booted or since the counter was administratively cleared.
 
@@ -53,7 +58,7 @@ Aggregate discard statistics for all inbound and outbound traffic. These are cou
 
 ### Global Ingress-Discard Statistics:  
 
-Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Statistics|Discards|Ingress|`
+Metrics Prefix: `Custom Metrics|<component-id>|Solace|<instance-name>|Statistics|Discards|Ingress|`
 
 Aggregate inbound discard statistics. These are counters incremented since the VMR or Messaging Appliance is booted or since the counter was administratively cleared.
 
@@ -72,7 +77,7 @@ Aggregate inbound discard statistics. These are counters incremented since the V
 
 ### Global Egress-Discard Statistics: 
 
-Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Statistics|Discards|Egress|`
+Metrics Prefix: `Custom Metrics|<component-id>|Solace|<instance-name>|Statistics|Discards|Egress|`
 
 Aggregate outbound discard statistics. These are counters incremented since the VMR or Messaging Appliance is booted or since the counter was administratively cleared.
 
@@ -89,7 +94,7 @@ Aggregate outbound discard statistics. These are counters incremented since the 
 
 ## Global Msg-Spool: 
 
-Metrics Prefix: `Custom Metrics|Solace|<instance-name>|MsgSpool|`
+Metrics Prefix: `Custom Metrics|<component-id>|Solace|<instance-name>|MsgSpool|`
 
 Global message-spool indicators and statistics.
 
@@ -99,16 +104,22 @@ Global message-spool indicators and statistics.
 | IsActive                         | Boolean | 1 indicates the msg-spool is currently active in the HA-Cluster. |
 | IsDatapathUp                     | Boolean | 1 indicates the msg-spool is currently actively using the storage volume. |
 | IsSynchronized                   | Boolean | 1 indicates the msg-spool on this node is in sync with the peer node. |
+| CurrentIngressFlowsCount         | Integer | Total number of publisher flows into the broker. |
+| CurrentEgressFlowsCount          | Integer | Total number of subscriber flows from the broker. |
+| TotalEndpointsCount              | Integer | Total number of queue and topic endpoints provisioned in the broker. |
+| TotalMessagesSpooledCount        | Integer | Total number of persisted messages in the broker. |
+| TotalMessagesSpooledInMB         | Integer | Total msg-spool usage in MB. |
 | MessageCountUtilizationPct          | Percent | Percent utilization of total available message reference count. |
 | TransactionResourceUtilizationPct   | Percent | Percent utilization of total available transactions. |
 | TransactedSessionCountUtilizationPct| Percent | Percent utilization of total available transacted sessions. |
 | DeliveredUnackedMsgsUtilizationPct  | Percent | Percent utilization of total available delivered but unacked messages. |
 | SpoolFilesUtilizationPercentage     | Percent | Percent utilization of total available spool files on this node. |
+| ActiveDiskPartitionUsagePct         | Integer | Current utilization of the disk partition on the active broker (vs. the standby). |
 
 
 ## Global Redundancy: 
 
-Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Redundancy|`
+Metrics Prefix: `Custom Metrics|<component-id>|Solace|<instance-name>|Redundancy|`
 
 Global Redundancy indicators.
 
@@ -121,49 +132,63 @@ Global Redundancy indicators.
 
 ## Global Service Status: 
 
-Metrics Prefix: `Custom Metrics|Solace|<instance-name>|Services|`
+Metrics Prefix: `Custom Metrics|<component-id>|Solace|<instance-name>|Services|`
 
 Global Service status and indicators.
 
 | Metric                         | Value | Description |
 |--------------------------------|-------|-------------|
 | _SMF Service_                  |
-| SmfPort                        | Integer | Port number for the Solace Message Format sessions. |
 | SmfPortUp                      | Boolean | 1 if the SMF port is accepting connections. |
 | _Compressed SMF Service_       |
-| SmfCompressedPort              | Integer | Port number for compressed SMF sessions. |
 | SmfCompressedPortUp            | Boolean | 1 if the Compressed-SMF port is accepting connections. |
 | _Encrypted SMF Service_        |
-| SmfSslPort                     | Integer | Port number for SMF over TLS sessions. |
 | SmfSslPortUp                   | Boolean | 1 if the TLS-SMF port is accepting connections. |
 | _Web-Socket Service_           |
-| WebPort                        | Integer | Port number for web-socket sessions. |
 | WebPortUp                      | Boolean | 1 if the Web-Socket port is accepting connections. |
 | _Encrypted Web-Socket Service_ |
-| WebSslPort                     | Integer | Port number for web-sockets over TLS sessions. |
 | WebSslPortUp                   | Boolean | 1 if the TLS Web-Socket port is accepting connections. |
+| _Per Msg-VPN Service Status_ |
+| MsgVpns\|&lt;vpn-name&gt;\|Services\|RestPortUp | Boolean | 1 if a Msg-VPN is accepting REST connections. |
 
-## MSG-VPN SCOPED RESOURCES: `Custom Metrics|Solace|<instance-name>|MsgVpns|<vpn-name>|`
+
+## MSG-VPN SCOPED RESOURCES: `Custom Metrics|<component-id>|Solace|<instance-name>|MsgVpns|<vpn-name>|`
 
 The following statistics are gathered per each message-VPN configured on the VMR or Messaging Appliance.
 
+| Metric                           | Value | Description |
+|----------------------------------|-------|-------------|
+| IsEnabled                        | Boolean | 1 indicates the msg-VPN is enabled in the configuration. |
+| OperationalStatus                | Boolean | 1 indicates the msg-VPN is currently available and accepting connections. |
+| QuotaInMB                        | Integer | Max spool-usage for this msg-VPN in MB. |
+| UsageInMB                        | Integer | Current spool-usage for this msg-VPN in MB. |
+| TotalMessagesSpooledCount        | Integer | Current number of messages spooled on this msg-VPN. |
+| TotalEndpointsCount              | Integer | Total number of queue and topic endpoints provisioned on this msg-VPN. |
+| TotalClientsConnected            | Integer | Total clients connected across all protocols on this msg-VPN. |
+| CurrentIngressFlowsCount         | Integer | Total number of publisher flows into the msg-VPN. |
+| CurrentEgressFlowsCount          | Integer | Total number of subscriber flows from the msg-VPN. |
+| CurrentIngressRatePerSecond      | Integer | Current inbound message rate per second on this msg-VPN. |
+| CurrentEgressRatePerSecond       | Integer | Current outbound message rate per second on this msg-VPN. |
+| CurrentIngressByteRatePerSecond  | Integer | Current inbound byte rate per second on this msg-VPN. |
+| CurrentEgressByteRatePerSecond   | Integer | Current outbound byte rate per second on this msg-VPN. |
+
+
 ### Queue List: 
 
-Metrics Prefix: `Custom Metrics|Solace|<instance-name>|MsgVpns|<vpn-name>|Queues|`
+Metrics Prefix: `Custom Metrics|<component-id>|Solace|<instance-name>|MsgVpns|<vpn-name>|Queues|`
 
 Statistics and indicators per each queue in a msg-VPN.
 
-| Metric                           | Value | Description |
-|----------------------------------|-------|-------------|
-| IsIngressEnabled                 | Boolean | 1 if the queue configuration has enabled the queue for publishers. |
-| IsEgressEnabled                  | Boolean | 1 if the queue configuration has enabled the queue for consumers. |
-| IsDurable                        | Boolean | 1 if the queue is durable (i.e. not temporary) . |
+| Metric                           | Value   | Description |
+|----------------------------------|---------|-------------|
+| IsEnabled                        | Boolean | 1 if the queue configuration has enabled the queue for publishers and subscribers. |
 | QuotaInMB                        | Integer | Max spool-usage for this queue in MB. |
-| MessagesEnqueued                 | Integer | Current number of messages enqueued on this endpoint. |
+| MessagesSpooled                  | Integer | Current number of messages spooled on this queue. |
 | UsageInMB                        | Integer | Current spool-usage for this queue in MB. |
 | ConsumerCount                    | Integer | Current number of consumers bound to this queue. |
-| OldestMsgId                      | Integer | Long integer msgID of the oldest message in the queue. |
-| NewestMsgId                      | Integer | Long integer msgID of the newest message in the queue. |
+| RedeliveredCount                 | Integer | Total number of redeliveries attempted on this queue. |
+| TotalIngressDiscards             | Integer | Total number of messages intended for this queue discarded upon arrival. |
+| TotalEgressDiscards              | Integer | Total number of messages intended for this queue discarded upon attempted delivery. |
 | CurrentIngressRatePerSecond      | Integer | Queue current inbound message rate per second. |
 | CurrentEgressRatePerSecond       | Integer | Queue current outbound message rate per second. |
 | CurrentIngressByteRatePerSecond  | Integer | Queue current inbound byte rate per second. |
@@ -171,21 +196,20 @@ Statistics and indicators per each queue in a msg-VPN.
 
 ### Durable TopicEndpoint List:
 
-Metrics Prefix: `Custom Metrics|Solace|<instance-name>|MsgVpns|<vpn-name>|TopicEndpoints|`
+Metrics Prefix: `Custom Metrics|<component-id>|Solace|<instance-name>|MsgVpns|<vpn-name>|TopicEndpoints|`
 
 Statistics and indicators per each topic endpoint in a msg-VPN.
 
 | Metric                           | Value | Description |
 |----------------------------------|-------|-------------|
-| IsIngressEnabled                 | Boolean | 1 if the endpoint configuration has enabled the endpoint for publishers. |
-| IsEgressEnabled                  | Boolean | 1 if the endpoint configuration has enabled the endpoint for consumers. |
-| IsDurable                        | Boolean | 1 if the endpoint is durable (i.e. not temporary) . |
+| IsEnabled                        | Boolean | 1 if the queue configuration has enabled the endpoint for publishers and subscribers. |
 | QuotaInMB                        | Integer | Max spool-usage for this endpoint in MB. |
 | MessagesSpooled                  | Integer | Current number of messages spooled on this endpoint. |
 | UsageInMB                        | Integer | Current spool-usage for this endpoint in MB. |
 | ConsumerCount                    | Integer | Current number of consumers bound to this endpoint. |
-| OldestMsgId                      | Integer | Long integer msgID of the oldest message in the endpoint. |
-| NewestMsgId                      | Integer | Long integer msgID of the newest message in the endpoint. |
+| RedeliveredCount                 | Integer | Total number of redeliveries attempted on this endpoint. |
+| TotalIngressDiscards             | Integer | Total number of messages intended for this endpoint discarded upon arrival. |
+| TotalEgressDiscards              | Integer | Total number of messages intended for this endpoint discarded upon attempted delivery. |
 | CurrentIngressRatePerSecond      | Integer | Topic-Endpoint current inbound message rate per second. |
 | CurrentEgressRatePerSecond       | Integer | Topic-Endpoint current outbound message rate per second. |
 | CurrentIngressByteRatePerSecond  | Integer | Topic-Endpoint current inbound byte rate per second. |
@@ -193,7 +217,7 @@ Statistics and indicators per each topic endpoint in a msg-VPN.
 
 ### Bridge List:
 
-Metrics Prefix: `Custom Metrics|Solace|<instance-name>|MsgVpns|<vpn-name>|Bridges|`
+Metrics Prefix: `Custom Metrics|<component-id>|Solace|<instance-name>|MsgVpns|<vpn-name>|Bridges|`
 
 Statistics and indicators per each bridge in a msg-VPN.
 

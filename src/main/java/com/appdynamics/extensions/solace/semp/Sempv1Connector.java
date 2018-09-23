@@ -12,7 +12,7 @@ import java.net.*;
  * Transport connector for SEMPv1 protocol requests. Implements HTTP POST operations
  * and returns results as String objects.
  */
-public class Sempv1Connector {
+public class Sempv1Connector implements SempConnector {
     private static final Logger logger = LoggerFactory.getLogger(Sempv1Connector.class);
     public  static final Integer DEFAULT_TIMEOUT = 15000;
 
@@ -78,7 +78,7 @@ public class Sempv1Connector {
         return getSempVersion(result);
     }
 
-    public SempVersion getSempVersion(String result) {
+    SempVersion getSempVersion(String result) {
         int start = result.indexOf("semp-version");
         if (-1 != start) {
             // <rpc-reply semp-version="soltr/8_6VMR">

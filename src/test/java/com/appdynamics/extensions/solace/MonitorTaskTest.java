@@ -1,29 +1,16 @@
 package com.appdynamics.extensions.solace;
 
-import com.appdynamics.extensions.solace.semp.SempService;
-import com.appdynamics.extensions.solace.semp.SempServiceFactory;
-import com.appdynamics.extensions.solace.semp.Sempv1Connector;
+import com.appdynamics.extensions.solace.semp.*;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
 import java.util.Map;
 
 public class MonitorTaskTest {
-    //@Test
-    public void sempTaskIntegrationTest() throws MalformedURLException {
-        String mgmtUrl = "http://192.168.56.201:8080/SEMP";
-        String adminUser = "admin";
-        String adminPass = "admin";
-        String displayName = "primary";
-        Integer timeout = 5000;
+    @Test
+    public void sempTaskIntegrationTest() {
         String baseMetricPrefix = "Server|Component:125573|Custom Metrics|Solace|Test";
 
-        Sempv1Connector connector = new Sempv1Connector(
-                mgmtUrl,
-                adminUser,
-                adminPass,
-                displayName,
-                timeout);
+        SempConnector connector = new MockSempConnector("7_2_2");
         ServerExclusionPolicies exclusionPolicies = new ServerExclusionPolicies(null);
         SempService sempService = SempServiceFactory.createSempService(connector, exclusionPolicies);
         new SolaceGlobalMonitorTask(
