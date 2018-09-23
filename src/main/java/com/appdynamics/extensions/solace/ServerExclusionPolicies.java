@@ -31,6 +31,7 @@ public class ServerExclusionPolicies {
         this.excludeCompressionMetrics   = Helper.getBooleanOrDefault(server, EXCLUDE_COMPRESSION_METRICS, true);
         this.excludeTlsMetrics           = Helper.getBooleanOrDefault(server, EXCLUDE_TLS_METRICS, true);
         this.excludeDiscardMetrics       = Helper.getBooleanOrDefault(server, EXCLUDE_DISCARD_METRICS, true);
+        this.excludeExtendedStats        = Helper.getBooleanOrDefault(server, EXCLUDE_EXTENDED_STATS, true);
         this.log();
     }
 
@@ -89,6 +90,8 @@ public class ServerExclusionPolicies {
         return excludeDiscardMetrics;
     }
 
+    public Boolean getExcludeExtendedStats() { return excludeExtendedStats; }
+
     final private MonitorConfigs.ExclusionPolicy vpnExclusionPolicy;
     final private List<Pattern> vpnFilter;
 
@@ -102,4 +105,5 @@ public class ServerExclusionPolicies {
     final private Boolean excludeCompressionMetrics;
     final private Boolean excludeTlsMetrics;
     final private Boolean excludeDiscardMetrics;
+    final private Boolean excludeExtendedStats;
 }
