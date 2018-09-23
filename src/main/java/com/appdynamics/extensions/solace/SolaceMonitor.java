@@ -3,6 +3,7 @@ package com.appdynamics.extensions.solace;
 import com.appdynamics.extensions.ABaseMonitor;
 import com.appdynamics.extensions.MetricWriteHelper;
 import com.appdynamics.extensions.TasksExecutionServiceProvider;
+import com.appdynamics.extensions.solace.semp.SempConnector;
 import com.appdynamics.extensions.solace.semp.SempService;
 import com.appdynamics.extensions.solace.semp.SempServiceFactory;
 import com.appdynamics.extensions.solace.semp.Sempv1Connector;
@@ -19,6 +20,11 @@ import java.util.concurrent.TimeUnit;
 
 import static com.appdynamics.extensions.solace.MonitorConfigs.*;
 
+/**
+ * TOP-LEVEL AD-PLUGIN CLASS: This is the Solace Monitor class that is found and instantiated within the
+ * AD MachineAgent runtime. Its responsibilities are to gather the monitor configuration YML file,
+ * interact with the ServiceProvider, construct and schedule SolaceGlobalMonitorTasks.
+ */
 public class SolaceMonitor extends ABaseMonitor {
     private static final Logger logger = LoggerFactory.getLogger(SolaceMonitor.class);
     private static final String DEFAULT_PREFIX = "Custom Metrics|Solace";
@@ -59,7 +65,7 @@ public class SolaceMonitor extends ABaseMonitor {
                 continue;
 
             try {
-                Sempv1Connector connector = new Sempv1Connector(
+                SempConnector connector = new Sempv1Connector(
                         mgmtUrl,
                         adminUser,
                         adminPass,
@@ -99,29 +105,6 @@ public class SolaceMonitor extends ABaseMonitor {
         if (baseMetricPrefix.endsWith("|"))
             return baseMetricPrefix.substring(0, baseMetricPrefix.lastIndexOf("|"));
         return baseMetricPrefix;
-    }
-
-    public static void main( String[] args )
-    {
-        try {
-            final SolaceMonitor monitor = new SolaceMonitor();
-            final Map<String, String> taskArgs = new HashMap<>();
-
-            taskArgs.put(CONFIG_ARG, "src/main/resources/conf/config.yml");
-
-            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-            scheduler.scheduleAtFixedRate(() -> {
-                try {
-                    monitor.execute(taskArgs, null);
-                } catch (Exception e) {
-                    logger.error("Error while running the task", e);
-                }
-            }, 2, 10, TimeUnit.SECONDS);
-        }
-        catch(Exception ex) {
-            logger.error("Exception while executing Solace Monitor", ex);
-            ex.printStackTrace();
-        }
     }
 
 }

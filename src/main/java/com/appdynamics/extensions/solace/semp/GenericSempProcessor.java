@@ -19,10 +19,19 @@ import java.util.Map;
 class GenericSempProcessor<Request,Reply> {
     private static final Logger logger = LoggerFactory.getLogger(GenericSempProcessor.class);
 
+    /**
+     * Used by the GenericSempService to provide query-specific construction logic for requests.
+     * @param <ResultType> Request instance type.
+     */
     interface RequestFactory<ResultType> {
         ResultType makeRequest();
     }
 
+    /**
+     * Used by the GenericSempService to provide query-specific construction logic for replies per specific requests.
+     * @param <ReplyType> Reply instance type.
+     * @param <ResultType> Reply-specific result type.
+     */
     interface ResultFactory<ReplyType, ResultType> {
         ResultType makeResult(ReplyType reply);
     }

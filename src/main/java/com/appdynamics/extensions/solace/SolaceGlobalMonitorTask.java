@@ -14,8 +14,6 @@ import java.util.*;
 class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     private static final Logger logger = LoggerFactory.getLogger(SolaceGlobalMonitorTask.class);
 
-    private static final String VPNS_PREFIX = "MsgVpns";
-
     SolaceGlobalMonitorTask(MetricPrinter metricPrinter, String basePrefix,
                             ServerExclusionPolicies exclusionPolicies, SempService svc) {
         this.metricPrinter     = metricPrinter;
@@ -54,11 +52,9 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
 
         // Run queues checks
         checkQueues( serverName );
-        checkQueueRates( serverName );
 
         // Run topic-endpoints checks
         checkTopicEndpoints( serverName );
-        checkTopicEndpointRates( serverName );
 
         // Run bridges check
         checkBridges( serverName );
@@ -81,143 +77,94 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
 
     private void checkMsgVpns(String serverName) {
         // vpn stats
-        for(Map<String,Object> vpn : svc.checkMsgVpnList()) {
-            String vpnName= (String) vpn.get(Metrics.Vpn.VpnName);
-            if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
-                logger.info("NOT writing metrics for the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
-                        vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
-                continue;
-            }
-            vpn.remove(Metrics.Vpn.VpnName);
-            metricPrinter.printMetrics(vpn, basePrefix, serverName, VPNS_PREFIX, vpnName);
-        }
+        for(Map<String,Object> vpn : svc.checkMsgVpnList())
+            checkMsgVpn(vpn, serverName);
         // vpn spool stats
-        for(Map<String,Object> vpn : svc.checkMsgVpnSpoolList()) {
-            String vpnName= (String) vpn.get(Metrics.Vpn.VpnName);
-            if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
-                logger.info("NOT writing metrics for the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
-                        vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
-                continue;
-            }
-            vpn.remove(Metrics.Vpn.VpnName);
-            metricPrinter.printMetrics(vpn, basePrefix, serverName, VPNS_PREFIX, vpnName);
+        for(Map<String,Object> vpn : svc.checkMsgVpnSpoolList())
+            checkMsgVpn(vpn, serverName);
+    }
+
+    private void checkMsgVpn(Map<String,Object> vpn, String serverName) {
+        String vpnName= (String) vpn.get(Metrics.Vpn.VpnName);
+        if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
+            logger.info("NOT writing metrics for the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
+                    vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
+            return;
         }
+        vpn.remove(Metrics.Vpn.VpnName);
+        metricPrinter.printMetrics(vpn, basePrefix, serverName, Metrics.Vpn.PREFIX, vpnName);
     }
 
     private void checkQueues(String serverName) {
-        for(Map<String,Object> queue : svc.checkQueueList()) {
-            String vpnName= (String) queue.get(Metrics.Queue.VpnName);
-            if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
-                logger.info("NOT writing metrics for any queues in the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
-                        vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
-                continue;
-            }
-            String qname = (String) queue.get(Metrics.Queue.QueueName);
-            if ( Helper.isExcluded(qname, exclusionPolicies.getQueueFilter(), exclusionPolicies.getQueueExclusionPolicy()) ) {
-                logger.info("NOT writing metrics for queue '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
-                        qname, MonitorConfigs.QUEUE_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_QUEUES);
-                continue;
-            }
-            if (exclusionPolicies.getExcludeTemporaries() ) {
-                if (!getIsDurable(queue, Metrics.Queue.IsDurable)) {
-                    logger.info("NOT writing metrics for temporary queue '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' configuration.",
-                            qname, MonitorConfigs.EXCLUDE_TEMPORARIES);
-                    continue;
-                }
-            }
-            queue.remove(Metrics.Queue.VpnName);
-            queue.remove(Metrics.Queue.QueueName);
-            metricPrinter.printMetrics(queue, basePrefix, serverName,
-                    VPNS_PREFIX, vpnName,
-                    Metrics.Queue.PREFIX, qname);
-        }
+        for(Map<String,Object> queue : svc.checkQueueList())
+            checkQueue(queue, serverName);
+        for(Map<String,Object> queue : svc.checkQueueRatesList())
+            checkQueue(queue, serverName);
+        for(Map<String,Object> queue : svc.checkQueueStatsList())
+            checkQueue(queue, serverName);
     }
 
-    private void checkQueueRates(String serverName) {
-        for(Map<String,Object> queue : svc.checkQueueRatesList()) {
-            String vpnName= (String) queue.get(Metrics.Queue.VpnName);
-            if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
-                logger.info("NOT writing rate metrics for any queues in the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
-                        vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
-                continue;
-            }
-            String qname = (String) queue.get(Metrics.Queue.QueueName);
-            if ( Helper.isExcluded(qname, exclusionPolicies.getQueueFilter(), exclusionPolicies.getQueueExclusionPolicy()) ) {
-                logger.info("NOT writing rate metrics for queue '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
-                        qname, MonitorConfigs.QUEUE_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_QUEUES);
-                continue;
-            }
-            if (exclusionPolicies.getExcludeTemporaries() ) {
-                if (!getIsDurable(queue, Metrics.Queue.IsDurable)) {
-                    logger.info("NOT writing rate metrics for temporary queue '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' configuration.",
-                            qname, MonitorConfigs.EXCLUDE_TEMPORARIES);
-                    continue;
-                }
-            }
-            queue.remove(Metrics.Queue.VpnName);
-            queue.remove(Metrics.Queue.QueueName);
-            metricPrinter.printMetrics(queue, basePrefix, serverName,
-                    VPNS_PREFIX, vpnName,
-                    Metrics.Queue.PREFIX, qname);
+    private void checkQueue(Map<String,Object> queue, String serverName) {
+        String vpnName= (String) queue.get(Metrics.Queue.VpnName);
+        if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
+            logger.info("NOT writing metrics for any queues in the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
+                    vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
+            return;
         }
+        String qname = (String) queue.get(Metrics.Queue.QueueName);
+        if ( Helper.isExcluded(qname, exclusionPolicies.getQueueFilter(), exclusionPolicies.getQueueExclusionPolicy()) ) {
+            logger.info("NOT writing metrics for queue '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
+                    qname, MonitorConfigs.QUEUE_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_QUEUES);
+            return;
+        }
+        if (exclusionPolicies.getExcludeTemporaries() ) {
+            if (!getIsDurable(queue, Metrics.Queue.IsDurable)) {
+                logger.info("NOT writing metrics for temporary queue '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' configuration.",
+                        qname, MonitorConfigs.EXCLUDE_TEMPORARIES);
+                return;
+            }
+        }
+        queue.remove(Metrics.Queue.VpnName);
+        queue.remove(Metrics.Queue.QueueName);
+        metricPrinter.printMetrics(queue, basePrefix, serverName,
+                Metrics.Vpn.PREFIX, vpnName,
+                Metrics.Queue.PREFIX, qname);
     }
 
     private void checkTopicEndpoints(String serverName) {
-        for(Map<String,Object> endpoint : svc.checkTopicEndpointList()) {
-            String vpnName= (String) endpoint.get(Metrics.TopicEndpoint.VpnName);
-            if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
-                logger.info("NOT writing metrics for any topic endpoints in the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
-                        vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
-                continue;
-            }
-            String teName = (String) endpoint.get(Metrics.TopicEndpoint.TopicEndpointName);
-            if ( Helper.isExcluded(teName, exclusionPolicies.getTopicEndpointFilter(), exclusionPolicies.getTopicEndpointExclusionPolicy()) ) {
-                logger.info("NOT writing metrics for topic endpoint '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
-                        teName, MonitorConfigs.TOPIC_ENDPOINT_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_TOPIC_ENDPOINTS);
-                continue;
-            }
-            if (exclusionPolicies.getExcludeTemporaries() ) {
-                if (!getIsDurable(endpoint, Metrics.TopicEndpoint.IsDurable)) {
-                    logger.info("NOT writing metrics for temporary topic-endpoint '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' configuration.",
-                            teName, MonitorConfigs.EXCLUDE_TEMPORARIES);
-                    continue;
-                }
-            }
-            endpoint.remove(Metrics.TopicEndpoint.VpnName);
-            endpoint.remove(Metrics.TopicEndpoint.TopicEndpointName);
-            metricPrinter.printMetrics(endpoint, basePrefix, serverName,
-                    VPNS_PREFIX, vpnName,
-                    Metrics.TopicEndpoint.PREFIX, teName);
-        }
+        for (Map<String, Object> endpoint : svc.checkTopicEndpointList())
+            checkTopicEndpoint(endpoint, serverName);
+        for (Map<String, Object> endpoint : svc.checkTopicEndpointRatesList())
+            checkTopicEndpoint(endpoint, serverName);
+        for (Map<String, Object> endpoint : svc.checkTopicEndpointStatsList())
+            checkTopicEndpoint(endpoint, serverName);
     }
 
-    private void checkTopicEndpointRates(String serverName) {
-        for(Map<String,Object> endpoint : svc.checkTopicEndpointRatesList()) {
-            String vpnName= (String) endpoint.get(Metrics.TopicEndpoint.VpnName);
-            if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
-                logger.info("NOT writing rate metrics for any topic endpoints in the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
-                        vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
-                continue;
-            }
-            String teName = (String) endpoint.get(Metrics.TopicEndpoint.TopicEndpointName);
-            if ( Helper.isExcluded(teName, exclusionPolicies.getTopicEndpointFilter(), exclusionPolicies.getTopicEndpointExclusionPolicy()) ) {
-                logger.info("NOT writing rate metrics for topic endpoint '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
-                        teName, MonitorConfigs.TOPIC_ENDPOINT_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_TOPIC_ENDPOINTS);
-                continue;
-            }
-            if (exclusionPolicies.getExcludeTemporaries() ) {
-                if (!getIsDurable(endpoint, Metrics.TopicEndpoint.IsDurable)) {
-                    logger.info("NOT writing rate metrics for temporary topic-endpoint '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' configuration.",
-                            teName, MonitorConfigs.EXCLUDE_TEMPORARIES);
-                    continue;
-                }
-            }
-            endpoint.remove(Metrics.TopicEndpoint.VpnName);
-            endpoint.remove(Metrics.TopicEndpoint.TopicEndpointName);
-            metricPrinter.printMetrics(endpoint, basePrefix, serverName,
-                    VPNS_PREFIX, vpnName,
-                    Metrics.TopicEndpoint.PREFIX, teName);
+    private void checkTopicEndpoint(Map<String,Object> endpoint, String serverName) {
+        String vpnName= (String) endpoint.get(Metrics.TopicEndpoint.VpnName);
+        if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
+            logger.info("NOT writing metrics for any topic endpoints in the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
+                    vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
+            return;
         }
+        String teName = (String) endpoint.get(Metrics.TopicEndpoint.TopicEndpointName);
+        if ( Helper.isExcluded(teName, exclusionPolicies.getTopicEndpointFilter(), exclusionPolicies.getTopicEndpointExclusionPolicy()) ) {
+            logger.info("NOT writing metrics for topic endpoint '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
+                    teName, MonitorConfigs.TOPIC_ENDPOINT_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_TOPIC_ENDPOINTS);
+            return;
+        }
+        if (exclusionPolicies.getExcludeTemporaries() ) {
+            if (!getIsDurable(endpoint, Metrics.TopicEndpoint.IsDurable)) {
+                logger.info("NOT writing metrics for temporary topic-endpoint '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' configuration.",
+                        teName, MonitorConfigs.EXCLUDE_TEMPORARIES);
+                return;
+            }
+        }
+        endpoint.remove(Metrics.TopicEndpoint.VpnName);
+        endpoint.remove(Metrics.TopicEndpoint.TopicEndpointName);
+        metricPrinter.printMetrics(endpoint, basePrefix, serverName,
+                Metrics.Vpn.PREFIX, vpnName,
+                Metrics.TopicEndpoint.PREFIX, teName);
     }
 
     private void checkBridges(String serverName) {
@@ -227,7 +174,7 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
             bridge.remove(Metrics.Bridge.VpnName);
             bridge.remove(Metrics.Bridge.BridgeName);
             metricPrinter.printMetrics(bridge, basePrefix, serverName,
-                    VPNS_PREFIX, vpnName,
+                    Metrics.Vpn.PREFIX, vpnName,
                     Metrics.Bridge.PREFIX, bridgeName);
         }
     }

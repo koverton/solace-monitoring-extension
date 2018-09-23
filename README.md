@@ -310,20 +310,21 @@ servers:
 ```
 
 ## Latest Updates
-1. Fix redundancy status for hardware queries (as of 8.2.0)
-2. Per-metric documentation
-3. Exclusion lists now accept regular-expression patterns
-4. Optional setting to exclude monitoring all temporary endpoints
+
+1. Version 1.2
+2. Added Msg-VPN level statistics, msg-spool and service status
+3. Added more capacity planning metrics
+4. Exclusion lists for TLS, Compression and Discard stats
 
 
 ## Next Steps / TODO Items
 
 In priority order:
-1. Add more statistics to all entities; current version emphasizes status checks
+
+1. Add support for per-instance overrides of default metrics published for each metric type
 2. More backwards compatibility schemas
 3. Better calculation to match parsing schema version to the version presented by the router
 4. When many schemas need to be supported, should load only the servers' required libs dynamically via child classloaders
 
 Additional metrics that make sense to add:
-1. Client connections
-2. DR links
+1. DR links

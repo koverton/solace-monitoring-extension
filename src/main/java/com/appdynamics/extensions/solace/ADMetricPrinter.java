@@ -25,12 +25,16 @@ public class ADMetricPrinter implements MetricPrinter
         if (metricValue instanceof Double)
             metricValue = ((Double)metricValue).longValue();
 
-        // void printMetric(String metricPath, String metricValue, String aggregationType, String timeRollup, String clusterRollup)
-        metricWriter.printMetric(metricPath, metricValue.toString(),
-                MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
-                MetricWriter.METRIC_TIME_ROLLUP_TYPE_AVERAGE,
-                MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
-
+        if (metricWriter != null) {
+            // void printMetric(String metricPath, String metricValue, String aggregationType, String timeRollup, String clusterRollup)
+            metricWriter.printMetric(metricPath, metricValue.toString(),
+                    MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
+                    MetricWriter.METRIC_TIME_ROLLUP_TYPE_AVERAGE,
+                    MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
+        }
+        else {
+            logger.warn("No AD MetricWriter available so skipping.");
+        }
 
         logger.debug("Metric [{}/{}/{}] metric = {} = {}",
                 MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,

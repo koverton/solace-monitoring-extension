@@ -119,6 +119,18 @@ class GenericSempService<Request,Reply> implements SempService {
         return result;
     }
 
+    public List<Map<String,Object>> checkQueueStatsList() {
+        logger.debug("<GenericSempService.checkQueueStatsList>");
+
+        List<Map<String,Object>> result = processor.repeatingQuery(
+                () -> ctx.getReqFactory().createQueueStatsListRequest(ctx.getSchemaVersion()),
+                (Reply reply) -> ctx.getReplyFactory().getQueueStatsList(reply)
+        );
+
+        logger.debug("</GenericSempService.checkQueueStatsList>");
+        return result;
+    }
+
     public List<Map<String,Object>> checkTopicEndpointList() {
         logger.debug("<GenericSempService.checkTopicEndpointList>");
 
@@ -140,6 +152,18 @@ class GenericSempService<Request,Reply> implements SempService {
         );
 
         logger.debug("</GenericSempService.checkTopicEndpointRatesList>");
+        return result;
+    }
+
+    public List<Map<String,Object>> checkTopicEndpointStatsList() {
+        logger.debug("<GenericSempService.checkTopicEndpointStatsList>");
+
+        List<Map<String,Object>> result = processor.repeatingQuery(
+                () -> ctx.getReqFactory().createTopicEndpointStatsListRequest(ctx.getSchemaVersion()),
+                (Reply reply) -> ctx.getReplyFactory().getTopicEndpointStatsList(reply)
+        );
+
+        logger.debug("</GenericSempService.checkTopicEndpointStatsList>");
         return result;
     }
 

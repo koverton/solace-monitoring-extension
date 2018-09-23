@@ -124,6 +124,13 @@ public class SempMarshaller_r7_2_2Test
     }
 
     @Test
+    public void showQueueStatsListTest() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-queues.stats.xml"));
+        List<Map<String, Object>> queues = factory.getQueueStatsList(reply);
+        assertNotNull(queues);
+    }
+
+    @Test
     public void showTopicEndpointListTest() throws Exception {
         RpcReply reply = marshaller.fromReplyXml(readFile("show-topicendpoints.detail.xml"));
         List<Map<String, Object>> endpoints = factory.getTopicEndpointList(reply);
@@ -135,6 +142,20 @@ public class SempMarshaller_r7_2_2Test
         RpcReply reply = marshaller.fromReplyXml(readFile("show-topicendpoints.rates.xml"));
         List<Map<String, Object>> endpoints = factory.getTopicEndpointRatesList(reply);
         assertNotNull(endpoints);
+    }
+
+    @Test
+    public void showTopicEndpointStatsListTest() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-topicendpoints.stats.xml"));
+        List<Map<String, Object>> endpoints = factory.getTopicEndpointStatsList(reply);
+        assertNotNull(endpoints);
+        assertEquals(2, endpoints.size());
+        for(Map<String,Object> e : endpoints) {
+            if (e.get(Metrics.TopicEndpoint.TopicEndpointName).equals("t2")) {
+                assertEquals(190L, e.get(Metrics.TopicEndpoint.RedeliveredCount));
+                assertEquals(190L, e.get(Metrics.TopicEndpoint.TotalEgressDiscards));
+            }
+        }
     }
 
     @Test
