@@ -250,6 +250,16 @@ If discard metrics are not useful to you for high-level monitoring, this can red
 uploaded to your controller.
 </td>
 </tr>
+<tr>
+<td class='confluenceTd'> <tt>excludeExtendedStats</tt> </td>
+<td class='confluenceTd'> [ Boolean : default TRUE ] Indicates whether or not to ignore extended statistics at the msg-VPN level.
+If extended vpn-level stats are not useful to you for high-level monitoring, this can reduce the number of metrics
+uploaded to your controller.
+</td>
+</tr>
+
+
+
 
 </tbody>
 </table>
@@ -315,6 +325,7 @@ servers:
 2. Added Msg-VPN level statistics, msg-spool and service status
 3. Added more capacity planning metrics
 4. Exclusion lists for TLS, Compression and Discard stats
+5. Exclusion setting for extended stats within the msg-VPN scoped objects
 
 
 ## Next Steps / TODO Items

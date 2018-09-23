@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.appdynamics.extensions.solace.MonitorConfigs.EXCLUDE_EXTENDED_STATS;
 import static org.junit.Assert.*;
 
 public class SempMarshaller_r7_2_2Test
@@ -29,7 +30,9 @@ public class SempMarshaller_r7_2_2Test
     @BeforeClass
     public static void setup() throws JAXBException {
         marshaller = new SempMarshaller_r7_2_2();
-        factory = new SempReplyFactory_r7_2_2(new ServerExclusionPolicies(new HashMap<>()));
+        Map<String,String> exclusionsMap = new HashMap<>();
+        exclusionsMap.put(EXCLUDE_EXTENDED_STATS, "false");
+        factory = new SempReplyFactory_r7_2_2(new ServerExclusionPolicies(exclusionsMap));
     }
 
     @Test

@@ -217,12 +217,6 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.Vpn.IsEnabled, (vpn.isEnabled() ? 1 : 0) );
             result.put(Metrics.Vpn.OperationalStatus, (vpn.isOperational() ? 1 : 0) );
             result.put(Metrics.Vpn.QuotaInMB, vpn.getMaximumSpoolUsageMb() );
-
-            result.put(Metrics.Vpn.CurrentIngressRatePerSecond, stats.getCurrentIngressRatePerSecond());
-            result.put(Metrics.Vpn.CurrentEgressRatePerSecond, stats.getCurrentEgressRatePerSecond());
-            result.put(Metrics.Vpn.CurrentIngressByteRatePerSecond, stats.getCurrentIngressByteRatePerSecond());
-            result.put(Metrics.Vpn.CurrentEgressByteRatePerSecond, stats.getCurrentEgressByteRatePerSecond());
-
             result.put(Metrics.Vpn.TotalClientsConnected, vpn.getConnections());
 
             if (!serverExclusionPolicies.getExcludeDiscardMetrics()) {
@@ -248,6 +242,13 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
                 result.put(Metrics.Vpn.MsgSpoolEgressDiscards, stats.getEgressDiscards().getMsgSpoolEgressDiscards());
             }
 
+            if (!serverExclusionPolicies.getExcludeExtendedStats()) {
+                result.put(Metrics.Vpn.CurrentIngressRatePerSecond, stats.getCurrentIngressRatePerSecond());
+                result.put(Metrics.Vpn.CurrentEgressRatePerSecond, stats.getCurrentEgressRatePerSecond());
+                result.put(Metrics.Vpn.CurrentIngressByteRatePerSecond, stats.getCurrentIngressByteRatePerSecond());
+                result.put(Metrics.Vpn.CurrentEgressByteRatePerSecond, stats.getCurrentEgressByteRatePerSecond());
+            }
+
             results.add(result);
         }
         return results;
@@ -271,9 +272,10 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
                     longOrDefault(vpn.getCurrentQueuesAndTopicEndpoints(),0));
             result.put(Metrics.Vpn.TotalMessagesSpooledCount, vpn.getCurrentMessagesSpooled());
 
-            result.put(Metrics.Vpn.CurrentIngressFlowsCount, vpn.getCurrentIngressFlows());
-            result.put(Metrics.Vpn.CurrentEgressFlowsCount, vpn.getCurrentEgressFlows());
-
+            if (!serverExclusionPolicies.getExcludeExtendedStats()) {
+                result.put(Metrics.Vpn.CurrentIngressFlowsCount, vpn.getCurrentIngressFlows());
+                result.put(Metrics.Vpn.CurrentEgressFlowsCount, vpn.getCurrentEgressFlows());
+            }
             results.add(result);
         }
         return results;
@@ -303,42 +305,46 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
 
     public List<Map<String, Object>> getQueueRatesList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
-        RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
-                .getShow()
-                .getQueue()
-                .getQueues();
-        for(QueueType q : queues.getQueue()) {
-            Map<String, Object> result = new HashMap<>();
-            List<QueueType.Rates> rates = q.getRates();
-            result.put(Metrics.Queue.QueueName, q.getName());
-            result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
-            for(QueueType.Rates r : rates) {
-                result.put(Metrics.Queue.CurrentIngressRatePerSecond, r.getQendptDataRates().getCurrentIngressRatePerSecond());
-                result.put(Metrics.Queue.CurrentIngressByteRatePerSecond, r.getQendptDataRates().getCurrentIngressByteRatePerSecond());
-                result.put(Metrics.Queue.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
-                result.put(Metrics.Queue.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
+        if (!serverExclusionPolicies.getExcludeExtendedStats()) {
+            RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
+                    .getShow()
+                    .getQueue()
+                    .getQueues();
+            for (QueueType q : queues.getQueue()) {
+                Map<String, Object> result = new HashMap<>();
+                List<QueueType.Rates> rates = q.getRates();
+                result.put(Metrics.Queue.QueueName, q.getName());
+                result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
+                for (QueueType.Rates r : rates) {
+                    result.put(Metrics.Queue.CurrentIngressRatePerSecond, r.getQendptDataRates().getCurrentIngressRatePerSecond());
+                    result.put(Metrics.Queue.CurrentIngressByteRatePerSecond, r.getQendptDataRates().getCurrentIngressByteRatePerSecond());
+                    result.put(Metrics.Queue.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
+                    result.put(Metrics.Queue.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
+                }
+                results.add(result);
             }
-            results.add(result);
         }
         return results;
     }
 
     public List<Map<String, Object>> getQueueStatsList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
-        RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
-                .getShow()
-                .getQueue()
-                .getQueues();
-        for(QueueType q : queues.getQueue()) {
-            QueueType.Stats stats = q.getStats();
-            MessageSpoolStatsType spoolStats = stats.getMessageSpoolStats();
-            Map<String, Object> result = new HashMap<>();
-            result.put(Metrics.Queue.QueueName, q.getName());
-            result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
-            result.put(Metrics.Queue.TotalIngressDiscards, countIngressDiscards(spoolStats));
-            result.put(Metrics.Queue.TotalEgressDiscards, countEgressDiscards(spoolStats));
-            result.put(Metrics.Queue.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
-            results.add(result);
+        if (!serverExclusionPolicies.getExcludeExtendedStats()) {
+            RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
+                    .getShow()
+                    .getQueue()
+                    .getQueues();
+            for (QueueType q : queues.getQueue()) {
+                QueueType.Stats stats = q.getStats();
+                MessageSpoolStatsType spoolStats = stats.getMessageSpoolStats();
+                Map<String, Object> result = new HashMap<>();
+                result.put(Metrics.Queue.QueueName, q.getName());
+                result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
+                result.put(Metrics.Queue.TotalIngressDiscards, countIngressDiscards(spoolStats));
+                result.put(Metrics.Queue.TotalEgressDiscards, countEgressDiscards(spoolStats));
+                result.put(Metrics.Queue.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
+                results.add(result);
+            }
         }
         return results;
     }
@@ -367,41 +373,45 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
 
     public List<Map<String, Object>> getTopicEndpointRatesList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
-        RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints eps = reply.getRpc()
-                .getShow()
-                .getTopicEndpoint()
-                .getTopicEndpoints();
-        for(RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2 t : eps.getTopicEndpoint()) {
-            Map<String, Object> result = new HashMap<>();
-            result.put(Metrics.TopicEndpoint.TopicEndpointName, t.getName());
-            result.put(Metrics.TopicEndpoint.VpnName, t.getInfo().getMessageVpn());
-            for(RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2.Rates r : t.getRates()) {
-                result.put(Metrics.TopicEndpoint.CurrentIngressRatePerSecond, r.getQendptDataRates().getCurrentIngressRatePerSecond());
-                result.put(Metrics.TopicEndpoint.CurrentIngressByteRatePerSecond, r.getQendptDataRates().getCurrentIngressByteRatePerSecond());
-                result.put(Metrics.TopicEndpoint.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
-                result.put(Metrics.TopicEndpoint.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
+        if (!serverExclusionPolicies.getExcludeExtendedStats()) {
+            RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints eps = reply.getRpc()
+                    .getShow()
+                    .getTopicEndpoint()
+                    .getTopicEndpoints();
+            for (RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2 t : eps.getTopicEndpoint()) {
+                Map<String, Object> result = new HashMap<>();
+                result.put(Metrics.TopicEndpoint.TopicEndpointName, t.getName());
+                result.put(Metrics.TopicEndpoint.VpnName, t.getInfo().getMessageVpn());
+                for (RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2.Rates r : t.getRates()) {
+                    result.put(Metrics.TopicEndpoint.CurrentIngressRatePerSecond, r.getQendptDataRates().getCurrentIngressRatePerSecond());
+                    result.put(Metrics.TopicEndpoint.CurrentIngressByteRatePerSecond, r.getQendptDataRates().getCurrentIngressByteRatePerSecond());
+                    result.put(Metrics.TopicEndpoint.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
+                    result.put(Metrics.TopicEndpoint.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
+                }
+                results.add(result);
             }
-            results.add(result);
         }
         return results;
     }
 
     public List<Map<String, Object>> getTopicEndpointStatsList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
-        RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints endpoints = reply.getRpc()
-                .getShow()
-                .getTopicEndpoint()
-                .getTopicEndpoints();
-        for(TopicEndpoint2 e : endpoints.getTopicEndpoint()) {
-            TopicEndpoint2.Stats stats = e.getStats();
-            MessageSpoolStatsType spoolStats = stats.getMessageSpoolStats();
-            Map<String, Object> result = new HashMap<>();
-            result.put(Metrics.TopicEndpoint.TopicEndpointName, e.getName());
-            result.put(Metrics.TopicEndpoint.VpnName, e.getInfo().getMessageVpn());
-            result.put(Metrics.TopicEndpoint.TotalIngressDiscards, countIngressDiscards(spoolStats));
-            result.put(Metrics.TopicEndpoint.TotalEgressDiscards, countEgressDiscards(spoolStats));
-            result.put(Metrics.TopicEndpoint.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
-            results.add(result);
+        if (!serverExclusionPolicies.getExcludeExtendedStats()) {
+            RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints endpoints = reply.getRpc()
+                    .getShow()
+                    .getTopicEndpoint()
+                    .getTopicEndpoints();
+            for (TopicEndpoint2 e : endpoints.getTopicEndpoint()) {
+                TopicEndpoint2.Stats stats = e.getStats();
+                MessageSpoolStatsType spoolStats = stats.getMessageSpoolStats();
+                Map<String, Object> result = new HashMap<>();
+                result.put(Metrics.TopicEndpoint.TopicEndpointName, e.getName());
+                result.put(Metrics.TopicEndpoint.VpnName, e.getInfo().getMessageVpn());
+                result.put(Metrics.TopicEndpoint.TotalIngressDiscards, countIngressDiscards(spoolStats));
+                result.put(Metrics.TopicEndpoint.TotalEgressDiscards, countEgressDiscards(spoolStats));
+                result.put(Metrics.TopicEndpoint.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
+                results.add(result);
+            }
         }
         return results;
     }

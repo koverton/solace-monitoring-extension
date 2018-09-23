@@ -165,6 +165,7 @@ The following statistics are gathered per each message-VPN configured on the VMR
 | TotalMessagesSpooledCount        | Integer | Current number of messages spooled on this msg-VPN. |
 | TotalEndpointsCount              | Integer | Total number of queue and topic endpoints provisioned on this msg-VPN. |
 | TotalClientsConnected            | Integer | Total clients connected across all protocols on this msg-VPN. |
+ _Extended Stats_                 | | These statistics are only visible when you set `excludeExtendedStats=false` (please see [../README.md]).
 | CurrentIngressFlowsCount         | Integer | Total number of publisher flows into the msg-VPN. |
 | CurrentEgressFlowsCount          | Integer | Total number of subscriber flows from the msg-VPN. |
 | CurrentIngressRatePerSecond      | Integer | Current inbound message rate per second on this msg-VPN. |
@@ -187,6 +188,7 @@ Statistics and indicators per each queue in a msg-VPN.
 | UsageInMB                        | Integer | Current spool-usage for this queue in MB. |
 | ConsumerCount                    | Integer | Current number of consumers bound to this queue. |
 | RedeliveredCount                 | Integer | Total number of redeliveries attempted on this queue. |
+| _Extended Stats_                 | | These statistics are only visible when you set `excludeExtendedStats=false` (please see [../README.md]).
 | TotalIngressDiscards             | Integer | Total number of messages intended for this queue discarded upon arrival. |
 | TotalEgressDiscards              | Integer | Total number of messages intended for this queue discarded upon attempted delivery. |
 | CurrentIngressRatePerSecond      | Integer | Queue current inbound message rate per second. |
@@ -207,6 +209,7 @@ Statistics and indicators per each topic endpoint in a msg-VPN.
 | MessagesSpooled                  | Integer | Current number of messages spooled on this endpoint. |
 | UsageInMB                        | Integer | Current spool-usage for this endpoint in MB. |
 | ConsumerCount                    | Integer | Current number of consumers bound to this endpoint. |
+| _Extended Stats_                 | | These statistics are only visible when you set `excludeExtendedStats=false` (please see [../README.md]).
 | RedeliveredCount                 | Integer | Total number of redeliveries attempted on this endpoint. |
 | TotalIngressDiscards             | Integer | Total number of messages intended for this endpoint discarded upon arrival. |
 | TotalEgressDiscards              | Integer | Total number of messages intended for this endpoint discarded upon attempted delivery. |
