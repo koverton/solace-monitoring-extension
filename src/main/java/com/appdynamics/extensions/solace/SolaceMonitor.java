@@ -11,12 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import static com.appdynamics.extensions.solace.MonitorConfigs.*;
 
@@ -28,7 +23,6 @@ import static com.appdynamics.extensions.solace.MonitorConfigs.*;
 public class SolaceMonitor extends ABaseMonitor {
     private static final Logger logger = LoggerFactory.getLogger(SolaceMonitor.class);
     private static final String DEFAULT_PREFIX = "Custom Metrics|Solace";
-    private static final String CONFIG_ARG = "config-file";
 
     @Override
     protected String getDefaultMetricPrefix() {
@@ -98,7 +92,7 @@ public class SolaceMonitor extends ABaseMonitor {
 
     /**
      * Makes sure the configured metric prefix does NOT end with a delimiter.
-     * @return
+     * @return Base prefix string ensured to be terminated with a symbol rather than a delimiter
      */
     private String getBasePrefix() {
         String baseMetricPrefix  = (String) configuration.getConfigYml().get(METRIC_PREFIX);
