@@ -184,6 +184,8 @@ public class SempReplyFactory_r8_4_0 implements SempReplyFactory<RpcReply> {
                 result.put(Metrics.Service.SmfPortUp, svc.getListenPortOperationalStatus().equals("Up") ? 1 : 0);
                 result.put(Metrics.Service.SmfCompressedPortUp, svc.getCompressionListenPortOperationalStatus().equals("Up") ? 1 : 0);
                 result.put(Metrics.Service.SmfSslPortUp, svc.getSsl().getListenPortOperationalStatus().equals("Up") ? 1 : 0);
+            } else if (svc.getName().equals("SEMP")) {
+                result.put(Metrics.Service.SempPortUp, svc.getListenPortOperationalStatus().equals("Up") ? 1 : 0);
             } else if (svc.getName().equals("WEB")) {
                 result.put(Metrics.Service.WebPortUp, svc.getListenPortOperationalStatus().equals("Up") ? 1 : 0);
                 RpcReply.Rpc.Show.Service.Services.Service2.Ssl ssl = svc.getSsl();
