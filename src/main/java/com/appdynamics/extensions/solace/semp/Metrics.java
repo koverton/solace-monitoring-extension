@@ -94,6 +94,7 @@ public final class Metrics {
         public final static String OperationalStatus = "OperationalStatus";
         public final static String QuotaInMB = "QuotaInMB";
         public final static String UsageInMB = "UsageInMB";
+        public final static String SMFConnectionsPct = "SMFConnectionsPct";
         public final static String TotalEndpointsCount = "TotalEndpointsCount";
         public final static String TotalMessagesSpooledCount = "TotalMessagesSpooledCount";
         public final static String TotalClientsConnected = "TotalClientsConnected";
@@ -176,7 +177,6 @@ public final class Metrics {
         public final static String IsConnected = "IsConnected";
         public final static String IsInSync = "IsInSync";
         public final static String IsBoundToBridgeQueue = "IsBoundToBridgeQueue";
-        public final static String UptimeInSecs = "UptimeInSecs";
     }
 
     public final class Derived {
