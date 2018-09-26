@@ -218,6 +218,8 @@ public class SempReplyFactory_r8_4_0 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.Vpn.OperationalStatus, (vpn.isOperational() ? 1 : 0) );
             result.put(Metrics.Vpn.QuotaInMB, vpn.getMaximumSpoolUsageMb() );
             result.put(Metrics.Vpn.TotalClientsConnected, vpn.getConnections());
+            result.put(Metrics.Vpn.SMFConnectionsPct,
+                    calcPercentage(vpn.getConnectionsServiceSmf(),vpn.getMaxConnectionsServiceSmf()));
 
             if (!serverExclusionPolicies.getExcludeDiscardMetrics()) {
                 result.put(Metrics.Vpn.TotalIngressDiscards, stats.getIngressDiscards().getTotalIngressDiscards());
@@ -435,7 +437,6 @@ public class SempReplyFactory_r8_4_0 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.Bridge.IsConnected, b.getConnectionEstablisher().equals("Local") ? 1:0);
             result.put(Metrics.Bridge.IsInSync, b.getInboundOperationalState().equals("Ready-InSync") ? 1:0);
             result.put(Metrics.Bridge.IsBoundToBridgeQueue, b.getQueueOperationalState().equals("Bound") ? 1:0);
-            result.put(Metrics.Bridge.UptimeInSecs, b.getConnectionUptimeInSeconds().longValue());
             results.add(result);
         }
         return results;

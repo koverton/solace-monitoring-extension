@@ -35,12 +35,12 @@ Aggregate data throughput statistics gathered for the entire VMR or Messaging Ap
 | CurrentEgressRatePerSecond       | Integer| Current outbound message rate per second |
 | CurrentIngressByteRatePerSecond  | Integer| Current inbound byte rate per second |
 | CurrentEgressByteRatePerSecond   | Integer| Current outbound byte rate per second |
-| _Compressed Stats_ |
+| _Compressed Stats_ | | Excluded from output by default according to `excludeCompressionMetrics` setting |
 | CurrentIngressCompressedRatePerSecond | Integer| Current compressed inbound byte rate per second |
 | CurrentEgressCompressedRatePerSecond  | Integer| Current compressed outbound byte rate per second |
 | IngressCompressionRatio          | Integer| Current compression ratio of inbound data |
 | EgressCompressionRatio           | Integer | Current compression ratio of outbound data |
-| _TLS Stats_ |
+| _TLS Stats_ | | Excluded from output by default according to `excludeTlsMetrics` setting |
 | CurrentIngressSslRatePerSecond   | Integer | Current SSL inbound byte rate per second |
 | CurrentEgressSslRatePerSecond    | Integer | Current SSL outbound byte rate per second |
 
@@ -48,6 +48,8 @@ Aggregate data throughput statistics gathered for the entire VMR or Messaging Ap
 ## Global Discard Statistics: 
 
 Metrics Prefix: `Custom Metrics|<component-id>|Solace|<instance-name>|Statistics|Discards|`
+
+    By default, discard metrics are excluded by the `excludeDiscardMetrics` which defaults to `true`.
 
 Aggregate discard statistics for all inbound and outbound traffic. These are counters incremented since the VMR or Messaging Appliance is booted or since the counter was administratively cleared.
 
@@ -165,6 +167,7 @@ The following statistics are gathered per each message-VPN configured on the VMR
 | TotalMessagesSpooledCount        | Integer | Current number of messages spooled on this msg-VPN. |
 | TotalEndpointsCount              | Integer | Total number of queue and topic endpoints provisioned on this msg-VPN. |
 | TotalClientsConnected            | Integer | Total clients connected across all protocols on this msg-VPN. |
+| SMFConnectionsPct                | Integer | Percentage of available SMF connections currently in use for this msg-VPN. |
  _Extended Stats_                 | | These statistics are only visible when you set `excludeExtendedStats=false` (please see [../README.md]).
 | CurrentIngressFlowsCount         | Integer | Total number of publisher flows into the msg-VPN. |
 | CurrentEgressFlowsCount          | Integer | Total number of subscriber flows from the msg-VPN. |
@@ -187,8 +190,8 @@ Statistics and indicators per each queue in a msg-VPN.
 | MessagesSpooled                  | Integer | Current number of messages spooled on this queue. |
 | UsageInMB                        | Integer | Current spool-usage for this queue in MB. |
 | ConsumerCount                    | Integer | Current number of consumers bound to this queue. |
-| RedeliveredCount                 | Integer | Total number of redeliveries attempted on this queue. |
 | _Extended Stats_                 | | These statistics are only visible when you set `excludeExtendedStats=false` (please see [../README.md]).
+| RedeliveredCount                 | Integer | Total number of redeliveries attempted on this queue. |
 | TotalIngressDiscards             | Integer | Total number of messages intended for this queue discarded upon arrival. |
 | TotalEgressDiscards              | Integer | Total number of messages intended for this queue discarded upon attempted delivery. |
 | CurrentIngressRatePerSecond      | Integer | Queue current inbound message rate per second. |
@@ -230,5 +233,4 @@ Statistics and indicators per each bridge in a msg-VPN.
 | IsConnected          | Boolean | 1 if the bridge is currently connected to the remote msg-vpn. |
 | IsInSync             | Boolean | 1 if the bridge data transmisssion is currently In-Sync. |
 | IsBoundToBridgeQueue | Boolean | 1 if the bridge consumer is bound to the remote bridge-queue. |
-| UptimeInSecs         | Integer | Number of seconds the bridge has been UP. |
 
