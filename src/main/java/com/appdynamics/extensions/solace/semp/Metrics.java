@@ -12,6 +12,7 @@ public final class Metrics {
         public final static String PREFIX = "Services";
 
         public final static String SmfPortUp = "SmfPortUp";
+        public final static String SempPortUp = "SempPortUp";
         public final static String SmfCompressedPortUp = "SmfCompressedPortUp";
         public final static String SmfSslPortUp = "SmfSslPortUp";
         public final static String WebPortUp = "WebPortUp";

@@ -140,18 +140,14 @@ Global Service status and indicators.
 
 | Metric                         | Value | Description |
 |--------------------------------|-------|-------------|
-| _SMF Service_                  |
-| SmfPortUp                      | Boolean | 1 if the SMF port is accepting connections. |
-| _Compressed SMF Service_       |
-| SmfCompressedPortUp            | Boolean | 1 if the Compressed-SMF port is accepting connections. |
-| _Encrypted SMF Service_        |
-| SmfSslPortUp                   | Boolean | 1 if the TLS-SMF port is accepting connections. |
-| _Web-Socket Service_           |
-| WebPortUp                      | Boolean | 1 if the Web-Socket port is accepting connections. |
-| _Encrypted Web-Socket Service_ |
-| WebSslPortUp                   | Boolean | 1 if the TLS Web-Socket port is accepting connections. |
+| SempPortUp                     | Boolean | 1 if the SEMP management service is accepting connections. |
+| SmfPortUp                      | Boolean | 1 if the SMF service is accepting connections. |
+| SmfCompressedPortUp            | Boolean | 1 if the Compressed-SMF service is accepting connections. |
+| SmfSslPortUp                   | Boolean | 1 if the TLS-SMF service is accepting connections. |
+| WebPortUp                      | Boolean | 1 if the Web-Socket service is accepting connections. |
+| WebSslPortUp                   | Boolean | 1 if the TLS Web-Socket service is accepting connections. |
 | _Per Msg-VPN Service Status_ |
-| MsgVpns\|&lt;vpn-name&gt;\|Services\|RestPortUp | Boolean | 1 if a Msg-VPN is accepting REST connections. |
+| `MsgVpns|<vpn-name>|Services|RestPortUp` | Boolean | 1 if a Msg-VPN is accepting REST connections. |
 
 
 ## MSG-VPN SCOPED RESOURCES: `Custom Metrics|<component-id>|Solace|<instance-name>|MsgVpns|<vpn-name>|`
@@ -168,7 +164,7 @@ The following statistics are gathered per each message-VPN configured on the VMR
 | TotalEndpointsCount              | Integer | Total number of queue and topic endpoints provisioned on this msg-VPN. |
 | TotalClientsConnected            | Integer | Total clients connected across all protocols on this msg-VPN. |
 | SMFConnectionsPct                | Integer | Percentage of available SMF connections currently in use for this msg-VPN. |
- _Extended Stats_                 | | These statistics are only visible when you set `excludeExtendedStats=false` (please see [../README.md]).
+ _Extended Stats_                  | | These statistics are only visible when you set `excludeExtendedStats=false` (please see [../README.md]).
 | CurrentIngressFlowsCount         | Integer | Total number of publisher flows into the msg-VPN. |
 | CurrentEgressFlowsCount          | Integer | Total number of subscriber flows from the msg-VPN. |
 | CurrentIngressRatePerSecond      | Integer | Current inbound message rate per second on this msg-VPN. |
