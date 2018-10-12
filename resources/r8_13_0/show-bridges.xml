@@ -1,0 +1,19 @@
+<rpc-reply semp-version="soltr/8_13_0">
+  <rpc>
+    <show>
+      <bridge>
+        <bridges>
+          <num-total-bridges>0</num-total-bridges>
+          <max-num-total-bridges>1000</max-num-total-bridges>
+          <num-local-bridges>0</num-local-bridges>
+          <max-num-local-bridges>500</max-num-local-bridges>
+          <num-remote-bridges>0</num-remote-bridges>
+          <max-num-remote-bridges>500</max-num-remote-bridges>
+          <num-total-remote-bridge-subscriptions>0</num-total-remote-bridge-subscriptions>
+          <max-num-total-remote-bridge-subscriptions>100000</max-num-total-remote-bridge-subscriptions>
+        </bridges>
+      </bridge>
+    </show>
+  </rpc>
+<execute-result code="ok"/>
+</rpc-reply>

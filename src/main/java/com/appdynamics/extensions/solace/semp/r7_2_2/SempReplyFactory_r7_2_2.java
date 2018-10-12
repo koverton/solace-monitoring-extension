@@ -1,6 +1,6 @@
 package com.appdynamics.extensions.solace.semp.r7_2_2;
 
-import com.appdynamics.extensions.solace.ServerExclusionPolicies;
+import com.appdynamics.extensions.solace.ServerConfigs;
 import com.appdynamics.extensions.solace.semp.*;
 import com.solacesystems.semp_jaxb.r7_2_2.reply.*;
 import com.solacesystems.semp_jaxb.r7_2_2.reply.RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2;
@@ -18,10 +18,10 @@ import static com.appdynamics.extensions.solace.semp.r7_2_2.StatsHelper.*;
 public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
     private static final Logger logger = LoggerFactory.getLogger(SempReplyFactory_r7_2_2.class);
 
-    final private ServerExclusionPolicies serverExclusionPolicies;
+    final private ServerConfigs serverConfigs;
 
-    public SempReplyFactory_r7_2_2(ServerExclusionPolicies serverExclusionPolicies) {
-        this.serverExclusionPolicies = serverExclusionPolicies;
+    public SempReplyFactory_r7_2_2(ServerConfigs serverConfigs) {
+        this.serverConfigs = serverConfigs;
     }
 
     public boolean isSuccess(RpcReply reply) {
@@ -50,14 +50,14 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
         result.put(Metrics.Statistics.CurrentIngressByteRatePerSecond, stats.getCurrentIngressByteRatePerSecond());
         result.put(Metrics.Statistics.CurrentEgressByteRatePerSecond, stats.getCurrentEgressByteRatePerSecond());
 
-        if (!serverExclusionPolicies.getExcludeCompressionMetrics()) {
+        if (!serverConfigs.getExcludeCompressionMetrics()) {
             result.put(Metrics.Statistics.CurrentIngressCompressedRatePerSecond, stats.getZipStats().getCurrentIngressCompressedRatePerSecond());
             result.put(Metrics.Statistics.CurrentEgressCompressedRatePerSecond, stats.getZipStats().getCurrentEgressCompressedRatePerSecond());
             result.put(Metrics.Statistics.IngressCompressionRatio, stats.getZipStats().getIngressCompressionRatio()*100);
             result.put(Metrics.Statistics.EgressCompressionRatio, stats.getZipStats().getEgressCompressionRatio()*100);
         }
 
-        if (!serverExclusionPolicies.getExcludeTlsMetrics()) {
+        if (!serverConfigs.getExcludeTlsMetrics()) {
             result.put(Metrics.Statistics.CurrentIngressSslRatePerSecond, stats.getSslStats().getCurrentIngressSslRatePerSecond());
             result.put(Metrics.Statistics.CurrentEgressSslRatePerSecond, stats.getSslStats().getCurrentEgressSslRatePerSecond());
         }
@@ -65,7 +65,7 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
         result.put(Metrics.Statistics.TotalClientsConnected, stats.getTotalClientsConnected());
         result.put(Metrics.Statistics.TotalSmfClientsConnected, stats.getTotalClientsConnectedServiceSmf());
 
-        if (!serverExclusionPolicies.getExcludeDiscardMetrics()) {
+        if (!serverConfigs.getExcludeDiscardMetrics()) {
             result.put(Metrics.Statistics.TotalIngressDiscards, stats.getIngressDiscards().getTotalIngressDiscards());
             result.put(Metrics.Statistics.NoSubscriptionMatch, stats.getIngressDiscards().getNoSubscriptionMatch());
             result.put(Metrics.Statistics.TopicParseError, stats.getIngressDiscards().getTopicParseError());
@@ -147,6 +147,7 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
                     .getStatus()
                     .getDetail()
                     .getMessageSpoolStatus()
+                    .getInternal()
                     .equals("AD-Active")) {
                 // We are Primary and AD-Active
                 result.put(Metrics.Redundancy.IsActive, 1);
@@ -156,6 +157,7 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
                     .getStatus()
                     .getDetail()
                     .getMessageSpoolStatus()
+                    .getInternal()
                     .equals("AD-Active")) {
                 // We are Backup and AD-Active
                 result.put(Metrics.Redundancy.IsActive, 1);
@@ -223,7 +225,7 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.Vpn.SMFConnectionsPct,
                     calcPercentage(vpn.getConnectionsServiceSmf(),vpn.getMaxConnectionsServiceSmf()));
 
-            if (!serverExclusionPolicies.getExcludeDiscardMetrics()) {
+            if (!serverConfigs.getExcludeDiscardMetrics()) {
                 result.put(Metrics.Vpn.TotalIngressDiscards, stats.getIngressDiscards().getTotalIngressDiscards());
                 result.put(Metrics.Vpn.NoSubscriptionMatch, stats.getIngressDiscards().getNoSubscriptionMatch());
                 result.put(Metrics.Vpn.TopicParseError, stats.getIngressDiscards().getTopicParseError());
@@ -246,7 +248,7 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
                 result.put(Metrics.Vpn.MsgSpoolEgressDiscards, stats.getEgressDiscards().getMsgSpoolEgressDiscards());
             }
 
-            if (!serverExclusionPolicies.getExcludeExtendedStats()) {
+            if (!serverConfigs.getExcludeExtendedStats()) {
                 result.put(Metrics.Vpn.CurrentIngressRatePerSecond, stats.getCurrentIngressRatePerSecond());
                 result.put(Metrics.Vpn.CurrentEgressRatePerSecond, stats.getCurrentEgressRatePerSecond());
                 result.put(Metrics.Vpn.CurrentIngressByteRatePerSecond, stats.getCurrentIngressByteRatePerSecond());
@@ -276,7 +278,7 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
                     longOrDefault(vpn.getCurrentQueuesAndTopicEndpoints(),0));
             result.put(Metrics.Vpn.TotalMessagesSpooledCount, vpn.getCurrentMessagesSpooled());
 
-            if (!serverExclusionPolicies.getExcludeExtendedStats()) {
+            if (!serverConfigs.getExcludeExtendedStats()) {
                 result.put(Metrics.Vpn.CurrentIngressFlowsCount, vpn.getCurrentIngressFlows());
                 result.put(Metrics.Vpn.CurrentEgressFlowsCount, vpn.getCurrentEgressFlows());
             }
@@ -309,31 +311,29 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
 
     public List<Map<String, Object>> getQueueRatesList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
-        if (!serverExclusionPolicies.getExcludeExtendedStats()) {
-            RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
-                    .getShow()
-                    .getQueue()
-                    .getQueues();
-            for (QueueType q : queues.getQueue()) {
-                Map<String, Object> result = new HashMap<>();
-                List<QueueType.Rates> rates = q.getRates();
-                result.put(Metrics.Queue.QueueName, q.getName());
-                result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
-                for (QueueType.Rates r : rates) {
-                    result.put(Metrics.Queue.CurrentIngressRatePerSecond, r.getQendptDataRates().getCurrentIngressRatePerSecond());
-                    result.put(Metrics.Queue.CurrentIngressByteRatePerSecond, r.getQendptDataRates().getCurrentIngressByteRatePerSecond());
-                    result.put(Metrics.Queue.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
-                    result.put(Metrics.Queue.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
-                }
-                results.add(result);
+        RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
+                .getShow()
+                .getQueue()
+                .getQueues();
+        for (QueueType q : queues.getQueue()) {
+            Map<String, Object> result = new HashMap<>();
+            List<QueueType.Rates> rates = q.getRates();
+            result.put(Metrics.Queue.QueueName, q.getName());
+            result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
+            for (QueueType.Rates r : rates) {
+                result.put(Metrics.Queue.CurrentIngressRatePerSecond, r.getQendptDataRates().getCurrentIngressRatePerSecond());
+                result.put(Metrics.Queue.CurrentIngressByteRatePerSecond, r.getQendptDataRates().getCurrentIngressByteRatePerSecond());
+                result.put(Metrics.Queue.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
+                result.put(Metrics.Queue.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
             }
+            results.add(result);
         }
         return results;
     }
 
     public List<Map<String, Object>> getQueueStatsList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
-        if (!serverExclusionPolicies.getExcludeExtendedStats()) {
+        if (!serverConfigs.getExcludeExtendedStats()) {
             RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
                     .getShow()
                     .getQueue()
@@ -377,30 +377,28 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
 
     public List<Map<String, Object>> getTopicEndpointRatesList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
-        if (!serverExclusionPolicies.getExcludeExtendedStats()) {
-            RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints eps = reply.getRpc()
-                    .getShow()
-                    .getTopicEndpoint()
-                    .getTopicEndpoints();
-            for (RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2 t : eps.getTopicEndpoint()) {
-                Map<String, Object> result = new HashMap<>();
-                result.put(Metrics.TopicEndpoint.TopicEndpointName, t.getName());
-                result.put(Metrics.TopicEndpoint.VpnName, t.getInfo().getMessageVpn());
-                for (RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2.Rates r : t.getRates()) {
-                    result.put(Metrics.TopicEndpoint.CurrentIngressRatePerSecond, r.getQendptDataRates().getCurrentIngressRatePerSecond());
-                    result.put(Metrics.TopicEndpoint.CurrentIngressByteRatePerSecond, r.getQendptDataRates().getCurrentIngressByteRatePerSecond());
-                    result.put(Metrics.TopicEndpoint.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
-                    result.put(Metrics.TopicEndpoint.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
-                }
-                results.add(result);
+        RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints eps = reply.getRpc()
+                .getShow()
+                .getTopicEndpoint()
+                .getTopicEndpoints();
+        for (RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2 t : eps.getTopicEndpoint()) {
+            Map<String, Object> result = new HashMap<>();
+            result.put(Metrics.TopicEndpoint.TopicEndpointName, t.getName());
+            result.put(Metrics.TopicEndpoint.VpnName, t.getInfo().getMessageVpn());
+            for (RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2.Rates r : t.getRates()) {
+                result.put(Metrics.TopicEndpoint.CurrentIngressRatePerSecond, r.getQendptDataRates().getCurrentIngressRatePerSecond());
+                result.put(Metrics.TopicEndpoint.CurrentIngressByteRatePerSecond, r.getQendptDataRates().getCurrentIngressByteRatePerSecond());
+                result.put(Metrics.TopicEndpoint.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
+                result.put(Metrics.TopicEndpoint.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
             }
+            results.add(result);
         }
         return results;
     }
 
     public List<Map<String, Object>> getTopicEndpointStatsList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
-        if (!serverExclusionPolicies.getExcludeExtendedStats()) {
+        if (!serverConfigs.getExcludeExtendedStats()) {
             RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints endpoints = reply.getRpc()
                     .getShow()
                     .getTopicEndpoint()

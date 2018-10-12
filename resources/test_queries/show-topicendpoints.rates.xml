@@ -1,8 +1,0 @@
-<rpc semp-version="soltr/7_1_1">
-    <show>
-        <topic-endpoint>
-            <name>*</name>
-            <rates/>
-        </topic-endpoint>
-    </show>
-</rpc>

@@ -1,0 +1,3 @@
+<rpc-reply semp-version="soltr/8_13_0">
+    <parse-error>invalid message: schema validation error</parse-error>
+</rpc-reply>

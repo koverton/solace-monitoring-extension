@@ -160,6 +160,14 @@ public class Helper {
         return ExclusionPolicy.BLACKLIST;
     }
 
+    static RedundancyModel parseRedundancyModel(String redundancy) {
+        if (redundancy == null || redundancy.length()==0)
+            return RedundancyModel.STANDALONE;
+        if (redundancy.toUpperCase().equals(RedundancyModel.REDUNDANT.name()))
+            return RedundancyModel.REDUNDANT;
+        return RedundancyModel.STANDALONE;
+    }
+
     static boolean isExcluded(String name, List<Pattern> policyList, ExclusionPolicy policy) {
         if (policy == ExclusionPolicy.BLACKLIST) {
             // Exclude this item because it was found in the blacklist

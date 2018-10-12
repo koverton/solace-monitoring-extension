@@ -18,6 +18,9 @@ public class MockSempConnector implements SempConnector {
     @Override
     public String doPost(String request) {
         try {
+            request = request.replace("\n", "")
+                    .replace("\r", "")
+                    .replaceAll(">[ \t]+<", "><");
             if (request.contains("><show><version"))
                 return readFile("show-version.xml");
             else if (request.contains("<show><stats><client>"))

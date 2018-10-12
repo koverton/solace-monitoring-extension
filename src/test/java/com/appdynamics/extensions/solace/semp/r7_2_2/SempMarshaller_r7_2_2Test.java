@@ -1,6 +1,6 @@
 package com.appdynamics.extensions.solace.semp.r7_2_2;
 
-import com.appdynamics.extensions.solace.ServerExclusionPolicies;
+import com.appdynamics.extensions.solace.ServerConfigs;
 import com.appdynamics.extensions.solace.semp.Metrics;
 import com.solacesystems.semp_jaxb.r7_2_2.reply.*;
 import org.junit.BeforeClass;
@@ -32,7 +32,7 @@ public class SempMarshaller_r7_2_2Test
         marshaller = new SempMarshaller_r7_2_2();
         Map<String,String> exclusionsMap = new HashMap<>();
         exclusionsMap.put(EXCLUDE_EXTENDED_STATS, "false");
-        factory = new SempReplyFactory_r7_2_2(new ServerExclusionPolicies(exclusionsMap));
+        factory = new SempReplyFactory_r7_2_2(new ServerConfigs(exclusionsMap));
     }
 
     @Test

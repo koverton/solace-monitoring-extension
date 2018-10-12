@@ -90,7 +90,7 @@ class GenericSempProcessor<Request,Reply> {
             Reply reply = ctx.getMarshaller().fromReplyXml(replyXml);
 
             if (!ctx.getReplyFactory().isSuccess(reply)) {
-                logger.error("Empty QueueList because no data in the response.");
+                logger.error("Empty query because no data in the response.");
             } else {
                 result.addAll(resultFactory.makeResult(reply));
             }

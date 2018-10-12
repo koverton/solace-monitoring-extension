@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.appdynamics.extensions.solace.MonitorConfigs.*;
@@ -47,7 +48,7 @@ public class SolaceMonitor extends ABaseMonitor {
             String adminPass   = Helper.getPassword(server);
             String displayName = server.get(DISPLAY_NAME);
             Integer timeout    = Helper.getIntOrDefault(server, TIMEOUT, Sempv1Connector.DEFAULT_TIMEOUT);
-            ServerExclusionPolicies exclusionPolicies = new ServerExclusionPolicies(server);
+            ServerConfigs serverConfigs = new ServerConfigs(server);
 
             logger.info("Adding task to poll [Server:{}, Mgmt URL:{}, Admin User:{}]",
                     displayName, mgmtUrl, adminUser);
@@ -65,13 +66,13 @@ public class SolaceMonitor extends ABaseMonitor {
                         adminPass,
                         displayName,
                         timeout);
-                SempService sempService = SempServiceFactory.createSempService(connector, exclusionPolicies);
+                SempService sempService = SempServiceFactory.createSempService(connector, serverConfigs);
                 if (sempService != null) {
                     serviceProvider.submit(displayName,
                             new SolaceGlobalMonitorTask(
                                     new ADMetricPrinter(metricWriter),
                                     baseMetricPrefix,
-                                    exclusionPolicies,
+                                    serverConfigs,
                                     sempService));
                 }
                 else {
@@ -101,4 +102,26 @@ public class SolaceMonitor extends ABaseMonitor {
         return baseMetricPrefix;
     }
 
+
+    public static void main(String[] args) {
+        try {
+            final SolaceMonitor monitor = new SolaceMonitor();
+            final Map<String, String> taskArgs = new HashMap<>();
+
+            taskArgs.put("config-file", "src/test/resources/conf/config.yml");
+
+            while(true) {
+                try {
+                    monitor.execute(taskArgs, null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Thread.sleep(3000);
+            }
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
 }
