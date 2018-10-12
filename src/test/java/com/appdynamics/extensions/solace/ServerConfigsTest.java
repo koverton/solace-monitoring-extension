@@ -11,7 +11,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-public class ExclusionListsTest {
+public class ServerConfigsTest {
     private final static String[] diseaseArray = new String[] {"Botulism", "Salmonella", "Anthrax"};
     private final static String[] patternArray = new String[] {"^Botu.*", "S[^o]*onella$", "^A.*$"};
     private final static List<Pattern> diseaseList = new ArrayList<>();
@@ -76,5 +76,14 @@ public class ExclusionListsTest {
     public void emptyLstTest() {
         assertFalse( Helper.isExcluded("Ebola", new ArrayList<>(), MonitorConfigs.ExclusionPolicy.BLACKLIST) );
         assertTrue( Helper.isExcluded("Ebola", new ArrayList<>(), MonitorConfigs.ExclusionPolicy.WHITELIST) );
+    }
+
+    @Test
+    public void parseRedundancyTest() {
+        assertEquals(MonitorConfigs.RedundancyModel.REDUNDANT, Helper.parseRedundancyModel("redundant"));
+        assertEquals(MonitorConfigs.RedundancyModel.REDUNDANT, Helper.parseRedundancyModel("rEdUnDaNt"));
+        assertEquals(MonitorConfigs.RedundancyModel.STANDALONE, Helper.parseRedundancyModel("Standalone"));
+        assertEquals(MonitorConfigs.RedundancyModel.STANDALONE, Helper.parseRedundancyModel(""));
+        assertEquals(MonitorConfigs.RedundancyModel.STANDALONE, Helper.parseRedundancyModel(null));
     }
 }

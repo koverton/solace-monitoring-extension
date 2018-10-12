@@ -1,10 +1,10 @@
-package com.appdynamics.extensions.solace.semp.r8_4_0;
+package com.appdynamics.extensions.solace.semp.r8_13_0;
 
 import com.appdynamics.extensions.solace.Helper;
 import com.appdynamics.extensions.solace.semp.Metrics;
-import com.solacesystems.semp_jaxb.r8_2_0.reply.MessageSpoolStatsType;
-import com.solacesystems.semp_jaxb.r8_2_0.reply.QendptInfoType;
-import com.solacesystems.semp_jaxb.r8_2_0.reply.RpcReply;
+import com.solacesystems.semp_jaxb.r8_13_0.reply.MessageSpoolStatsType;
+import com.solacesystems.semp_jaxb.r8_13_0.reply.QendptInfoType;
+import com.solacesystems.semp_jaxb.r8_13_0.reply.RpcReply;
 
 import java.util.Map;
 

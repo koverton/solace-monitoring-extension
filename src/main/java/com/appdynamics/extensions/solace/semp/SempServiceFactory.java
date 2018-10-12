@@ -1,8 +1,9 @@
 package com.appdynamics.extensions.solace.semp;
 
-import com.appdynamics.extensions.solace.ServerExclusionPolicies;
+import com.appdynamics.extensions.solace.ServerConfigs;
 import com.appdynamics.extensions.solace.semp.r7_2_2.*;
 import com.appdynamics.extensions.solace.semp.r8_2_0.*;
+import com.appdynamics.extensions.solace.semp.r8_13_0.*;
 import com.appdynamics.extensions.solace.semp.r8_6VMR.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +21,10 @@ public class SempServiceFactory {
      * Constructs a SempService for a given Solace broker that uses the appropriate SEMP library for version supported by that broker.
      *
      * @param connector transport connector to the service we want to query.
-     * @param ServerExclusionPolicies encapsulates all exclusion policies used by the SempService.
+     * @param serverConfigs encapsulates all configs and exclusion policies used by the SempService.
      * @return SempService object defining the platform and version number of the service we are connected to.
      */
-    static public SempService createSempService(SempConnector connector, ServerExclusionPolicies exclusionPolicies) {
+    static public SempService createSempService(SempConnector connector, ServerConfigs serverConfigs) {
         logger.debug("<SempServiceFactory.createSempService>");
         SempVersion sempVersion = connector.checkBrokerVersion();
 
@@ -38,8 +39,8 @@ public class SempServiceFactory {
                 try {
                     return new GenericSempService<>(
                             new SempConnectionContext<>(connector,
-                                    new SempRequestFactory_r8_6VMR(exclusionPolicies),
-                                    new SempReplyFactory_r8_6VMR(exclusionPolicies),
+                                    new SempRequestFactory_r8_6VMR(serverConfigs),
+                                    new SempReplyFactory_r8_6VMR(serverConfigs),
                                     new SempMarshaller_r8_6VMR(),
                                     sempVersion.getVersionString()));
                 } catch (JAXBException ex) {
@@ -53,12 +54,27 @@ public class SempServiceFactory {
         else {
             logger.info("SempServiceFactory instantiating Hardware SEMP-service");
             // Prefer newest version we can
-            if (sempVersion.getVersionNumber() >= SempVersion.v8_2_0.getVersionNumber()) {
+            if (sempVersion.getVersionNumber() >= SempVersion.v8_13_0.getVersionNumber()) {
                 try {
                     return new GenericSempService<>(
                             new SempConnectionContext<>(connector,
-                                    new SempRequestFactory_r8_2_0(exclusionPolicies),
-                                    new SempReplyFactory_r8_2_0(exclusionPolicies),
+                                    new SempRequestFactory_r8_13_0(serverConfigs),
+                                    new SempReplyFactory_r8_13_0(serverConfigs),
+                                    new SempMarshaller_r8_13_0(),
+                                    sempVersion.getVersionString()));
+                }
+                catch(JAXBException ex) {
+                    logger.error("Exception thrown attempting to create SempService version: "
+                            + SempVersion.v8_13_0.getVersionString(), ex);
+                    ex.printStackTrace();
+                }
+            }
+            else if (sempVersion.getVersionNumber() >= SempVersion.v8_2_0.getVersionNumber()) {
+                try {
+                    return new GenericSempService<>(
+                            new SempConnectionContext<>(connector,
+                                    new SempRequestFactory_r8_2_0(serverConfigs),
+                                    new SempReplyFactory_r8_2_0(serverConfigs),
                                     new SempMarshaller_r8_2_0(),
                                     sempVersion.getVersionString()));
                 }
@@ -72,8 +88,8 @@ public class SempServiceFactory {
                 try {
                     return new GenericSempService<>(
                             new SempConnectionContext<>(connector,
-                                    new SempRequestFactory_r7_2_2(exclusionPolicies),
-                                    new SempReplyFactory_r7_2_2(exclusionPolicies),
+                                    new SempRequestFactory_r7_2_2(serverConfigs),
+                                    new SempReplyFactory_r7_2_2(serverConfigs),
                                     new SempMarshaller_r7_2_2(),
                                     sempVersion.getVersionString()));
                 }

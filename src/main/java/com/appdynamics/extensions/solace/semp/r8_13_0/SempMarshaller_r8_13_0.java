@@ -1,8 +1,8 @@
-package com.appdynamics.extensions.solace.semp.r8_4_0;
+package com.appdynamics.extensions.solace.semp.r8_13_0;
 
 import com.appdynamics.extensions.solace.semp.SempMarshaller;
-import com.solacesystems.semp_jaxb.r8_2_0.reply.RpcReply;
-import com.solacesystems.semp_jaxb.r8_2_0.request.Rpc;
+import com.solacesystems.semp_jaxb.r8_13_0.reply.RpcReply;
+import com.solacesystems.semp_jaxb.r8_13_0.request.Rpc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,10 +14,10 @@ import java.io.StringReader;
 import java.io.StringWriter;
 
 //
-public class SempMarshaller_r8_4_0 implements SempMarshaller<Rpc, RpcReply> {
-    private static final Logger logger = LoggerFactory.getLogger(SempMarshaller_r8_4_0.class);
+public class SempMarshaller_r8_13_0 implements SempMarshaller<Rpc, RpcReply> {
+    private static final Logger logger = LoggerFactory.getLogger(SempMarshaller_r8_13_0.class);
 
-    public SempMarshaller_r8_4_0() throws JAXBException {
+    public SempMarshaller_r8_13_0() throws JAXBException {
         writer = new StringWriter();
         reqCtx = JAXBContext.newInstance(Rpc.class);
         replyCtx = JAXBContext.newInstance(RpcReply.class);
@@ -49,7 +49,7 @@ public class SempMarshaller_r8_4_0 implements SempMarshaller<Rpc, RpcReply> {
             }
             return reply;
         } catch (Exception e) {
-            logger.error("Exception thrown unmarshaling soltr/8.2.0 reply", e);
+            logger.error("Exception thrown unmarshaling soltr/8.4.0 reply", e);
             e.printStackTrace();
         }
         return null;

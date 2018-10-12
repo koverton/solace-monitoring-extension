@@ -21,6 +21,13 @@ public interface SempService {
     Map<String,Object> checkGlobalStats();
 
     /**
+     * Equivalent CLI: show message-spool stats detail
+     *
+     * @return key->value map of global msg-spool metrics
+     */
+    Map<String,Object> checkGlobalMsgSpoolStats();
+
+    /**
      * Equivalent CLI: show redundancy detail
      *
      * @return key->value map of global redundancy metrics
@@ -33,13 +40,6 @@ public interface SempService {
      * @return key->value map of global service metrics
      */
     Map<String,Object> checkGlobalServiceStatus();
-
-    /**
-     * Equivalent CLI: show message-spool stats detail
-     *
-     * @return key->value map of global msg-spool metrics
-     */
-    Map<String,Object> checkGlobalMsgSpoolStats();
 
     /**
      * Equivalent CLI: show message-vpn * detail

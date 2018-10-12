@@ -1,11 +1,11 @@
 package com.appdynamics.extensions.solace.semp.r8_6VMR;
 
-import com.appdynamics.extensions.solace.ServerExclusionPolicies;
+import com.appdynamics.extensions.solace.ServerConfigs;
 import com.solacesystems.semp_jaxb.r8_6VMR.request.Rpc;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import javax.xml.bind.JAXBException;
+import javax.xml.bind.*;
 
 import java.util.HashMap;
 
@@ -20,7 +20,7 @@ public class SempRequestFactory_r8_6VMRTest {
 
     @BeforeClass
     public static void setup() throws JAXBException {
-        factory = new SempRequestFactory_r8_6VMR(new ServerExclusionPolicies(new HashMap<>()));
+        factory = new SempRequestFactory_r8_6VMR(new ServerConfigs(new HashMap<>()));
         marshaller = new SempMarshaller_r8_6VMR();
     }
 
@@ -70,7 +70,7 @@ public class SempRequestFactory_r8_6VMRTest {
     public void getVpnSpoolListTest() {
         Rpc request = factory.createMsgVpnSpoolListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
-        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><message-spool><vpn-name>*</vpn-name></message-spool></show></rpc>", xml);
+        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><message-spool><vpn-name>*</vpn-name><detail/></message-spool></show></rpc>", xml);
     }
 
     @Test
@@ -91,7 +91,6 @@ public class SempRequestFactory_r8_6VMRTest {
     public void getQueueStatListTest() {
         Rpc request = factory.createQueueStatsListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
-        System.out.println(xml);
         assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><queue><name>*</name><stats/><durable/><count/><num-elements>100</num-elements></queue></show></rpc>", xml);
     }
 
@@ -113,7 +112,6 @@ public class SempRequestFactory_r8_6VMRTest {
     public void getTopicEndpointStatsListTest() {
         Rpc request = factory.createTopicEndpointStatsListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
-        System.out.println(xml);
         assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><topic-endpoint><name>*</name><stats/><durable/><count/><num-elements>100</num-elements></topic-endpoint></show></rpc>", xml);
     }
 

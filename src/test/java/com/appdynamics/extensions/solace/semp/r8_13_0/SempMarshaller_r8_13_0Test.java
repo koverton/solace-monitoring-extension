@@ -1,8 +1,8 @@
-package com.appdynamics.extensions.solace.semp.r8_4_0;
+package com.appdynamics.extensions.solace.semp.r8_13_0;
 
-import com.appdynamics.extensions.solace.ServerExclusionPolicies;
+import com.appdynamics.extensions.solace.ServerConfigs;
 import com.appdynamics.extensions.solace.semp.Metrics;
-import com.solacesystems.semp_jaxb.r8_2_0.reply.*;
+import com.solacesystems.semp_jaxb.r8_13_0.reply.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -16,23 +16,23 @@ import java.util.Map;
 import static com.appdynamics.extensions.solace.MonitorConfigs.EXCLUDE_EXTENDED_STATS;
 import static org.junit.Assert.*;
 
-public class SempMarshaller_r8_4_0Test
+public class SempMarshaller_r8_13_0Test
 {
 
     private String readFile(String filename) throws Exception {
-        String SEMP_VERSION = "r8_4_0";
+        String SEMP_VERSION = "r8_13_0";
         String replyFile = "resources/" + SEMP_VERSION + "/" + filename;
         return new String(Files.readAllBytes(Paths.get(replyFile)));
     }
-    private static SempMarshaller_r8_4_0 marshaller;
-    private static SempReplyFactory_r8_4_0 factory;
+    private static SempMarshaller_r8_13_0 marshaller;
+    private static SempReplyFactory_r8_13_0 factory;
 
     @BeforeClass
     public static void setup() throws JAXBException {
-        marshaller = new SempMarshaller_r8_4_0();
+        marshaller = new SempMarshaller_r8_13_0();
         Map<String,String> exclusionsMap = new HashMap<>();
         exclusionsMap.put(EXCLUDE_EXTENDED_STATS, "false");
-        factory = new SempReplyFactory_r8_4_0(new ServerExclusionPolicies(exclusionsMap));
+        factory = new SempReplyFactory_r8_13_0(new ServerConfigs(exclusionsMap));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class SempMarshaller_r8_4_0Test
         Map<String, Object> stats =
                 factory.getGlobalStats(reply);
         assertNotNull(stats);
-        assertEquals(367L, stats.get(Metrics.Statistics.TotalClientsConnected));
+        assertEquals(3L, stats.get(Metrics.Statistics.TotalClientsConnected));
     }
 
     @Test
@@ -145,7 +145,7 @@ public class SempMarshaller_r8_4_0Test
         RpcReply reply = marshaller.fromReplyXml(readFile("show-topicendpoints.stats.xml"));
         List<Map<String, Object>> endpoints = factory.getTopicEndpointStatsList(reply);
         assertNotNull(endpoints);
-        assertEquals(2, endpoints.size());
+        assertEquals(0, endpoints.size());
         for(Map<String,Object> e : endpoints) {
             if (e.get(Metrics.TopicEndpoint.TopicEndpointName).equals("t2")) {
                 assertEquals(190L, e.get(Metrics.TopicEndpoint.RedeliveredCount));

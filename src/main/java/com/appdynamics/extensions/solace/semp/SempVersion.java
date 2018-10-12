@@ -26,23 +26,27 @@ public class SempVersion {
     public static final Float  INVALID_VERSION = 0.0f;
 
     // 4 versions of each going backwards
-    public static SempVersion v8_3VMR = new SempVersion(Platform.VMR, "8_3VMR", 8.3f);
-    public static SempVersion v8_5VMR = new SempVersion(Platform.VMR, "8_5VMR", 8.5f);
     public static SempVersion v8_6VMR = new SempVersion(Platform.VMR, "8_6VMR", 8.6f);
-    public static SempVersion v8_7VMR = new SempVersion(Platform.VMR, "8_7VMR", 8.7f);
 
     public static SempVersion v7_2_2 = new SempVersion(Platform.APPLIANCE, "7_2_2", 7.22f);
-    public static SempVersion v8_0_0 = new SempVersion(Platform.APPLIANCE, "8_0_0", 8.0f);
-    public static SempVersion v8_2_0 = new SempVersion(Platform.APPLIANCE, "8_2_0", 8.20f);
-    public static SempVersion v8_3_0 = new SempVersion(Platform.APPLIANCE, "8_3_0", 8.30f);
+    public static SempVersion v8_2_0 = new SempVersion(Platform.APPLIANCE, "8_2_0", 8.020f);
+    public static SempVersion v8_4_0 = new SempVersion(Platform.APPLIANCE, "8_4_0", 8.040f);
+    public static SempVersion v8_13_0 = new SempVersion(Platform.APPLIANCE, "8_13_0", 8.130f);
 
     public static SempVersion INVALID = new SempVersion(Platform.NONE, INVALID_VERSION_STR, INVALID_VERSION);
 
     public SempVersion(String schemaVersion) {
-        // Parse out the version details from the schema version, e.g. "soltr/8_6VMR" or "soltr/8_2_0"
-        platform = parsePlatform(schemaVersion);
-        versionString = parseVersionString(schemaVersion);
-        versionNumber = parseVersionNumber(schemaVersion);
+        if (schemaVersion == null || schemaVersion.length()==0) {
+            platform = Platform.NONE;
+            versionString = INVALID_VERSION_STR;
+            versionNumber = INVALID_VERSION;
+        }
+        else {
+            // Parse out the version details from the schema version, e.g. "soltr/8_6VMR" or "soltr/8_2_0"
+            platform = parsePlatform(schemaVersion);
+            versionString = parseVersionString(schemaVersion);
+            versionNumber = parseVersionNumber(versionString);
+        }
     }
     private SempVersion(Platform p, String versionString, float versionNumber) {
         this.platform = p;
@@ -85,28 +89,20 @@ public class SempVersion {
     }
 
     private float parseVersionNumber(String version) {
-        // Turn '8_2_0' or '8_6VMR' into '8.20' and '8.6' respectively
-        StringBuilder sb = new StringBuilder();
-        int decimalCount = 0;
-        for(int i = 0; i < version.length(); i++) {
-            char c = version.charAt(i);
-            // Add 'real' digits to the version string
-            if ("0123456789".indexOf(c) != -1)
-                sb.append(c);
-            else if (c == '_') {
-                // Only convert the first '_' into a decimal in the version string
-                if (decimalCount == 0) {
-                    decimalCount++;
-                    sb.append('.');
-                }
-                // any extra '_' can be skipped
+        if (!version.equals(INVALID_VERSION_STR)) {
+            // Turn '8_2_0' or '8_6VMR' into '8.02' and '8.06' respectively
+            String[] vs = version.replaceAll("VMR", "").split("_");
+            try {
+                int major = Integer.parseInt(vs[0]);
+                int minor = Integer.parseInt(vs[1]);
+                int build = (vs.length==3 ? Integer.parseInt(vs[2]) : 0);
+                String parsedVersion = String.format("%d.%02d%02d", major, minor, build);
+                return Float.parseFloat(parsedVersion);
             }
-        }
-        try {
-            return Float.parseFloat(sb.toString());
-        }
-        catch(NumberFormatException nex) {
-            logger.error("INVALID SEMP-VERSION: Exception attempting to parse version version-string: " + sb.toString(), nex);
+            catch(NumberFormatException nex) {
+                logger.error("INVALID SEMP-VERSION: Exception attempting to parse version version-string: " + version, nex);
+
+            }
         }
         return INVALID_VERSION;
     }

@@ -2,6 +2,9 @@ package com.appdynamics.extensions.solace;
 
 public class MonitorConfigs {
     public enum ExclusionPolicy { WHITELIST, BLACKLIST }
+    public enum RedundancyModel { STANDALONE, REDUNDANT }
+
+    public final static String REDUNDANCY = "redundancy";
 
     public final static String VPN_EXCLUSION_POLICY = "vpnExclusionPolicy";
     public final static String QUEUE_EXCLUSION_POLICY = "queueExclusionPolicy";

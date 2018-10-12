@@ -15,12 +15,13 @@ import static com.appdynamics.extensions.solace.MonitorConfigs.*;
  *
  * ExclusionPolicy instances can support wildcard-based blacklisting and whitelisting.
  */
-public class ServerExclusionPolicies {
-    private static final Logger logger = LoggerFactory.getLogger(ServerExclusionPolicies.class);
+public class ServerConfigs {
+    private static final Logger logger = LoggerFactory.getLogger(ServerConfigs.class);
 
-    public ServerExclusionPolicies(Map<String, String> server) {
+    public ServerConfigs(Map<String, String> server) {
         if (server == null)
             server = new HashMap<>();
+        this.redundancyModel             = Helper.parseRedundancyModel(server.get(REDUNDANCY));
         this.vpnExclusionPolicy          = Helper.parseExclusionPolicy(server.get(VPN_EXCLUSION_POLICY));
         this.vpnFilter                   = Helper.getRegexPatternListOrNew(server, EXCLUDE_MSG_VPNS);
         this.queueExclusionPolicy        = Helper.parseExclusionPolicy(server.get(QUEUE_EXCLUSION_POLICY));
@@ -37,6 +38,7 @@ public class ServerExclusionPolicies {
 
     private void log() {
         if (logger.isDebugEnabled()) {
+            logger.debug("Redundancy Model: {}", redundancyModel.toString());
             logger.debug("VPN Exclusion policy: {}", vpnExclusionPolicy);
             for (Pattern excludedVpnPattern : vpnFilter)
                 logger.debug("VPN Exclusion Pattern: {}", excludedVpnPattern);
@@ -49,6 +51,8 @@ public class ServerExclusionPolicies {
             logger.debug("Temporary endpoint exclusion policy: {}", excludeTemporaries);
         }
     }
+
+    public MonitorConfigs.RedundancyModel getRedundancyModel() { return redundancyModel; }
 
     public MonitorConfigs.ExclusionPolicy getVpnExclusionPolicy() {
         return vpnExclusionPolicy;
@@ -91,6 +95,8 @@ public class ServerExclusionPolicies {
     }
 
     public Boolean getExcludeExtendedStats() { return excludeExtendedStats; }
+
+    final private MonitorConfigs.RedundancyModel redundancyModel;
 
     final private MonitorConfigs.ExclusionPolicy vpnExclusionPolicy;
     final private List<Pattern> vpnFilter;
