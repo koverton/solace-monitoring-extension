@@ -1,4 +1,5 @@
 #!/bin/bash
+cd `dirname $0`
 
 if [ "$#" -lt 2 ]; then
 	echo "	USAGE: $0 <host-port> <request-file>"
@@ -6,7 +7,11 @@ if [ "$#" -lt 2 ]; then
 	exit 1
 fi
 
-hostport=$1
-file=$2
+mkdir -p responses
 
-curl -X POST -u admin:admin http://$hostport/SEMP  -d @$file
+hostport=$1
+infile=$2
+outfile=`echo $infile | sed 's/requests/responses/'`
+sempver="soltr/7_2_2"
+
+curl -X POST -u admin:admin http://$hostport/SEMP  -d @$infile > $outfile

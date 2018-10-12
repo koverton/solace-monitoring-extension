@@ -1,6 +1,6 @@
 package com.appdynamics.extensions.solace.semp.r7_2_2;
 
-import com.appdynamics.extensions.solace.ServerExclusionPolicies;
+import com.appdynamics.extensions.solace.ServerConfigs;
 import com.solacesystems.semp_jaxb.r7_2_2.request.Rpc;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,7 +20,7 @@ public class SempRequestFactory_r7_2_2Test {
 
     @BeforeClass
     public static void setup() throws JAXBException {
-        factory = new SempRequestFactory_r7_2_2(new ServerExclusionPolicies(new HashMap<>()));
+        factory = new SempRequestFactory_r7_2_2(new ServerConfigs(new HashMap<>()));
         marshaller = new SempMarshaller_r7_2_2();
     }
 
@@ -71,14 +71,13 @@ public class SempRequestFactory_r7_2_2Test {
     public void getVpnSpoolListTest() {
         Rpc request = factory.createMsgVpnSpoolListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
-        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><message-spool><vpn-name>*</vpn-name></message-spool></show></rpc>", xml);
+        assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><message-spool><vpn-name>*</vpn-name><detail/></message-spool></show></rpc>", xml);
     }
 
     @Test
     public void getQueueListTest() {
         Rpc request = factory.createQueueListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
-        System.out.println(xml);
         assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><queue><name>*</name><durable/><detail/><count/><num-elements>100</num-elements></queue></show></rpc>", xml);
     }
 
@@ -86,7 +85,6 @@ public class SempRequestFactory_r7_2_2Test {
     public void getQueueRatesListTest() {
         Rpc request = factory.createQueueRatesListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
-        System.out.println(xml);
         assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><queue><name>*</name><rates/><durable/><count/><num-elements>100</num-elements></queue></show></rpc>", xml);
     }
 
@@ -94,7 +92,6 @@ public class SempRequestFactory_r7_2_2Test {
     public void getQueueStatListTest() {
         Rpc request = factory.createQueueStatsListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
-        System.out.println(xml);
         assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><queue><name>*</name><stats/><durable/><count/><num-elements>100</num-elements></queue></show></rpc>", xml);
     }
 
@@ -102,7 +99,6 @@ public class SempRequestFactory_r7_2_2Test {
     public void getTopicEndpointListTest() {
         Rpc request = factory.createTopicEndpointListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
-        System.out.println(xml);
         assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><topic-endpoint><name>*</name><durable/><detail/><count/><num-elements>100</num-elements></topic-endpoint></show></rpc>", xml);
     }
 
@@ -110,7 +106,6 @@ public class SempRequestFactory_r7_2_2Test {
     public void getTopicEndpointRatesListTest() {
         Rpc request = factory.createTopicEndpointRatesListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
-        System.out.println(xml);
         assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><topic-endpoint><name>*</name><rates/><durable/><count/><num-elements>100</num-elements></topic-endpoint></show></rpc>", xml);
     }
 
@@ -118,7 +113,6 @@ public class SempRequestFactory_r7_2_2Test {
     public void getTopicEndpointStatsListTest() {
         Rpc request = factory.createTopicEndpointStatsListRequest(SEMP_VERSION);
         String xml = marshaller.toRequestXml(request);
-        System.out.println(xml);
         assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><topic-endpoint><name>*</name><stats/><durable/><count/><num-elements>100</num-elements></topic-endpoint></show></rpc>", xml);
     }
 

@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+import static com.appdynamics.extensions.solace.DerivedMetricsLogic.deriveMetrics;
+
 /**
  * Worker task for all Solace metrics gathering. Executes all desired metrics queries
  * on the SempService that is provided to it.
@@ -15,11 +17,12 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     private static final Logger logger = LoggerFactory.getLogger(SolaceGlobalMonitorTask.class);
 
     SolaceGlobalMonitorTask(MetricPrinter metricPrinter, String basePrefix,
-                            ServerExclusionPolicies exclusionPolicies, SempService svc) {
+                            ServerConfigs serverConfigs, SempService svc) {
         this.metricPrinter     = metricPrinter;
         this.basePrefix        = basePrefix;
-        this.exclusionPolicies = exclusionPolicies;
+        this.serverConfigs     = serverConfigs;
         this.svc               = svc;
+        logger.info("SolaceGlobalMonitorTask monitoring created.");
     }
 
     @Override
@@ -27,6 +30,7 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         logger.debug("<SolaceGlobalMonitorTask.run>");
 
         startTimeMillis = System.currentTimeMillis();
+        logger.info("SolaceGlobalMonitorTask started at %d.", startTimeMillis);
 
         final String serverName = svc.getDisplayName();
         logger.debug("Configured metricPrefix: {}, ServerName {}", basePrefix, serverName);
@@ -60,7 +64,7 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         checkBridges( serverName );
 
         // Derive additional metrics
-        Map<String,Object> derivedMetrics = deriveMetrics(serviceStats, redundancyStats, spoolStats);
+        Map<String,Object> derivedMetrics = deriveMetrics(serverConfigs.getRedundancyModel(), serviceStats, redundancyStats, spoolStats);
         metricPrinter.printMetrics(derivedMetrics, basePrefix, serverName, Metrics.Derived.PREFIX);
         logger.debug("</SolaceGlobalMonitorTask.run>");
     }
@@ -68,7 +72,7 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     @Override
     public void onTaskComplete() {
         double seconds = (System.currentTimeMillis()-this.startTimeMillis)/1000.0;
-        logger.info("SolaceGlobalMonitorTask monitoring run completed in %d seconds.", seconds);
+        logger.info("SolaceGlobalMonitorTask monitoring run completed in %f seconds.", seconds);
     }
 
     private Boolean getIsDurable(Map<String,Object> map, String fieldName) {
@@ -86,7 +90,7 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
 
     private void checkMsgVpn(Map<String,Object> vpn, String serverName) {
         String vpnName= (String) vpn.get(Metrics.Vpn.VpnName);
-        if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
+        if ( Helper.isExcluded(vpnName, serverConfigs.getVpnFilter(), serverConfigs.getVpnExclusionPolicy()) ) {
             logger.info("NOT writing metrics for the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
                     vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
             return;
@@ -98,26 +102,27 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     private void checkQueues(String serverName) {
         for(Map<String,Object> queue : svc.checkQueueList())
             checkQueue(queue, serverName);
-        for(Map<String,Object> queue : svc.checkQueueRatesList())
-            checkQueue(queue, serverName);
         for(Map<String,Object> queue : svc.checkQueueStatsList())
             checkQueue(queue, serverName);
+        if (!serverConfigs.getExcludeExtendedStats())
+            for(Map<String,Object> queue : svc.checkQueueRatesList())
+                checkQueue(queue, serverName);
     }
 
     private void checkQueue(Map<String,Object> queue, String serverName) {
         String vpnName= (String) queue.get(Metrics.Queue.VpnName);
-        if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
+        if ( Helper.isExcluded(vpnName, serverConfigs.getVpnFilter(), serverConfigs.getVpnExclusionPolicy()) ) {
             logger.info("NOT writing metrics for any queues in the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
                     vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
             return;
         }
         String qname = (String) queue.get(Metrics.Queue.QueueName);
-        if ( Helper.isExcluded(qname, exclusionPolicies.getQueueFilter(), exclusionPolicies.getQueueExclusionPolicy()) ) {
+        if ( Helper.isExcluded(qname, serverConfigs.getQueueFilter(), serverConfigs.getQueueExclusionPolicy()) ) {
             logger.info("NOT writing metrics for queue '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
                     qname, MonitorConfigs.QUEUE_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_QUEUES);
             return;
         }
-        if (exclusionPolicies.getExcludeTemporaries() ) {
+        if (serverConfigs.getExcludeTemporaries() ) {
             if (!getIsDurable(queue, Metrics.Queue.IsDurable)) {
                 logger.info("NOT writing metrics for temporary queue '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' configuration.",
                         qname, MonitorConfigs.EXCLUDE_TEMPORARIES);
@@ -134,26 +139,27 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     private void checkTopicEndpoints(String serverName) {
         for (Map<String, Object> endpoint : svc.checkTopicEndpointList())
             checkTopicEndpoint(endpoint, serverName);
-        for (Map<String, Object> endpoint : svc.checkTopicEndpointRatesList())
-            checkTopicEndpoint(endpoint, serverName);
         for (Map<String, Object> endpoint : svc.checkTopicEndpointStatsList())
             checkTopicEndpoint(endpoint, serverName);
+        if (!serverConfigs.getExcludeExtendedStats())
+            for (Map<String, Object> endpoint : svc.checkTopicEndpointRatesList())
+                checkTopicEndpoint(endpoint, serverName);
     }
 
     private void checkTopicEndpoint(Map<String,Object> endpoint, String serverName) {
         String vpnName= (String) endpoint.get(Metrics.TopicEndpoint.VpnName);
-        if ( Helper.isExcluded(vpnName, exclusionPolicies.getVpnFilter(), exclusionPolicies.getVpnExclusionPolicy()) ) {
+        if ( Helper.isExcluded(vpnName, serverConfigs.getVpnFilter(), serverConfigs.getVpnExclusionPolicy()) ) {
             logger.info("NOT writing metrics for any topic endpoints in the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
                     vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
             return;
         }
         String teName = (String) endpoint.get(Metrics.TopicEndpoint.TopicEndpointName);
-        if ( Helper.isExcluded(teName, exclusionPolicies.getTopicEndpointFilter(), exclusionPolicies.getTopicEndpointExclusionPolicy()) ) {
+        if ( Helper.isExcluded(teName, serverConfigs.getTopicEndpointFilter(), serverConfigs.getTopicEndpointExclusionPolicy()) ) {
             logger.info("NOT writing metrics for topic endpoint '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
                     teName, MonitorConfigs.TOPIC_ENDPOINT_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_TOPIC_ENDPOINTS);
             return;
         }
-        if (exclusionPolicies.getExcludeTemporaries() ) {
+        if (serverConfigs.getExcludeTemporaries() ) {
             if (!getIsDurable(endpoint, Metrics.TopicEndpoint.IsDurable)) {
                 logger.info("NOT writing metrics for temporary topic-endpoint '{}' because it did not match the exclusion policy. If this was not expected, check your '{}' configuration.",
                         teName, MonitorConfigs.EXCLUDE_TEMPORARIES);
@@ -179,50 +185,9 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         }
     }
 
-    private Map<String,Object> deriveMetrics(Map<String,Object> serviceStats, Map<String,Object> redundancyStats, Map<String,Object> spoolStats) {
-        Map<String,Object> metrics = new HashMap<>();
-
-        // These metrics are used for all top-level dashboard indicators
-        Integer svcPortUp = (Integer) serviceStats.get(Metrics.Service.SmfPortUp);
-        //Integer redIsPrimary = (Integer) redundancyStats.get(Metrics.Redundancy.IsPrimary);
-        Integer redIsActive = (Integer) redundancyStats.get(Metrics.Redundancy.IsActive);
-        Integer spoolIsEnabled = (Integer) spoolStats.get(Metrics.MsgSpool.IsEnabled);
-        Integer spoolIsActive = (Integer) spoolStats.get(Metrics.MsgSpool.IsActive);
-        Integer spoolIsStandby = (Integer) spoolStats.get(Metrics.MsgSpool.IsStandby);
-        Integer spoolDatapathUp = (Integer) spoolStats.get(Metrics.MsgSpool.IsDatapathUp);
-
-        // Is Solace node UP (active is up as active, backup is up as backup)
-        Integer dataSvcOk = 0;
-        if (svcPortUp == 1) {
-            if (redIsActive==1) {
-                if (spoolIsActive==1 && spoolDatapathUp==1)
-                    dataSvcOk = 1;
-            }
-            else {
-                if (spoolIsStandby==1 && spoolDatapathUp==0)
-                    dataSvcOk = 1;
-            }
-        }
-        metrics.put(Metrics.Derived.DataSvcOk, dataSvcOk);
-
-        // Is MsgSpool UP (active is up as ADActive, backup is synchronized)
-        Integer spoolOk = 0;
-        if (redIsActive==1) {
-            if (spoolDatapathUp==1)
-                spoolOk = 1;
-        }
-        else {
-            if (spoolIsStandby==1 && spoolIsEnabled==1)
-                spoolOk = 1;
-        }
-        metrics.put(Metrics.Derived.MsgSpoolOk, spoolOk);
-
-        return metrics;
-    }
-
     final private SempService svc;
     final private MetricPrinter metricPrinter;
     final private String basePrefix;
-    final private ServerExclusionPolicies exclusionPolicies;
+    final private ServerConfigs serverConfigs;
     private long startTimeMillis;
 }

@@ -1,19 +1,17 @@
 package com.appdynamics.extensions.solace.semp.r7_2_2;
 
-import com.appdynamics.extensions.solace.ServerExclusionPolicies;
+import com.appdynamics.extensions.solace.ServerConfigs;
 import com.appdynamics.extensions.solace.semp.SempRequestFactory;
 import com.solacesystems.semp_jaxb.r7_2_2.request.ObjectFactory;
 import com.solacesystems.semp_jaxb.r7_2_2.request.Rpc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 public class SempRequestFactory_r7_2_2 implements SempRequestFactory<Rpc> {
     private static final Logger logger = LoggerFactory.getLogger(SempRequestFactory_r7_2_2.class);
 
-    public SempRequestFactory_r7_2_2(ServerExclusionPolicies exclusionPolicies) {
-        this.exclusionPolicies = exclusionPolicies;
+    public SempRequestFactory_r7_2_2(ServerConfigs serverConfigs) {
+        this.serverConfigs = serverConfigs;
         factory = new ObjectFactory();
     }
 
@@ -65,6 +63,7 @@ public class SempRequestFactory_r7_2_2 implements SempRequestFactory<Rpc> {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setMessageSpool(factory.createRpcShowMessageSpool());
         request.getShow().getMessageSpool().setVpnName("*");
+        request.getShow().getMessageSpool().setDetail(factory.createKeywordType());
         return request;
     }
 
@@ -72,7 +71,7 @@ public class SempRequestFactory_r7_2_2 implements SempRequestFactory<Rpc> {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setQueue(factory.createRpcShowQueue());
         request.getShow().getQueue().setName("*");
-        if (exclusionPolicies.getExcludeTemporaries())
+        if (serverConfigs.getExcludeTemporaries())
             request.getShow().getQueue().setDurable(factory.createKeywordType());
         request.getShow().getQueue().setDetail(factory.createKeywordType());
         request.getShow().getQueue().setCount(factory.createKeywordType());
@@ -84,7 +83,7 @@ public class SempRequestFactory_r7_2_2 implements SempRequestFactory<Rpc> {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setQueue(factory.createRpcShowQueue());
         request.getShow().getQueue().setName("*");
-        if (exclusionPolicies.getExcludeTemporaries())
+        if (serverConfigs.getExcludeTemporaries())
             request.getShow().getQueue().setDurable(factory.createKeywordType());
         request.getShow().getQueue().setRates(factory.createKeywordType());
         request.getShow().getQueue().setCount(factory.createKeywordType());
@@ -96,7 +95,7 @@ public class SempRequestFactory_r7_2_2 implements SempRequestFactory<Rpc> {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setQueue(factory.createRpcShowQueue());
         request.getShow().getQueue().setName("*");
-        if (exclusionPolicies.getExcludeTemporaries())
+        if (serverConfigs.getExcludeTemporaries())
             request.getShow().getQueue().setDurable(factory.createKeywordType());
         request.getShow().getQueue().setStats(factory.createKeywordType());
         request.getShow().getQueue().setCount(factory.createKeywordType());
@@ -108,7 +107,7 @@ public class SempRequestFactory_r7_2_2 implements SempRequestFactory<Rpc> {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setTopicEndpoint(factory.createRpcShowTopicEndpoint());
         request.getShow().getTopicEndpoint().setName("*");
-        if (exclusionPolicies.getExcludeTemporaries())
+        if (serverConfigs.getExcludeTemporaries())
             request.getShow().getTopicEndpoint().setDurable(factory.createKeywordType());
         request.getShow().getTopicEndpoint().setDetail(factory.createKeywordType());
         request.getShow().getTopicEndpoint().setCount(factory.createKeywordType());
@@ -120,7 +119,7 @@ public class SempRequestFactory_r7_2_2 implements SempRequestFactory<Rpc> {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setTopicEndpoint(factory.createRpcShowTopicEndpoint());
         request.getShow().getTopicEndpoint().setName("*");
-        if (exclusionPolicies.getExcludeTemporaries())
+        if (serverConfigs.getExcludeTemporaries())
             request.getShow().getTopicEndpoint().setDurable(factory.createKeywordType());
         request.getShow().getTopicEndpoint().setRates(factory.createKeywordType());
         request.getShow().getTopicEndpoint().setCount(factory.createKeywordType());
@@ -132,7 +131,7 @@ public class SempRequestFactory_r7_2_2 implements SempRequestFactory<Rpc> {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setTopicEndpoint(factory.createRpcShowTopicEndpoint());
         request.getShow().getTopicEndpoint().setName("*");
-        if (exclusionPolicies.getExcludeTemporaries())
+        if (serverConfigs.getExcludeTemporaries())
             request.getShow().getTopicEndpoint().setDurable(factory.createKeywordType());
         request.getShow().getTopicEndpoint().setStats(factory.createKeywordType());
         request.getShow().getTopicEndpoint().setCount(factory.createKeywordType());
@@ -155,6 +154,6 @@ public class SempRequestFactory_r7_2_2 implements SempRequestFactory<Rpc> {
         return request;
     }
 
-    final private ServerExclusionPolicies exclusionPolicies;
+    final private ServerConfigs serverConfigs;
     final private ObjectFactory factory;
 }
