@@ -98,6 +98,14 @@ public class SempMarshaller_r8_2_0Test
         assertNotNull(redundancy);
     }
 
+    // TODO
+    @Test
+    public void showStandaloneRedundancyTest() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail.standalone.xml"));
+        Map<String, Object> redundancy = factory.getGlobalRedundancy(reply);
+        assertNotNull(redundancy);
+    }
+
     @Test
     public void showMsgVpnListTest() throws Exception {
         RpcReply reply = marshaller.fromReplyXml(readFile("show-vpn.stats.xml"));

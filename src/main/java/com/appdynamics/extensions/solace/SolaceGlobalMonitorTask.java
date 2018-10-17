@@ -72,7 +72,7 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     @Override
     public void onTaskComplete() {
         double seconds = (System.currentTimeMillis()-this.startTimeMillis)/1000.0;
-        logger.info("SolaceGlobalMonitorTask monitoring run completed in %f seconds.", seconds);
+        logger.info("SolaceGlobalMonitorTask monitoring run completed in {} seconds.", seconds);
     }
 
     private Boolean getIsDurable(Map<String,Object> map, String fieldName) {
