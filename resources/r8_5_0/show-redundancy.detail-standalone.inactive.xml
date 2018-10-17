@@ -73,5 +73,5 @@
       </redundancy>
     </show>
   </rpc>
-<execute-result code="ok"/>
+  <execute-result code="ok"/>
 </rpc-reply>

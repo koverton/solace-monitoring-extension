@@ -138,6 +138,10 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
         result.put(Metrics.Redundancy.ConfiguredStatus, redundancy.getConfigStatus().equals("Enabled") ? 1 : 0);
         result.put(Metrics.Redundancy.OperationalStatus, redundancy.getRedundancyStatus().equals("Up") ? 1 : 0);
         // result.put(Metrics.Redundancy.IsPrimary, redundancy.getActiveStandbyRole().equals("Primary") ? 1 : 0);
+        if ( ((Integer)result.get(Metrics.Redundancy.ConfiguredStatus)) == 0L ) {
+            result.put(Metrics.Redundancy.IsActive, 0);
+            return result;
+        }
         // TODO: Need a way to figure out if we are active or backup
         // if ((Integer) result.get(Metrics.Redundancy.IsPrimary) == 1) {
         try {
