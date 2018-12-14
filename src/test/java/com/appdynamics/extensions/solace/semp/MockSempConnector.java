@@ -28,7 +28,7 @@ public class MockSempConnector implements SempConnector {
             else if (request.contains("<show><message-spool><detail/>"))
                 return readFile("show-message-spool.detail-backup.active.xml");
             else if (request.contains("<show><redundancy>"))
-                return readFile("show-redundancy.detail-backup.active.xml");
+                return readFile("show-redundancy.detail-standalone.inactive.xml");
             else if (request.contains("<show><service/>"))
                 return readFile("show-service.xml");
             else if (request.contains("<show><message-vpn><vpn-name>*</vpn-name><stats/>"))
