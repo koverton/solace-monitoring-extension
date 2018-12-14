@@ -27,13 +27,13 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
 
     @Override
     public void run() {
-        logger.debug("<SolaceGlobalMonitorTask.run>");
+        logger.trace("<SolaceGlobalMonitorTask.run>");
 
         startTimeMillis = System.currentTimeMillis();
-        logger.info("SolaceGlobalMonitorTask started at %d.", startTimeMillis);
+        logger.info("SolaceGlobalMonitorTask started at {}.", startTimeMillis);
 
         final String serverName = svc.getDisplayName();
-        logger.debug("Configured metricPrefix: {}, ServerName {}", basePrefix, serverName);
+        logger.info("Configured metricPrefix: {}, ServerName {}", basePrefix, serverName);
 
         // Run Service check
         Map<String,Object> serviceStats = svc.checkGlobalServiceStatus();
@@ -66,7 +66,8 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         // Derive additional metrics
         Map<String,Object> derivedMetrics = deriveMetrics(serverConfigs.getRedundancyModel(), serviceStats, redundancyStats, spoolStats);
         metricPrinter.printMetrics(derivedMetrics, basePrefix, serverName, Metrics.Derived.PREFIX);
-        logger.debug("</SolaceGlobalMonitorTask.run>");
+
+        logger.trace("</SolaceGlobalMonitorTask.run>");
     }
 
     @Override

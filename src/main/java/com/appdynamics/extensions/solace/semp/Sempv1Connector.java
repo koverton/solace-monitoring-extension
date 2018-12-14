@@ -58,7 +58,7 @@ public class Sempv1Connector implements SempConnector {
                 StringBuilder total = new StringBuilder();
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
-                    logger.debug(inputLine);
+                    logger.trace(inputLine);
                     total.append(inputLine);
                 }
                 in.close();
