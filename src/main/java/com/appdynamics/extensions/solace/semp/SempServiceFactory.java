@@ -25,7 +25,7 @@ public class SempServiceFactory {
      * @return SempService object defining the platform and version number of the service we are connected to.
      */
     static public SempService createSempService(SempConnector connector, ServerConfigs serverConfigs) {
-        logger.debug("<SempServiceFactory.createSempService>");
+        logger.trace("<SempServiceFactory.createSempService>");
         SempVersion sempVersion = connector.checkBrokerVersion();
 
         if (!sempVersion.isValid()) {
@@ -101,7 +101,7 @@ public class SempServiceFactory {
             }
             // TBD: Support more here
         }
-        logger.debug("</SempServiceFactory.createSempService>");
+        logger.trace("</SempServiceFactory.createSempService>");
 
         return null;
     }
