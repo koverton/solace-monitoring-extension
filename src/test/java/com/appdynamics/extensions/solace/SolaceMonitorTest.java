@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SolaceMonitorTest {
 
-    //@Test
+    @Test
     public void testSolaceMonitor() throws Exception {
         try {
             final SolaceMonitor monitor = new SolaceMonitor();
