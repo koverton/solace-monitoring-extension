@@ -1,0 +1,77 @@
+<rpc-reply semp-version="soltr/8_5_0">
+  <rpc>
+    <show>
+      <redundancy>
+        <config-status>Shutdown</config-status>
+        <redundancy-status>Down</redundancy-status>
+        <last-failure-reason>Primary IP is not configured</last-failure-reason>
+        <last-failure-time>Aug 13 2018 17:26:11 CDT</last-failure-time>
+        <operating-mode>Message Routing Node</operating-mode>
+        <switchover-mechanism>IP Address Takeover</switchover-mechanism>
+        <auto-revert>false</auto-revert>
+        <redundancy-mode>N/A</redundancy-mode>
+        <active-standby-role>Primary</active-standby-role>
+        <mate-connect-via-addr></mate-connect-via-addr>
+        <oper-status>
+          <adb-link-up>false</adb-link-up>
+          <adb-link-last-failure-reason>N/A</adb-link-last-failure-reason>
+          <adb-link-last-failure-time>Dec 31 1969 18:00:00 CST</adb-link-last-failure-time>
+          <adb-hello-up>false</adb-hello-up>
+          <adb-hello-last-failure-reason>N/A</adb-hello-last-failure-reason>
+          <adb-hello-last-failure-time>Dec 31 1969 18:00:00 CST</adb-hello-last-failure-time>
+          <adb-hello-avg-latency>0</adb-hello-avg-latency>
+          <adb-hello-max-latency>0</adb-hello-max-latency>
+        </oper-status>
+        <adb-hello-interval>1000</adb-hello-interval>
+        <adb-hello-timeout>3000</adb-hello-timeout>
+        <virtual-routers>
+          <primary>
+            <config>
+              <routing-interface>1/6/lag1:1</routing-interface>
+              <vrrp-vrid>-1</vrrp-vrid>
+            </config>
+            <status>
+              <activity>Local Active</activity>
+            </status>
+          </primary>
+          <backup>
+            <config>
+              <routing-interface></routing-interface>
+              <vrrp-vrid>-1</vrrp-vrid>
+            </config>
+            <status>
+              <activity>Shutdown</activity>
+            </status>
+          </backup>
+        </virtual-routers>
+        <mismatch-info>
+          <local>
+            <primary-cvrid>
+              <ip-address>168.72.235.230</ip-address>
+            </primary-cvrid>
+            <backup-cvrid>
+            </backup-cvrid>
+            <mate-address>
+            </mate-address>
+            <ad-enabled-cvrid>
+              <ip-address>168.72.235.230</ip-address>
+            </ad-enabled-cvrid>
+            <disk-wwn>60:06:0e:80:12:a0:ff:00:00:00:a0:ff:00:00:1e:6c</disk-wwn>
+          </local>
+          <received-from-mate>
+            <primary-cvrid>
+            </primary-cvrid>
+            <backup-cvrid>
+            </backup-cvrid>
+            <mate-address>
+            </mate-address>
+            <ad-enabled-cvrid>
+            </ad-enabled-cvrid>
+            <disk-wwn>N/A</disk-wwn>
+          </received-from-mate>
+        </mismatch-info>
+      </redundancy>
+    </show>
+  </rpc>
+  <execute-result code="ok"/>
+</rpc-reply>
