@@ -2,6 +2,7 @@ package com.appdynamics.extensions.solace.semp.r8_6VMR;
 
 import com.appdynamics.extensions.solace.ServerConfigs;
 import com.appdynamics.extensions.solace.semp.Metrics;
+import com.appdynamics.extensions.solace.semp.SempStateTest;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -80,6 +81,7 @@ public class SempMarshaller_r8_6VMRTest
         Map<String, Object> info =
                 factory.getGlobalMsgSpool(reply);
         assertNotNull(info);
+        SempStateTest.msgSpoolTest(info);
 
         Integer isEnabled = (Integer)info.get(Metrics.MsgSpool.IsEnabled);
         Integer isActive = (Integer)info.get(Metrics.MsgSpool.IsActive);
@@ -114,16 +116,72 @@ public class SempMarshaller_r8_6VMRTest
 
     @Test
     public void showPrimaryRedundancyTest() throws Exception {
-        RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-backup.xml"));
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-primary.xml"));
         Map<String, Object> redundancy = factory.getGlobalRedundancy(reply);
-        assertNotNull(redundancy);
+        SempStateTest.redundancyTest(redundancy);
+        assertEquals(1,  redundancy.get(Metrics.Redundancy.IsActive));
+
+        String redStatus = reply.getRpc()
+                .getShow()
+                .getRedundancy()
+                .getRedundancyStatus();
+        assertEquals("Up", redStatus);
+
+        String primaryActivity = reply.getRpc()
+                .getShow()
+                .getRedundancy()
+                .getVirtualRouters()
+                .getPrimary()
+                .getStatus()
+                .getActivity();
+        assertEquals("Local Active", primaryActivity);
+
+        String msgSpoolStatus = reply.getRpc()
+                .getShow()
+                .getRedundancy()
+                .getVirtualRouters()
+                .getPrimary()
+                .getStatus()
+                .getDetail()
+                .getMessageSpoolStatus()
+                .getInternal()
+                .getRedundancy();
+        assertEquals("AD-Active", msgSpoolStatus);
     }
 
     @Test
     public void showBackupRedundancyTest() throws Exception {
         RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-backup.xml"));
         Map<String, Object> redundancy = factory.getGlobalRedundancy(reply);
-        assertNotNull(redundancy);
+        SempStateTest.redundancyTest(redundancy);
+        assertEquals(0,  redundancy.get(Metrics.Redundancy.IsActive));
+
+        String redStatus = reply.getRpc()
+                .getShow()
+                .getRedundancy()
+                .getRedundancyStatus();
+        assertEquals("Up", redStatus);
+
+        String primaryActivity = reply.getRpc()
+                .getShow()
+                .getRedundancy()
+                .getVirtualRouters()
+                .getBackup()
+                .getStatus()
+                .getActivity();
+        assertEquals("Mate Active", primaryActivity);
+
+        String msgSpoolStatus = reply.getRpc()
+                .getShow()
+                .getRedundancy()
+                .getVirtualRouters()
+                .getBackup()
+                .getStatus()
+                .getDetail()
+                .getMessageSpoolStatus()
+                .getInternal()
+                .getRedundancy();
+        assertEquals("AD-Standby", msgSpoolStatus);
     }
 
     @Test
