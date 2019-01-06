@@ -3,21 +3,60 @@ package com.appdynamics.extensions.solace.semp.r8_2_0;
 
 import com.appdynamics.extensions.solace.Helper;
 import com.appdynamics.extensions.solace.semp.Metrics;
-import com.solacesystems.semp_jaxb.r8_2_0.reply.MessageSpoolStatsType;
-import com.solacesystems.semp_jaxb.r8_2_0.reply.QendptInfoType;
-import com.solacesystems.semp_jaxb.r8_2_0.reply.RpcReply;
+import com.solacesystems.semp_jaxb.r8_2_0.reply.*;
 
 import java.util.Map;
 
 public class StatsHelper {
 
+
+    static String getRedundantMsgSpoolStatus(RedundancyInfoType detail) {
+        String result;
+        try {
+            result = detail
+                    .getStatus()
+                    .getDetail()
+                    .getMessageSpoolStatus()
+                    .getInternal()
+                    .getRedundancy();
+        }
+        catch(Throwable t) {
+            result = "AD-Disabled";
+        }
+        return result;
+    }
+    static String getRedundantActivityStatus(RedundancyInfoType detail) {
+        String result;
+        try {
+            result = detail
+                    .getStatus()
+                    .getDetail()
+                    .getActivityStatus()
+                    .getSummary();
+        }
+        catch(Throwable t) {
+            result = "AD-Disabled";
+        }
+        return result;
+    }
+
+    static String getRedundantNodeSpoolStatus(RedundancyDetailInfoType detail) {
+        String result = "NOT-FOUND";
+        try {
+            result = detail.getMessageSpoolStatus().getInternal().getRedundancy();
+        }
+        catch(Throwable t) {}
+        return result;
+    }
+
     static void directMessagingOnly(RpcReply.Rpc.Show.Redundancy redundancy, Map<String, Object> result) {
+        String primaryMsgSpoolStatus = getRedundantMsgSpoolStatus(redundancy.getVirtualRouters().getPrimary());
+        String backupMsgSpoolStatus = getRedundantMsgSpoolStatus(redundancy.getVirtualRouters().getBackup());
         // If message-spool is completely disabled, they're running direct-only, which can be Active/Active
-        if( redundancy.getVirtualRouters().getPrimary().getStatus().getDetail().getMessageSpoolStatus().equals("AD-Disabled")
-                && redundancy.getVirtualRouters().getBackup().getStatus().getDetail().getMessageSpoolStatus().equals("AD-Disabled")
+        if( primaryMsgSpoolStatus.equals("AD-Disabled") && backupMsgSpoolStatus.equals("AD-Disabled")
         ) {
-            if( redundancy.getVirtualRouters().getPrimary().getStatus().getDetail().getActivityStatus().equals("Local Active")
-                    || redundancy.getVirtualRouters().getBackup().getStatus().getDetail().getActivityStatus().equals("Local Active") ) {
+            if( getRedundantActivityStatus(redundancy.getVirtualRouters().getPrimary()).equals("Local Active")
+                    || getRedundantActivityStatus(redundancy.getVirtualRouters().getBackup()).equals("Local Active") ) {
                 result.put(Metrics.Redundancy.IsActive, 1);
             }
         }

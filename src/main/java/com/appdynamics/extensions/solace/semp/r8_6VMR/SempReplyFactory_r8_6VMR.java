@@ -130,6 +130,16 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
         return result;
     }
 
+    private static String getRedundantNodeSpoolStatus(RedundancyDetailInfoType detail) {
+        String result = "NOT-FOUND";
+        try {
+            result = detail.getMessageSpoolStatus().getInternal().getRedundancy();
+        }
+        catch(Throwable t) {
+            logger.error("Exception thrown processing Redundancy detail msg-spool status.");
+        }
+        return result;
+    }
     public Map<String,Object> getGlobalRedundancy(RpcReply reply) {
         RpcReply.Rpc.Show.Redundancy redundancy = reply.getRpc()
                 .getShow()
@@ -142,20 +152,20 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
         // TODO: Need a way to figure out if we are active or backup
         // if ((Integer) result.get(Metrics.Redundancy.IsPrimary) == 1) {
         try {
-            if (redundancy.getVirtualRouters()
-                    .getPrimary()
-                    .getStatus()
-                    .getDetail()
-                    .getMessageSpoolStatus()
+            if ( getRedundantNodeSpoolStatus(
+                    redundancy.getVirtualRouters()
+                            .getPrimary()
+                            .getStatus()
+                            .getDetail())
                     .equals("AD-Active")) {
                 // We are Primary and AD-Active
                 result.put(Metrics.Redundancy.IsActive, 1);
             }
-            else if (redundancy.getVirtualRouters()
-                    .getBackup()
-                    .getStatus()
-                    .getDetail()
-                    .getMessageSpoolStatus()
+            else if ( getRedundantNodeSpoolStatus(
+                    redundancy.getVirtualRouters()
+                            .getBackup()
+                            .getStatus()
+                            .getDetail())
                     .equals("AD-Active")) {
                 // We are Backup and AD-Active
                 result.put(Metrics.Redundancy.IsActive, 1);
