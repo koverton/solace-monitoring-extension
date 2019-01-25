@@ -1,5 +1,6 @@
 package com.appdynamics.extensions.solace.semp.r8_13_0;
 
+import com.appdynamics.extensions.solace.MonitorConfigs;
 import com.appdynamics.extensions.solace.ServerConfigs;
 import com.appdynamics.extensions.solace.semp.Metrics;
 import com.appdynamics.extensions.solace.semp.SempStateTest;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.appdynamics.extensions.solace.DerivedMetricsLogic.deriveMetrics;
 import static com.appdynamics.extensions.solace.MonitorConfigs.EXCLUDE_EXTENDED_STATS;
 import static org.junit.Assert.*;
 
@@ -64,6 +66,8 @@ public class SempMarshaller_r8_13_0Test
         assertTrue(factory.isSuccess(reply));
         Map<String, Object> service = factory.getGlobalService(reply);
         assertNotNull(service);
+        assertEquals(1, service.get(Metrics.Service.SmfPortUp));
+        assertEquals(1, service.get(Metrics.Service.SmfCompressedPortUp));
     }
 
     @Test
@@ -324,5 +328,33 @@ public class SempMarshaller_r8_13_0Test
         RpcReply reply = marshaller.fromReplyXml(readFile("show-bridges.xml"));
         List<Map<String, Object>> bridges = factory.getGlobalBridgeList(reply);
         assertNotNull(bridges);
+    }
+
+    @Test
+    public void derivedPrimaryActiveTest2() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-primary.active2.xml"));
+        Map<String, Object> redundancy = factory.getGlobalRedundancy(reply);
+        reply = marshaller.fromReplyXml(readFile("show-message-spool.detail-primary.active2.xml"));
+        Map<String, Object> spool = factory.getGlobalMsgSpool(reply);
+        reply = marshaller.fromReplyXml(readFile("show-service2.xml"));
+        Map<String, Object> service = factory.getGlobalService(reply);
+        Map<String, Object> derived = deriveMetrics(MonitorConfigs.RedundancyModel.REDUNDANT,
+                service, redundancy, spool);
+        assertEquals(1, derived.get(Metrics.Derived.DataSvcOk));
+        assertEquals(1, derived.get(Metrics.Derived.MsgSpoolOk));
+    }
+
+    @Test
+    public void derivedBackupStandbyTest2() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-backup.standby2.xml"));
+        Map<String, Object> redundancy = factory.getGlobalRedundancy(reply);
+        reply = marshaller.fromReplyXml(readFile("show-message-spool.detail-backup.standby2.xml"));
+        Map<String, Object> spool = factory.getGlobalMsgSpool(reply);
+        reply = marshaller.fromReplyXml(readFile("show-service.standby2.xml"));
+        Map<String, Object> service = factory.getGlobalService(reply);
+        Map<String, Object> derived = deriveMetrics(MonitorConfigs.RedundancyModel.REDUNDANT,
+                service, redundancy, spool);
+        assertEquals(1, derived.get(Metrics.Derived.DataSvcOk));
+        assertEquals(1, derived.get(Metrics.Derived.MsgSpoolOk));
     }
 }

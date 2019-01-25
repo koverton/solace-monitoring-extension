@@ -120,6 +120,8 @@ public class SempMarshaller_r8_6VMRTest
         Map<String, Object> redundancy = factory.getGlobalRedundancy(reply);
         SempStateTest.redundancyTest(redundancy);
         assertEquals(1,  redundancy.get(Metrics.Redundancy.IsActive));
+        assertEquals(1,  redundancy.get(Metrics.Redundancy.OperationalStatus));
+        assertEquals(1,  redundancy.get(Metrics.Redundancy.ConfiguredStatus));
 
         String redStatus = reply.getRpc()
                 .getShow()
