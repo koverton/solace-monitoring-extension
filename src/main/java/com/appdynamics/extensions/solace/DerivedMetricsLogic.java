@@ -5,8 +5,8 @@ import com.appdynamics.extensions.solace.semp.Metrics;
 import java.util.HashMap;
 import java.util.Map;
 
-class DerivedMetricsLogic {
-    static Map<String,Object> deriveMetrics(
+public class DerivedMetricsLogic {
+    public static Map<String,Object> deriveMetrics(
             MonitorConfigs.RedundancyModel redundancyModel,
             Map<String,Object> serviceStats,
             Map<String,Object> redundancyStats,
