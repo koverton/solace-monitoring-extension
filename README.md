@@ -19,7 +19,7 @@ plane via HTTP. The following metrics are currently gathered by this monitor:
 * Msg-VPN durable topic endpoint summaries
 * Msg-VPN bridge summaries
 
-Detailed documentation of all available metrics can be found [here](docs/metrics.md).
+Detailed documentation of all available metrics [can be found here](docs/metrics.md).
 
 ## Installation
 

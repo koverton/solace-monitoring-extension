@@ -7,6 +7,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+/**
+ * <p>Implementation of {@link com.appdynamics.extensions.solace.MetricPrinter}
+ * for AppDynamics MachineAgent plugin.
+ */
 public class ADMetricPrinter implements MetricPrinter
 {
     private static final Logger logger = LoggerFactory.getLogger(ADMetricPrinter.class);

@@ -1,5 +1,8 @@
 package com.appdynamics.extensions.solace;
 
+/**
+ * <p>Static metric ID names for all available metrics.
+ */
 public class MonitorConfigs {
     public enum ExclusionPolicy { WHITELIST, BLACKLIST }
     public enum RedundancyModel { STANDALONE, REDUNDANT }

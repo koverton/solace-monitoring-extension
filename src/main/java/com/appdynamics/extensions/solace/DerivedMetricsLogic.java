@@ -5,6 +5,11 @@ import com.appdynamics.extensions.solace.semp.Metrics;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * <p>Helper class to encapsulate all derived metrics. Derived metrics are higher-order
+ * metrics calculated from several other metrics. These derived metrics are version-agnostic
+ * in that they depend on metrics that exist in all supported Solace schema versions.
+ */
 public class DerivedMetricsLogic {
     public static Map<String,Object> deriveMetrics(
             MonitorConfigs.RedundancyModel redundancyModel,
