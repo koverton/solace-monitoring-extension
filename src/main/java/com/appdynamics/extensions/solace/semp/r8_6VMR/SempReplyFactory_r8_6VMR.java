@@ -49,6 +49,8 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
         result.put(Metrics.Statistics.CurrentEgressRatePerSecond, stats.getCurrentEgressRatePerSecond());
         result.put(Metrics.Statistics.CurrentIngressByteRatePerSecond, stats.getCurrentIngressByteRatePerSecond());
         result.put(Metrics.Statistics.CurrentEgressByteRatePerSecond, stats.getCurrentEgressByteRatePerSecond());
+        result.put(Metrics.Statistics.TotalClientDataMessagesReceived, stats.getClientDataMessagesReceived());
+        result.put(Metrics.Statistics.TotalClientDataMessagesSent, stats.getClientDataMessagesSent());
 
         if (!serverConfigs.getExcludeCompressionMetrics()) {
             result.put(Metrics.Statistics.CurrentIngressCompressedRatePerSecond, stats.getZipStats().getCurrentIngressCompressedRatePerSecond());
@@ -232,6 +234,8 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
             result.put(Metrics.Vpn.TotalClientsConnected, vpn.getConnections());
             result.put(Metrics.Vpn.SMFConnectionsPct,
                     calcPercentage(vpn.getConnectionsServiceSmf(),vpn.getMaxConnectionsServiceSmf()));
+            result.put(Metrics.Vpn.TotalClientDataMessagesReceived, stats.getClientDataMessagesReceived());
+            result.put(Metrics.Vpn.TotalClientDataMessagesSent, stats.getClientDataMessagesSent());
 
             if (!serverConfigs.getExcludeDiscardMetrics()) {
                 result.put(Metrics.Vpn.TotalIngressDiscards, stats.getIngressDiscards().getTotalIngressDiscards());
@@ -354,6 +358,7 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
                 result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
                 result.put(Metrics.Queue.TotalIngressDiscards, countIngressDiscards(spoolStats));
                 result.put(Metrics.Queue.TotalEgressDiscards, countEgressDiscards(spoolStats));
+                result.put(Metrics.Queue.TotalMessagesSpooled, spoolStats.getTotalMessagesSpooled().longValue());
                 result.put(Metrics.Queue.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
                 results.add(result);
             }
@@ -419,6 +424,7 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
                 result.put(Metrics.TopicEndpoint.VpnName, e.getInfo().getMessageVpn());
                 result.put(Metrics.TopicEndpoint.TotalIngressDiscards, countIngressDiscards(spoolStats));
                 result.put(Metrics.TopicEndpoint.TotalEgressDiscards, countEgressDiscards(spoolStats));
+                result.put(Metrics.TopicEndpoint.TotalMessagesSpooled, spoolStats.getTotalMessagesSpooled().longValue());
                 result.put(Metrics.TopicEndpoint.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
                 results.add(result);
             }
