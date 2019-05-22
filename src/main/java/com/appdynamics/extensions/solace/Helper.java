@@ -18,6 +18,9 @@ import static com.appdynamics.extensions.TaskInputArgs.PASSWORD;
 import static com.appdynamics.extensions.TaskInputArgs.PASSWORD_ENCRYPTED;
 import static com.appdynamics.extensions.solace.MonitorConfigs.*;
 
+/**
+ * <p>Internal helper methods for {@link com.appdynamics.extensions.solace.SolaceMonitor}.
+ */
 public class Helper {
     private static final Logger logger = LoggerFactory.getLogger(Helper.class);
 
