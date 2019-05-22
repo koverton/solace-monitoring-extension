@@ -77,6 +77,8 @@ public class SempMarshaller_r8_13_0Test
                 factory.getGlobalStats(reply);
         assertNotNull(stats);
         assertEquals(3L, stats.get(Metrics.Statistics.TotalClientsConnected));
+        assertEquals(57552L, stats.get(Metrics.Statistics.TotalClientDataMessagesSent));
+        assertEquals(26375764L, stats.get(Metrics.Statistics.TotalClientDataMessagesReceived));
     }
 
     @Test
@@ -271,6 +273,11 @@ public class SempMarshaller_r8_13_0Test
     public void showMsgVpnListTest() throws Exception {
         RpcReply reply = marshaller.fromReplyXml(readFile("show-vpn.stats.xml"));
         List<Map<String, Object>> vpns = factory.getMsgVpnList(reply);
+        Long total = 10000L;
+        for(Map<String, Object> vpn : vpns) {
+            assertEquals(total++, vpn.get(Metrics.Vpn.TotalClientDataMessagesReceived));
+            assertEquals(total++, vpn.get(Metrics.Vpn.TotalClientDataMessagesSent));
+        }
         assertNotNull(vpns);
     }
 
