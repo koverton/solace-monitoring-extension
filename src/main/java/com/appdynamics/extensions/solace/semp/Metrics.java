@@ -64,6 +64,8 @@ public final class Metrics {
         public final static String CurrentEgressSslRatePerSecond = "CurrentEgressSslRatePerSecond";
         public final static String TotalClientsConnected = "TotalClientsConnected";
         public final static String TotalSmfClientsConnected = "TotalSmfClientsConnected";
+        public final static String TotalClientDataMessagesReceived = "TotalClientDataMessagesReceived";
+        public final static String TotalClientDataMessagesSent = "TotalClientDataMessagesSent";
         // Ingress discards
         public final static String TotalIngressDiscards = "Discards|TotalIngressDiscards";
         public final static String NoSubscriptionMatch = "Discards|Ingress|NoSubscriptionMatch";
@@ -106,6 +108,8 @@ public final class Metrics {
         public final static String CurrentEgressRatePerSecond = "CurrentEgressRatePerSecond";
         public final static String CurrentIngressByteRatePerSecond = "CurrentIngressByteRatePerSecond";
         public final static String CurrentEgressByteRatePerSecond = "CurrentEgressByteRatePerSecond";
+        public final static String TotalClientDataMessagesReceived = "TotalClientDataMessagesReceived";
+        public final static String TotalClientDataMessagesSent = "TotalClientDataMessagesSent";
         // Ingress discards
         public final static String TotalIngressDiscards = "Discards|TotalIngressDiscards";
         public final static String NoSubscriptionMatch = "Discards|Ingress|NoSubscriptionMatch";
@@ -143,6 +147,7 @@ public final class Metrics {
         public final static String RedeliveredCount = "RedeliveredCount";
         public final static String TotalIngressDiscards = "TotalIngressDiscards";
         public final static String TotalEgressDiscards = "TotalEgressDiscards";
+        public final static String TotalMessagesSpooled = "TotalMessagesSpooled";
         public final static String CurrentIngressRatePerSecond = "CurrentIngressRatePerSecond";
         public final static String CurrentEgressRatePerSecond = "CurrentEgressRatePerSecond";
         public final static String CurrentIngressByteRatePerSecond = "CurrentIngressByteRatePerSecond";
@@ -163,6 +168,7 @@ public final class Metrics {
         public final static String RedeliveredCount = "RedeliveredCount";
         public final static String TotalIngressDiscards = "TotalIngressDiscards";
         public final static String TotalEgressDiscards = "TotalEgressDiscards";
+        public final static String TotalMessagesSpooled = "TotalMessagesSpooled";
         public final static String CurrentIngressRatePerSecond = "CurrentIngressRatePerSecond";
         public final static String CurrentEgressRatePerSecond = "CurrentEgressRatePerSecond";
         public final static String CurrentIngressByteRatePerSecond = "CurrentIngressByteRatePerSecond";

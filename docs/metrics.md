@@ -35,6 +35,8 @@ Aggregate data throughput statistics gathered for the entire VMR or Messaging Ap
 | CurrentEgressRatePerSecond       | Integer| Current outbound message rate per second |
 | CurrentIngressByteRatePerSecond  | Integer| Current inbound byte rate per second |
 | CurrentEgressByteRatePerSecond   | Integer| Current outbound byte rate per second |
+| TotalClientDataMessagesReceived  | Integer| Total messages received by this broker since creation or the last reset |
+| TotalClientDataMessagesSent      | Integer| Total messages sent by this broker since creation or the last reset |
 | _Compressed Stats_ | | Excluded from output by default according to `excludeCompressionMetrics` setting |
 | CurrentIngressCompressedRatePerSecond | Integer| Current compressed inbound byte rate per second |
 | CurrentEgressCompressedRatePerSecond  | Integer| Current compressed outbound byte rate per second |
@@ -164,6 +166,8 @@ The following statistics are gathered per each message-VPN configured on the VMR
 | TotalEndpointsCount              | Integer | Total number of queue and topic endpoints provisioned on this msg-VPN. |
 | TotalClientsConnected            | Integer | Total clients connected across all protocols on this msg-VPN. |
 | SMFConnectionsPct                | Integer | Percentage of available SMF connections currently in use for this msg-VPN. |
+| TotalClientDataMessagesReceived  | Integer | Total messages received by this msg-VPN since creation or the last reset |
+| TotalClientDataMessagesSent      | Integer | Total messages sent by this msg-VPN since creation or the last reset |
  _Extended Stats_                  | | These statistics are only visible when you set `excludeExtendedStats=false` (please see [../README.md]).
 | CurrentIngressFlowsCount         | Integer | Total number of publisher flows into the msg-VPN. |
 | CurrentEgressFlowsCount          | Integer | Total number of subscriber flows from the msg-VPN. |
@@ -190,6 +194,7 @@ Statistics and indicators per each queue in a msg-VPN.
 | RedeliveredCount                 | Integer | Total number of redeliveries attempted on this queue. |
 | TotalIngressDiscards             | Integer | Total number of messages intended for this queue discarded upon arrival. |
 | TotalEgressDiscards              | Integer | Total number of messages intended for this queue discarded upon attempted delivery. |
+| TotalMessagesSpooled             | Integer | Total number of messages spooled since the queue was created OR since the stats reset. |
 | CurrentIngressRatePerSecond      | Integer | Queue current inbound message rate per second. |
 | CurrentEgressRatePerSecond       | Integer | Queue current outbound message rate per second. |
 | CurrentIngressByteRatePerSecond  | Integer | Queue current inbound byte rate per second. |
@@ -212,6 +217,7 @@ Statistics and indicators per each topic endpoint in a msg-VPN.
 | RedeliveredCount                 | Integer | Total number of redeliveries attempted on this endpoint. |
 | TotalIngressDiscards             | Integer | Total number of messages intended for this endpoint discarded upon arrival. |
 | TotalEgressDiscards              | Integer | Total number of messages intended for this endpoint discarded upon attempted delivery. |
+| TotalMessagesSpooled             | Integer | Total number of messages spooled since the queue was created OR since the stats reset. |
 | CurrentIngressRatePerSecond      | Integer | Topic-Endpoint current inbound message rate per second. |
 | CurrentEgressRatePerSecond       | Integer | Topic-Endpoint current outbound message rate per second. |
 | CurrentIngressByteRatePerSecond  | Integer | Topic-Endpoint current inbound byte rate per second. |
