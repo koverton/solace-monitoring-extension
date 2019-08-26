@@ -7,11 +7,11 @@ metricPrefix: "Server|Component:<Component_id>|Custom Metrics|Solace|"
 
 # List of Solace Servers
 servers:
-  - mgmtUrl: "http://192.168.56.201:8080/SEMP"
+  - mgmtUrl: "http://localhost:8080/SEMP"
     adminUser: "admin"
-    # password: "admin"
-    encryptedPassword: "gD1962YptbA8bsaHmYXlSw=="
-    encryptionKey: "na1jFUKT8euDXp1p7bgwIxhI6ZESLylz"
+    password: "admin"
+    # encryptedPassword: "gD1962YptbA8bsaHmYXlSw=="
+    # encryptionKey: "na1jFUKT8euDXp1p7bgwIxhI6ZESLylz"
     #displayName is required. Displays your server name in metric path.
     displayName: "PrimaryVMR"
     # requestTimeout: 1000000 # one second timeout
@@ -22,22 +22,6 @@ servers:
     topicEndpointExclusionPolicy: "blacklist"
     excludeTopicEndpoints: ["#P2P/.*"]
     excludeTemporaries: true
-  - mgmtUrl: "http://192.168.56.202:8080/SEMP"
-    adminUser: "admin"
-    # password: "admin"
-    encryptedPassword: "gD1962YptbA8bsaHmYXlSw=="
-    encryptionKey: "na1jFUKT8euDXp1p7bgwIxhI6ZESLylz"
-    #displayName is required. Displays your server name in metric path.
-    displayName: "BackupVMR"
-    # requestTimeout: 1000000 # one second timeout
-    vpnExclusionPolicy: "whitelist"
-    excludeMsgVpns: ["test", "tmp"]
-    queueExclusionPolicy: "whitelist"
-    excludeQueues: ["queue1", "queue2"]
-    topicEndpointExclusionPolicy: "whitelist"
-    excludeTopicEndpoints: ["dte1", "dte2"]
-    excludeTemporaries: true
-
 
 # number of concurrent tasks
 numberOfThreads: 2
