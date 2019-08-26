@@ -177,6 +177,11 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     private void checkBridges(String serverName) {
         for(Map<String,Object> bridge: svc.checkGlobalBridgeList()) {
             String vpnName= (String) bridge.get(Metrics.Bridge.VpnName);
+            if ( Helper.isExcluded(vpnName, serverConfigs.getVpnFilter(), serverConfigs.getVpnExclusionPolicy()) ) {
+                logger.info("NOT writing metrics for bridges in the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
+                        vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
+                continue;
+            }
             String bridgeName= (String) bridge.get(Metrics.Bridge.BridgeName);
             bridge.remove(Metrics.Bridge.VpnName);
             bridge.remove(Metrics.Bridge.BridgeName);
