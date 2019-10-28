@@ -76,9 +76,9 @@ public class SempMarshaller_r9_2_0Test
         Map<String, Object> stats =
                 factory.getGlobalStats(reply);
         assertNotNull(stats);
-        assertEquals(3L, stats.get(Metrics.Statistics.TotalClientsConnected));
-        assertEquals(57552L, stats.get(Metrics.Statistics.TotalClientDataMessagesSent));
-        assertEquals(26375764L, stats.get(Metrics.Statistics.TotalClientDataMessagesReceived));
+        assertEquals(4L, stats.get(Metrics.Statistics.TotalClientsConnected));
+        assertEquals(54321L, stats.get(Metrics.Statistics.TotalClientDataMessagesSent));
+        assertEquals(98765L, stats.get(Metrics.Statistics.TotalClientDataMessagesReceived));
     }
 
     @Test
@@ -321,7 +321,7 @@ public class SempMarshaller_r9_2_0Test
         RpcReply reply = marshaller.fromReplyXml(readFile("show-topicendpoints.stats.xml"));
         List<Map<String, Object>> endpoints = factory.getTopicEndpointStatsList(reply);
         assertNotNull(endpoints);
-        assertEquals(0, endpoints.size());
+        assertEquals(3, endpoints.size());
         for(Map<String,Object> e : endpoints) {
             if (e.get(Metrics.TopicEndpoint.TopicEndpointName).equals("t2")) {
                 assertEquals(190L, e.get(Metrics.TopicEndpoint.RedeliveredCount));
