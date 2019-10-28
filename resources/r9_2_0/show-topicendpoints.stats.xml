@@ -13,7 +13,7 @@
                 <last-message-id-spooled>0</last-message-id-spooled>
                 <low-message-id-ack-received>0</low-message-id-ack-received>
                 <high-message-id-ack-received>0</high-message-id-ack-received>
-                <messages-redelivered>0</messages-redelivered>
+                <messages-redelivered>190</messages-redelivered>
                 <spool-usage-exceeded>0</spool-usage-exceeded>
                 <max-message-size-exceeded>0</max-message-size-exceeded>
                 <spool-shutdown-discard>0</spool-shutdown-discard>
@@ -71,7 +71,7 @@
                 <last-message-id-spooled>0</last-message-id-spooled>
                 <low-message-id-ack-received>0</low-message-id-ack-received>
                 <high-message-id-ack-received>0</high-message-id-ack-received>
-                <messages-redelivered>0</messages-redelivered>
+                <messages-redelivered>190</messages-redelivered>
                 <spool-usage-exceeded>0</spool-usage-exceeded>
                 <max-message-size-exceeded>0</max-message-size-exceeded>
                 <spool-shutdown-discard>0</spool-shutdown-discard>
@@ -129,7 +129,7 @@
                 <last-message-id-spooled>0</last-message-id-spooled>
                 <low-message-id-ack-received>0</low-message-id-ack-received>
                 <high-message-id-ack-received>0</high-message-id-ack-received>
-                <messages-redelivered>0</messages-redelivered>
+                <messages-redelivered>190</messages-redelivered>
                 <spool-usage-exceeded>0</spool-usage-exceeded>
                 <max-message-size-exceeded>0</max-message-size-exceeded>
                 <spool-shutdown-discard>0</spool-shutdown-discard>
@@ -138,7 +138,7 @@
                 <destination-group-error>0</destination-group-error>
                 <low-priority-msg-congestion-discard>0</low-priority-msg-congestion-discard>
                 <total-deleted-messages>0</total-deleted-messages>
-                <total-ttl-expired-discard-messages>0</total-ttl-expired-discard-messages>
+                <total-ttl-expired-discard-messages>190</total-ttl-expired-discard-messages>
                 <total-ttl-expired-to-dmq-messages>0</total-ttl-expired-to-dmq-messages>
                 <total-ttl-expired-to-dmq-failures>0</total-ttl-expired-to-dmq-failures>
                 <max-redelivery-exceeded-discard-messages>0</max-redelivery-exceeded-discard-messages>

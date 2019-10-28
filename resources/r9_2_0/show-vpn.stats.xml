@@ -68,8 +68,8 @@
           <stats>
             <total-client-messages-received>195</total-client-messages-received>
             <total-client-messages-sent>257</total-client-messages-sent>
-            <client-data-messages-received>0</client-data-messages-received>
-            <client-data-messages-sent>0</client-data-messages-sent>
+            <client-data-messages-received>10000</client-data-messages-received>
+            <client-data-messages-sent>10001</client-data-messages-sent>
             <client-persistent-messages-received>0</client-persistent-messages-received>
             <client-persistent-messages-sent>0</client-persistent-messages-sent>
             <client-non-persistent-messages-received>0</client-non-persistent-messages-received>
@@ -235,8 +235,8 @@
           <stats>
             <total-client-messages-received>262</total-client-messages-received>
             <total-client-messages-sent>190</total-client-messages-sent>
-            <client-data-messages-received>0</client-data-messages-received>
-            <client-data-messages-sent>0</client-data-messages-sent>
+            <client-data-messages-received>10002</client-data-messages-received>
+            <client-data-messages-sent>10003</client-data-messages-sent>
             <client-persistent-messages-received>0</client-persistent-messages-received>
             <client-persistent-messages-sent>0</client-persistent-messages-sent>
             <client-non-persistent-messages-received>0</client-non-persistent-messages-received>
