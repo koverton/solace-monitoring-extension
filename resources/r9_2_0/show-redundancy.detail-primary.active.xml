@@ -1,0 +1,85 @@
+<rpc-reply semp-version="soltr/9_2_0">
+  <rpc>
+    <show>
+      <redundancy>
+        <config-status>Shutdown</config-status>
+        <redundancy-status>Down</redundancy-status>
+        <last-failure-reason>Primary IP is not configured</last-failure-reason>
+        <last-failure-time>Oct 26 2019 16:09:40 UTC</last-failure-time>
+        <operating-mode>Message Routing Node</operating-mode>
+        <switchover-mechanism>IP Address Takeover</switchover-mechanism>
+        <auto-revert>false</auto-revert>
+        <redundancy-mode>N/A</redundancy-mode>
+        <active-standby-role>Undefined</active-standby-role>
+        <mate-router-name></mate-router-name>
+        <mate-smf-port>0</mate-smf-port>
+        <mate-smf-port-compressed>0</mate-smf-port-compressed>
+        <mate-smf-port-ssl>0</mate-smf-port-ssl>
+        <mate-connect-via-addr>0.0.0.0</mate-connect-via-addr>
+        <mate-link>
+          <remote-port>8741</remote-port>
+          <ssl>No</ssl>
+        </mate-link>
+        <oper-status>
+          <adb-link-up>false</adb-link-up>
+          <adb-link-last-failure-reason>N/A</adb-link-last-failure-reason>
+          <adb-link-last-failure-time>Jan  1 1970 00:00:00 UTC</adb-link-last-failure-time>
+          <adb-hello-up>false</adb-hello-up>
+          <adb-hello-last-failure-reason>N/A</adb-hello-last-failure-reason>
+          <adb-hello-last-failure-time>Jan  1 1970 00:00:00 UTC</adb-hello-last-failure-time>
+          <adb-hello-avg-latency>0</adb-hello-avg-latency>
+          <adb-hello-max-latency>0</adb-hello-max-latency>
+        </oper-status>
+        <adb-hello-interval>1000</adb-hello-interval>
+        <adb-hello-timeout>3000</adb-hello-timeout>
+        <virtual-routers>
+          <primary>
+            <config>
+              <routing-interface></routing-interface>
+              <vrrp-vrid>-1</vrrp-vrid>
+            </config>
+            <status>
+              <activity>Local Active</activity>
+            </status>
+          </primary>
+          <backup>
+            <config>
+              <routing-interface></routing-interface>
+              <vrrp-vrid>-1</vrrp-vrid>
+            </config>
+            <status>
+              <activity>Shutdown</activity>
+            </status>
+          </backup>
+        </virtual-routers>
+        <mismatch-info>
+          <local>
+            <primary-cvrid>
+              <ip-address>44.240.235.174</ip-address>
+            </primary-cvrid>
+            <backup-cvrid>
+            </backup-cvrid>
+            <mate-address>
+            </mate-address>
+            <ad-enabled-cvrid>
+              <ip-address>44.240.235.174</ip-address>
+            </ad-enabled-cvrid>
+            <disk-wwn>N/A</disk-wwn>
+          </local>
+          <received-from-mate>
+            <primary-cvrid>
+            </primary-cvrid>
+            <backup-cvrid>
+            </backup-cvrid>
+            <mate-address>
+            </mate-address>
+            <ad-enabled-cvrid>
+            </ad-enabled-cvrid>
+            <disk-wwn>N/A</disk-wwn>
+          </received-from-mate>
+        </mismatch-info>
+      </redundancy>
+    </show>
+  </rpc>
+<execute-result code="ok"/>
+</rpc-reply>

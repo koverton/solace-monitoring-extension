@@ -1,4 +1,4 @@
-<rpc-reply semp-version="soltr/7_2VMR">
+<rpc-reply semp-version="soltr/9_2_0VMR">
   <rpc>
     <show>
       <message-spool>

@@ -27,11 +27,12 @@ public class SempVersion {
 
     // 4 versions of each going backwards
     public static SempVersion v8_6VMR = new SempVersion(Platform.VMR, "8_6VMR", 8.6f);
+    public static SempVersion v9_2_0VMR = new SempVersion(Platform.VMR, "9_2_0VMR", 9.020f);
 
     public static SempVersion v7_2_2 = new SempVersion(Platform.APPLIANCE, "7_2_2", 7.22f);
     public static SempVersion v8_2_0 = new SempVersion(Platform.APPLIANCE, "8_2_0", 8.020f);
-    public static SempVersion v8_4_0 = new SempVersion(Platform.APPLIANCE, "8_4_0", 8.040f);
     public static SempVersion v8_13_0 = new SempVersion(Platform.APPLIANCE, "8_13_0", 8.130f);
+    public static SempVersion v9_2_0 = new SempVersion(Platform.APPLIANCE, "9_2_0", 9.020f);
 
     public static SempVersion INVALID = new SempVersion(Platform.NONE, INVALID_VERSION_STR, INVALID_VERSION);
 

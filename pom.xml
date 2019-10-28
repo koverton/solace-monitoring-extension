@@ -4,7 +4,7 @@
 
     <groupId>com.appdynamics.extensions</groupId>
     <artifactId>solace-monitoring-extension</artifactId>
-    <version>1.1.5</version>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
 
     <name>solace-monitoring-extension</name>
@@ -23,10 +23,20 @@
         <!-- VMR -->
         <dependency>
             <groupId>com.solacesystems</groupId>
+            <artifactId>semp_jaxb_9_2_0VMR</artifactId>
+            <version>9.2.0.14</version>
+        </dependency>
+        <dependency>
+            <groupId>com.solacesystems</groupId>
             <artifactId>semp_jaxb_8_6VMR</artifactId>
             <version>8.6.0.1010</version>
         </dependency>
         <!-- hardware -->
+        <dependency>
+            <groupId>com.solacesystems</groupId>
+            <artifactId>semp_jaxb_9_2_0</artifactId>
+            <version>9.2.0.14</version>
+        </dependency>
         <dependency>
             <groupId>com.solacesystems</groupId>
             <artifactId>semp_jaxb_8_13_0</artifactId>
@@ -48,12 +58,19 @@
             <groupId>com.appdynamics</groupId>
             <artifactId>machine-agent</artifactId>
             <version>3.7.11</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.appdynamics</groupId>
             <artifactId>appd-exts-commons</artifactId>
             <version>2.0.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+        <!-- For Base64 code -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.13</version>
         </dependency>
 
         <!-- ?? Blew up without it -->
