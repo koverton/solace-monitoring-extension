@@ -25,6 +25,22 @@ public class ConnectorTest {
     }
 
     @Test
+    public void localHostVersionTest() throws Exception {
+        Sempv1Connector connector = new Sempv1Connector(
+                "http://localhost:8080/SEMP",
+                "admin",
+                "admin",
+                "jimmy");
+
+        SempVersion version = connector.checkBrokerVersion();
+
+        // VMR version
+        assertEquals("8_6VMR", connector.getSempVersion(err86vmr).getVersionString());
+        // Hardware version
+        assertEquals("8_2_0", connector.getSempVersion(err820).getVersionString());
+    }
+
+    @Test
     public void emptyVersionTest() throws Exception {
         Sempv1Connector connector = new Sempv1Connector(
                 "http://1.1.1.1:8080/SEMP",

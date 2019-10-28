@@ -1,88 +1,76 @@
-<rpc-reply semp-version="soltr/9_2_0VMR">
+<rpc-reply semp-version="soltr/9_2_0">
   <rpc>
     <show>
       <message-spool>
         <message-spool-info>
-          <config-status>Enabled (Primary)</config-status>
+          <config-status>Enabled (Backup)</config-status>
           <max-disk-usage>60000</max-disk-usage>
           <spool-while-charging>false</spool-while-charging>
           <spool-without-flash>false</spool-without-flash>
-          <using-internal-disk>true</using-internal-disk>
-          <disk-array-wwn>N/A</disk-array-wwn>
-          <operational-status>AD-Active</operational-status>
-          <datapath-up>true</datapath-up>
-          <synchronization-status>Synced</synchronization-status>
-          <max-message-count>240M</max-message-count>
-          <message-count-utilization-percentage>0.03</message-count-utilization-percentage>
-          <transaction-resource-utilization-percentage>1.10</transaction-resource-utilization-percentage>
-          <transacted-session-resource-utilization-percentage>2.20</transacted-session-resource-utilization-percentage>
-          <transacted-session-count-utilization-percentage>3.30</transacted-session-count-utilization-percentage>
-          <delivered-unacked-msgs-utilization-percentage>4.40</delivered-unacked-msgs-utilization-percentage>
-          <spool-files-utilization-percentage>5.50</spool-files-utilization-percentage>
-          <active-disk-partition-usage>70.27</active-disk-partition-usage>
-          <next-message-id>3600944</next-message-id>
+          <using-internal-disk>false</using-internal-disk>
+          <disk-array-wwn>60:06:01:60:e8:60:1c:00:58:d7:51:8f:62:07:e8:11</disk-array-wwn>
+          <operational-status>AD-Standby</operational-status>
+          <datapath-up>false</datapath-up>
+          <synchronization-status>Unknown</synchronization-status>
+          <max-message-count>500M</max-message-count>
+          <message-count-utilization-percentage>-</message-count-utilization-percentage>
+          <transaction-resource-utilization-percentage>-</transaction-resource-utilization-percentage>
+          <transacted-session-resource-utilization-percentage>-</transacted-session-resource-utilization-percentage>
+          <transacted-session-count-utilization-percentage>-</transacted-session-count-utilization-percentage>
+          <delivered-unacked-msgs-utilization-percentage>-</delivered-unacked-msgs-utilization-percentage>
+          <spool-files-utilization-percentage>-</spool-files-utilization-percentage>
+          <active-disk-partition-usage>-</active-disk-partition-usage>
+          <standby-disk-partition-usage>-</standby-disk-partition-usage>
+          <next-message-id>26178006</next-message-id>
+          <defrag-status>Idle</defrag-status>
           <num-delete-in-progress>0</num-delete-in-progress>
           <max-message-spool-entities>16000</max-message-spool-entities>
           <message-spool-entities-allowed-by-qendpt>16000</message-spool-entities-allowed-by-qendpt>
-          <message-spool-entities-used-by-queue>4396</message-spool-entities-used-by-queue>
-          <message-spool-entities-used-by-dte>378</message-spool-entities-used-by-dte>
-          <transacted-sessions-used>3</transacted-sessions-used>
+          <message-spool-entities-used-by-queue>0</message-spool-entities-used-by-queue>
+          <message-spool-entities-used-by-dte>0</message-spool-entities-used-by-dte>
+          <transacted-sessions-used>0</transacted-sessions-used>
           <max-transacted-sessions>16000</max-transacted-sessions>
-          <transacted-sessions-local-used>3</transacted-sessions-local-used>
+          <transacted-sessions-local-used>0</transacted-sessions-local-used>
           <transacted-sessions-xa-used>0</transacted-sessions-xa-used>
-          <transactions-used>3</transactions-used>
+          <transactions-used>0</transactions-used>
           <max-transactions>50000</max-transactions>
-          <transactions-local-used>3</transactions-local-used>
+          <transactions-local-used>0</transactions-local-used>
           <transactions-xa-used>0</transactions-xa-used>
-          <sequenced-topics-used>6</sequenced-topics-used>
+          <sequenced-topics-used>0</sequenced-topics-used>
           <max-sequenced-topics>3000</max-sequenced-topics>
-          <queue-topic-subscriptions-used>765</queue-topic-subscriptions-used>
+          <queue-topic-subscriptions-used>0</queue-topic-subscriptions-used>
           <max-queue-topic-subscriptions>100000</max-queue-topic-subscriptions>
-          <ingress-flow-count>6</ingress-flow-count>
+          <ingress-flow-count>0</ingress-flow-count>
           <ingress-flows-allowed>16000</ingress-flows-allowed>
           <flows-allowed>16000</flows-allowed>
-          <active-flow-count>489</active-flow-count>
-          <inactive-flow-count>4294967154</inactive-flow-count>
+          <active-flow-count>0</active-flow-count>
+          <inactive-flow-count>0</inactive-flow-count>
           <browser-flow-count>0</browser-flow-count>
           <cvrid-config-ready>true</cvrid-config-ready>
           <card-ready>true</card-ready>
           <flash-module-ready>true</flash-module-ready>
           <power-module-ready>true</power-module-ready>
           <card-contents-ready>true</card-contents-ready>
-          <local-contents-key>192.168.130.61:2,1</local-contents-key>
+          <local-contents-key>192.168.160.136:4,1</local-contents-key>
+          <mate-contents-key>192.168.160.136:4,1</mate-contents-key>
           <router-schema-match>true</router-schema-match>
           <disk-ready>true</disk-ready>
           <disk-contents-status>Ready</disk-contents-status>
-          <disk-key-primary>192.168.130.61:2,1</disk-key-primary>
-          <disk-key-backup>192.168.130.61:2,1</disk-key-backup>
-          <last-failure-reason>N/A</last-failure-reason>
-          <current-rfad-usage>3.73715</current-rfad-usage>
-          <current-disk-usage>34.1933</current-disk-usage>
-          <current-persist-usage>37.9305</current-persist-usage>
-          <rfad-messages-currently-spooled>10971</rfad-messages-currently-spooled>
-          <disk-messages-currently-spooled>46184</disk-messages-currently-spooled>
-          <total-messages-currently-spooled>57155</total-messages-currently-spooled>
-          <disk-infos>
-            <disk-info>
-              <partition>Active</partition>
-              <blocks>113281832</blocks>
-              <used>63204076</used>
-              <available>26745155</available>
-              <use>70</use>
-              <mounted-on>/usr/sw</mounted-on>
-            </disk-info>
-          </disk-infos>
-          <spool-files>
-            <total-maximum>999999</total-maximum>
-            <total-used>36</total-used>
-            <total-available>999963</total-available>
-            <total-used-percent>0</total-used-percent>
-            <total-pending-delete>0</total-pending-delete>
-          </spool-files>
-          <cache-status>Enabled</cache-status>
+          <disk-key-primary>Unknown</disk-key-primary>
+          <disk-key-backup>Unknown</disk-key-backup>
+          <last-failure-reason>Local ADB Key Invalid</last-failure-reason>
+          <last-failure-time>Oct 11 2018 16:25:15 UTC</last-failure-time>
+          <current-rfad-usage>0</current-rfad-usage>
+          <current-disk-usage>0</current-disk-usage>
+          <current-persist-usage>0</current-persist-usage>
+          <rfad-messages-currently-spooled>0</rfad-messages-currently-spooled>
+          <disk-messages-currently-spooled>0</disk-messages-currently-spooled>
+          <total-messages-currently-spooled>0</total-messages-currently-spooled>
+          <transaction-replication-compatibility-mode>Legacy</transaction-replication-compatibility-mode>
+          <cache-status>N/A</cache-status>
           <max-cache-usage>10</max-cache-usage>
-          <current-cache-usage>0</current-cache-usage>
-          <cache-high-water-mark>0.9918</cache-high-water-mark>
+          <current-cache-usage>N/A</current-cache-usage>
+          <cache-high-water-mark>N/A</cache-high-water-mark>
           <event-configuration>
             <event-thresholds>
               <name>endpoints</name>
