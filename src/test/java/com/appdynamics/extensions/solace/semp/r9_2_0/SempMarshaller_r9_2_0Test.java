@@ -23,7 +23,7 @@ public class SempMarshaller_r9_2_0Test
 {
 
     private String readFile(String filename) throws Exception {
-        String SEMP_VERSION = "responses"; // "r9_2_0";
+        String SEMP_VERSION = "r9_2_0";
         String replyFile = "resources/" + SEMP_VERSION + "/" + filename;
         return new String(Files.readAllBytes(Paths.get(replyFile)));
     }

@@ -198,7 +198,11 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
                     result.put(Metrics.Service.WebSslPortUp, ssl.getListenPortOperationalStatus().equals("Up") ? 1 : 0);
                 }
             } else if (svc.getName().equals("REST")) {
-                int isUp = svc.getListenPortOperationalStatus().equals("Up") ? 1 : 0;
+                String restOpStatus = svc.getListenPortOperationalStatus();
+                int isUp = 0;
+                if (restOpStatus != null && restOpStatus.equals("Up") ) {
+                    isUp = 1;
+                }
                 String vpnName = svc.getVpnName();
                 // HACK: this should really make use of the MetricPrinter which knows the platform-specific
                 // way to structure a metric address
