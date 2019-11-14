@@ -3,6 +3,7 @@ package com.appdynamics.extensions.solace.semp.r8_6VMR;
 import com.appdynamics.extensions.solace.ServerConfigs;
 import com.appdynamics.extensions.solace.semp.Metrics;
 import com.appdynamics.extensions.solace.semp.SempStateTest;
+import com.appdynamics.extensions.solace.semp.SempTestHelper;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.appdynamics.extensions.solace.MonitorConfigs.EXCLUDE_EXTENDED_STATS;
+import static com.appdynamics.extensions.solace.MonitorConfigs.*;
 import static org.junit.Assert.*;
 
 public class SempMarshaller_r8_6VMRTest
@@ -33,6 +34,10 @@ public class SempMarshaller_r8_6VMRTest
         marshaller = new SempMarshaller_r8_6VMR();
         Map<String,String> exclusionsMap = new HashMap<>();
         exclusionsMap.put(EXCLUDE_EXTENDED_STATS, "false");
+        exclusionsMap.put(EXCLUDE_DISCARD_METRICS, "false");
+        exclusionsMap.put(EXCLUDE_TLS_METRICS, "false");
+        exclusionsMap.put(EXCLUDE_COMPRESSION_METRICS, "false");
+        exclusionsMap.put(EXCLUDE_TEMPORARIES, "false");
         factory = new SempReplyFactory_r8_6VMR(new ServerConfigs(exclusionsMap));
     }
 
@@ -64,6 +69,7 @@ public class SempMarshaller_r8_6VMRTest
         assertTrue(factory.isSuccess(reply));
         Map<String, Object> service = factory.getGlobalService(reply);
         assertNotNull(service);
+        SempTestHelper.noNullValuesCheck(service);
     }
 
     @Test
@@ -72,6 +78,7 @@ public class SempMarshaller_r8_6VMRTest
         Map<String, Object> stats =
                 factory.getGlobalStats(reply);
         assertNotNull(stats);
+        SempTestHelper.noNullValuesCheck(stats);
         assertEquals(487L, stats.get(Metrics.Statistics.TotalClientsConnected));
     }
 
@@ -81,6 +88,7 @@ public class SempMarshaller_r8_6VMRTest
         Map<String, Object> info =
                 factory.getGlobalMsgSpool(reply);
         assertNotNull(info);
+        SempTestHelper.noNullValuesCheck(info);
         SempStateTest.msgSpoolTest(info);
 
         Integer isEnabled = (Integer)info.get(Metrics.MsgSpool.IsEnabled);
@@ -101,6 +109,7 @@ public class SempMarshaller_r8_6VMRTest
         Map<String, Object> info =
                 factory.getGlobalMsgSpool(reply);
         assertNotNull(info);
+        SempTestHelper.noNullValuesCheck(info);
 
         Integer isEnabled = (Integer)info.get(Metrics.MsgSpool.IsEnabled);
         Integer isActive = (Integer)info.get(Metrics.MsgSpool.IsActive);
@@ -119,6 +128,7 @@ public class SempMarshaller_r8_6VMRTest
         RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-primary.xml"));
         Map<String, Object> redundancy = factory.getGlobalRedundancy(reply);
         SempStateTest.redundancyTest(redundancy);
+        SempTestHelper.noNullValuesCheck(redundancy);
         assertEquals(1,  redundancy.get(Metrics.Redundancy.IsActive));
         assertEquals(1,  redundancy.get(Metrics.Redundancy.OperationalStatus));
         assertEquals(1,  redundancy.get(Metrics.Redundancy.ConfiguredStatus));
@@ -156,6 +166,7 @@ public class SempMarshaller_r8_6VMRTest
         RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-backup.xml"));
         Map<String, Object> redundancy = factory.getGlobalRedundancy(reply);
         SempStateTest.redundancyTest(redundancy);
+        SempTestHelper.noNullValuesCheck(redundancy);
         assertEquals(0,  redundancy.get(Metrics.Redundancy.IsActive));
 
         String redStatus = reply.getRpc()
@@ -191,6 +202,7 @@ public class SempMarshaller_r8_6VMRTest
         RpcReply reply = marshaller.fromReplyXml(readFile("show-vpn.stats.xml"));
         List<Map<String, Object>> vpns = factory.getMsgVpnList(reply);
         assertNotNull(vpns);
+        SempTestHelper.noNullValuesCheck(vpns);
     }
 
     @Test
@@ -198,6 +210,7 @@ public class SempMarshaller_r8_6VMRTest
         RpcReply reply = marshaller.fromReplyXml(readFile("show-queues.detail.xml"));
         List<Map<String, Object>> queues = factory.getQueueList(reply);
         assertNotNull(queues);
+        SempTestHelper.noNullValuesCheck(queues);
     }
 
     @Test
@@ -205,6 +218,7 @@ public class SempMarshaller_r8_6VMRTest
         RpcReply reply = marshaller.fromReplyXml(readFile("show-queues.rates.xml"));
         List<Map<String, Object>> queues = factory.getQueueRatesList(reply);
         assertNotNull(queues);
+        SempTestHelper.noNullValuesCheck(queues);
     }
 
     @Test
@@ -212,6 +226,7 @@ public class SempMarshaller_r8_6VMRTest
         RpcReply reply = marshaller.fromReplyXml(readFile("show-queues.stats.xml"));
         List<Map<String, Object>> queues = factory.getQueueStatsList(reply);
         assertNotNull(queues);
+        SempTestHelper.noNullValuesCheck(queues);
     }
 
     @Test
@@ -219,6 +234,7 @@ public class SempMarshaller_r8_6VMRTest
         RpcReply reply = marshaller.fromReplyXml(readFile("show-topicendpoints.detail.xml"));
         List<Map<String, Object>> endpoints = factory.getTopicEndpointList(reply);
         assertNotNull(endpoints);
+        SempTestHelper.noNullValuesCheck(endpoints);
     }
 
     @Test
@@ -226,6 +242,7 @@ public class SempMarshaller_r8_6VMRTest
         RpcReply reply = marshaller.fromReplyXml(readFile("show-topicendpoints.rates.xml"));
         List<Map<String, Object>> endpoints = factory.getTopicEndpointRatesList(reply);
         assertNotNull(endpoints);
+        SempTestHelper.noNullValuesCheck(endpoints);
     }
 
     @Test
@@ -235,6 +252,7 @@ public class SempMarshaller_r8_6VMRTest
         assertNotNull(endpoints);
         assertEquals(2, endpoints.size());
         for(Map<String,Object> e : endpoints) {
+            SempTestHelper.noNullValuesCheck(e);
             if (e.get(Metrics.TopicEndpoint.TopicEndpointName).equals("t2")) {
                 assertEquals(190L, e.get(Metrics.TopicEndpoint.RedeliveredCount));
                 assertEquals(190L, e.get(Metrics.TopicEndpoint.TotalEgressDiscards));
@@ -247,5 +265,6 @@ public class SempMarshaller_r8_6VMRTest
         RpcReply reply = marshaller.fromReplyXml(readFile("show-bridges.xml"));
         List<Map<String, Object>> bridges = factory.getGlobalBridgeList(reply);
         assertNotNull(bridges);
+        SempTestHelper.noNullValuesCheck(bridges);
     }
 }

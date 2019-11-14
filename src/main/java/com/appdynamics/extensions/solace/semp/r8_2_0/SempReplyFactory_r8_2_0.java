@@ -241,7 +241,6 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
                 result.put(Metrics.Vpn.ParseError, stats.getIngressDiscards().getParseError());
                 result.put(Metrics.Vpn.MsgTooBig, stats.getIngressDiscards().getMsgTooBig());
                 result.put(Metrics.Vpn.TtlExceeded, stats.getIngressDiscards().getTtlExceeded());
-                result.put(Metrics.Vpn.WebParseError, stats.getIngressDiscards().getWebParseError());
                 result.put(Metrics.Vpn.PublishTopicAcl, stats.getIngressDiscards().getPublishTopicAcl());
                 result.put(Metrics.Vpn.MsgSpoolDiscards, stats.getIngressDiscards().getMsgSpoolDiscards());
                 result.put(Metrics.Vpn.IngressMessagePromotionCongestion, stats.getIngressDiscards().getMessagePromotionCongestion());
@@ -251,7 +250,6 @@ public class SempReplyFactory_r8_2_0 implements SempReplyFactory<RpcReply> {
                 result.put(Metrics.Vpn.TransmitCongestion, stats.getEgressDiscards().getTransmitCongestion());
                 result.put(Metrics.Vpn.CompressionCongestion, stats.getEgressDiscards().getCompressionCongestion());
                 result.put(Metrics.Vpn.MessageElided, stats.getEgressDiscards().getMessageElided());
-                result.put(Metrics.Vpn.PayloadCouldNotBeFormatted, stats.getEgressDiscards().getPayloadCouldNotBeFormatted());
                 result.put(Metrics.Vpn.EgressMessagePromotionCongestion, stats.getEgressDiscards().getMessagePromotionCongestion());
                 result.put(Metrics.Vpn.EgressMessageSpoolCongestion, stats.getEgressDiscards().getMessageSpoolCongestion());
                 result.put(Metrics.Vpn.MsgSpoolEgressDiscards, stats.getEgressDiscards().getMsgSpoolEgressDiscards());

@@ -26,6 +26,11 @@ public class ADMetricPrinter implements MetricPrinter
 
     private void printMetric(String metricPrefix, String metricName, Object metricValue) {
         String metricPath = metricPrefix + metricName;
+        if (metricValue == null) {
+            logger.warn("SKIPPING null metric value for metric: {}",
+                    metricPath);
+            return;
+        }
         if (metricValue instanceof Double)
             metricValue = ((Double)metricValue).longValue();
 

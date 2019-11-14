@@ -16,9 +16,9 @@
                 <messages-redelivered>0</messages-redelivered>
                 <spool-usage-exceeded>0</spool-usage-exceeded>
                 <max-message-size-exceeded>0</max-message-size-exceeded>
-                <spool-shutdown-discard>0</spool-shutdown-discard>
+                <spool-shutdown-discard>10</spool-shutdown-discard>
                 <user-profile-deny-guaranteed>0</user-profile-deny-guaranteed>
-                <no-local-delivery-discard>0</no-local-delivery-discard>
+                <no-local-delivery-discard>10</no-local-delivery-discard>
                 <destination-group-error>0</destination-group-error>
                 <low-priority-msg-congestion-discard>0</low-priority-msg-congestion-discard>
                 <total-deleted-messages>0</total-deleted-messages>
