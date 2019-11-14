@@ -371,6 +371,12 @@ servers:
 ```
 
 ## Latest Updates
+Version 1.2.1
+
+1. Added bindings for semp 9.2.0 hardware and VMR
+2. Added TotalMessagesSpooled metric to queue stats
+3. Added more error checks and several new layers of unit testing query results
+4. Better matching of semp query versions to server semp schema
 
 Version 1.1.2
 
@@ -391,9 +397,7 @@ Version 1.1.1
 In priority order:
 
 1. Add support for per-instance overrides of default metrics published for each metric type
-2. More backwards compatibility schemas
-3. Better calculation to match parsing schema version to the version presented by the router
-4. When many schemas need to be supported, should load only the servers' required libs dynamically via child classloaders
+2. When many schemas need to be supported, should load only the servers' required libs dynamically via child classloaders
 
 Additional metrics that make sense to add:
 1. DR links
