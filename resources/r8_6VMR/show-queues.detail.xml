@@ -68,7 +68,7 @@
             </info>
           </queue>
           <queue>
-            <name>Q1.FROM.WMQ</name>
+            <name>q1</name>
             <info>
               <message-vpn>default</message-vpn>
               <durable>true</durable>
@@ -86,7 +86,7 @@
               <reject-msg-to-sender-on-discard>Yes</reject-msg-to-sender-on-discard>
               <reject-msg-to-sender-on-discard-including-when-shutdown>No</reject-msg-to-sender-on-discard-including-when-shutdown>
               <bind-time-forwarding-mode>Store-And-Forward</bind-time-forwarding-mode>
-              <num-messages-spooled>0</num-messages-spooled>
+              <num-messages-spooled>9876</num-messages-spooled>
               <current-spool-usage-in-mb>0</current-spool-usage-in-mb>
               <high-water-mark-in-mb>0</high-water-mark-in-mb>
               <total-delivered-unacked-msgs>0</total-delivered-unacked-msgs>

@@ -302,6 +302,12 @@ public class SempMarshaller_r8_13_0Test
         List<Map<String, Object>> queues = factory.getQueueList(reply);
         assertNotNull(queues);
         SempTestHelper.noNullValuesCheck(queues);
+        for (Map<String, Object> q : queues) {
+            if (q.get(Metrics.Queue.QueueName).equals("q1")) {
+                Integer totalSpooled = (Integer) q.get(Metrics.Queue.TotalMessagesSpooled);
+                assertEquals(9876, totalSpooled.intValue());
+            }
+        }
     }
 
     @Test
@@ -318,6 +324,12 @@ public class SempMarshaller_r8_13_0Test
         List<Map<String, Object>> queues = factory.getQueueStatsList(reply);
         assertNotNull(queues);
         SempTestHelper.noNullValuesCheck(queues);
+        for (Map<String, Object> q : queues) {
+            if (q.get(Metrics.Queue.QueueName).equals("q1")) {
+                Long currentSpooled = (Long) q.get(Metrics.Queue.MessagesSpooled);
+                assertEquals(4321, currentSpooled.intValue());
+            }
+        }
     }
 
     @Test
