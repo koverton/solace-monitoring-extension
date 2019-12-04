@@ -302,8 +302,8 @@ public class SempMarshaller_r7_2_2Test
         SempTestHelper.noNullValuesCheck(queues);
         for (Map<String, Object> q : queues) {
             if (q.get(Metrics.Queue.QueueName).equals("q1")) {
-                Integer totalSpooled = (Integer) q.get(Metrics.Queue.TotalMessagesSpooled);
-                assertEquals(9876, totalSpooled.intValue());
+                Integer curSpooled = (Integer) q.get(Metrics.Queue.MessagesSpooled);
+                assertEquals(5432, curSpooled.intValue());
             }
         }
     }
@@ -324,8 +324,8 @@ public class SempMarshaller_r7_2_2Test
         SempTestHelper.noNullValuesCheck(queues);
         for (Map<String, Object> q : queues) {
             if (q.get(Metrics.Queue.QueueName).equals("q1")) {
-                Long currentSpooled = (Long) q.get(Metrics.Queue.MessagesSpooled);
-                assertEquals(4321, currentSpooled.intValue());
+                Long totalSpooled = (Long) q.get(Metrics.Queue.TotalMessagesSpooled);
+                assertEquals(8765, totalSpooled.intValue());
             }
         }
     }

@@ -15,8 +15,8 @@
               <total-clients-connected-service-mqtt>0</total-clients-connected-service-mqtt>
               <total-client-messages-received>455</total-client-messages-received>
               <total-client-messages-sent>445</total-client-messages-sent>
-              <client-data-messages-received>98765</client-data-messages-received>
-              <client-data-messages-sent>54321</client-data-messages-sent>
+              <client-data-messages-received>54325</client-data-messages-received>
+              <client-data-messages-sent>58765</client-data-messages-sent>
               <client-persistent-messages-received>0</client-persistent-messages-received>
               <client-persistent-messages-sent>0</client-persistent-messages-sent>
               <client-non-persistent-messages-received>0</client-non-persistent-messages-received>

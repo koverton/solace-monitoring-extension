@@ -84,8 +84,8 @@ public class SempMarshaller_r9_2_0Test
         assertNotNull(stats);
         SempTestHelper.noNullValuesCheck(stats);
         assertEquals(4L, stats.get(Metrics.Statistics.TotalClientsConnected));
-        assertEquals(54321L, stats.get(Metrics.Statistics.TotalClientDataMessagesSent));
-        assertEquals(98765L, stats.get(Metrics.Statistics.TotalClientDataMessagesReceived));
+        assertEquals(58765L, stats.get(Metrics.Statistics.TotalClientDataMessagesSent));
+        assertEquals(54325L, stats.get(Metrics.Statistics.TotalClientDataMessagesReceived));
     }
 
     @Test
@@ -304,8 +304,8 @@ public class SempMarshaller_r9_2_0Test
         SempTestHelper.noNullValuesCheck(queues);
         for (Map<String, Object> q : queues) {
             if (q.get(Metrics.Queue.QueueName).equals("q1")) {
-                Integer totalSpooled = (Integer) q.get(Metrics.Queue.TotalMessagesSpooled);
-                assertEquals(9876, totalSpooled.intValue());
+                Integer currentSpooled = (Integer) q.get(Metrics.Queue.MessagesSpooled);
+                assertEquals(5432, currentSpooled.intValue());
             }
         }
     }
@@ -327,8 +327,8 @@ public class SempMarshaller_r9_2_0Test
             assertNotNull("Must have excluded stats", q.get(Metrics.Queue.TotalIngressDiscards));
             SempTestHelper.noNullValuesCheck(q);
             if (q.get(Metrics.Queue.QueueName).equals("q1")) {
-                Long currentSpooled = (Long) q.get(Metrics.Queue.MessagesSpooled);
-                assertEquals(4321, currentSpooled.intValue());
+                Long totalSpooled = (Long) q.get(Metrics.Queue.TotalMessagesSpooled);
+                assertEquals(8765, totalSpooled.intValue());
             }
         }
     }
