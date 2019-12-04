@@ -315,8 +315,8 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.Queue.IsEnabled, combineConfigStatus(q.getInfo()));
             result.put(Metrics.Queue.IsDurable, q.getInfo().isDurable() ? 1 : 0);
             result.put(Metrics.Queue.QuotaInMB, q.getInfo().getQuota().longValue());
-            // This is total, it's not the current value; poorly named in SEMP output
-            result.put(Metrics.Queue.TotalMessagesSpooled, longOrDefault(q.getInfo().getNumMessagesSpooled(),0L).intValue());
+            // This is the current value
+            result.put(Metrics.Queue.MessagesSpooled, longOrDefault(q.getInfo().getNumMessagesSpooled(),0L).intValue());
             result.put(Metrics.Queue.UsageInMB, longOrDefault(q.getInfo().getCurrentSpoolUsageInMb(), 0));
             result.put(Metrics.Queue.ConsumerCount, longOrDefault(q.getInfo().getBindCount(), 0).intValue());
             results.add(result);
@@ -361,8 +361,8 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
                 result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
                 result.put(Metrics.Queue.TotalIngressDiscards, countIngressDiscards(spoolStats));
                 result.put(Metrics.Queue.TotalEgressDiscards, countEgressDiscards(spoolStats));
-                // This is not total, it's the current value; poorly named in SEMP output
-                result.put(Metrics.Queue.MessagesSpooled, spoolStats.getTotalMessagesSpooled().longValue());
+                // This is total messages spooled cumulatively
+                result.put(Metrics.Queue.TotalMessagesSpooled, spoolStats.getTotalMessagesSpooled().longValue());
                 result.put(Metrics.Queue.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
                 results.add(result);
             }
@@ -384,6 +384,7 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.TopicEndpoint.IsEnabled, combineConfigStatus(t.getInfo()));
             result.put(Metrics.TopicEndpoint.IsDurable, t.getInfo().isDurable() ? 1 : 0);
             result.put(Metrics.TopicEndpoint.QuotaInMB, t.getInfo().getQuota().longValue());
+            // Current value spooled
             result.put(Metrics.TopicEndpoint.MessagesSpooled, longOrDefault(t.getInfo().getNumMessagesSpooled(),0).intValue());
             result.put(Metrics.TopicEndpoint.UsageInMB, longOrDefault(t.getInfo().getCurrentSpoolUsageInMb(),0));
             result.put(Metrics.TopicEndpoint.ConsumerCount, longOrDefault(t.getInfo().getBindCount(),0).intValue());
