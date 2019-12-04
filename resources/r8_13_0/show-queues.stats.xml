@@ -97,7 +97,7 @@
                 <max-redelivery-exceeded-to-dmq-failures>0</max-redelivery-exceeded-to-dmq-failures>
                 <total-ttl-exceeded-discard-messages>0</total-ttl-exceeded-discard-messages>
                 <total-bytes-spooled>260495800</total-bytes-spooled>
-                <total-messages-spooled>4321</total-messages-spooled>
+                <total-messages-spooled>8765</total-messages-spooled>
                 <replication-stats>
                   <active>
                     <ack-prop-msgs-tx>0</ack-prop-msgs-tx>
