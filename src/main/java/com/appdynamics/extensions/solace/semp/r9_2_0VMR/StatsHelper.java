@@ -63,7 +63,6 @@ public class StatsHelper {
 
     static Long countIngressDiscards(MessageSpoolStatsType stats) {
         return Helper.longOrDefault(stats.getSpoolUsageExceeded(), 0) +
-                Helper.longOrDefault(stats.getSpoolUsageExceeded(), 0) +
                 Helper.longOrDefault(stats.getMaxMessageSizeExceeded(), 0) +
                 Helper.longOrDefault(stats.getSpoolShutdownDiscard(), 0) +
                 Helper.longOrDefault(stats.getUserProfileDenyGuaranteed(), 0) +
