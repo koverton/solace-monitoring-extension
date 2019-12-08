@@ -11,13 +11,13 @@ import java.util.concurrent.TimeUnit;
 
 public class SolaceMonitorTest {
 
-    // @Test
+    @Test
     public void testSolaceMonitor() throws Exception {
         try {
             final SolaceMonitor monitor = new SolaceMonitor();
             final Map<String, String> taskArgs = new HashMap<>();
 
-            taskArgs.put("config-file", "src/test/resources/conf/config.yml");
+            taskArgs.put("config-file", "src/test/resources/conf/citi-config.yml");
 
             while(true) {
                 try {

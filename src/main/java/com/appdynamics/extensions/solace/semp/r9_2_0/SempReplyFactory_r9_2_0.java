@@ -83,6 +83,7 @@ public class SempReplyFactory_r9_2_0 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.Statistics.TransmitCongestion, stats.getEgressDiscards().getTransmitCongestion());
             result.put(Metrics.Statistics.CompressionCongestion, stats.getEgressDiscards().getCompressionCongestion());
             result.put(Metrics.Statistics.MessageElided, stats.getEgressDiscards().getMessageElided());
+            result.put(Metrics.Statistics.PayloadCouldNotBeFormatted, stats.getEgressDiscards().getPayloadCouldNotBeFormatted());
             result.put(Metrics.Statistics.EgressMessagePromotionCongestion, stats.getEgressDiscards().getMessagePromotionCongestion());
             result.put(Metrics.Statistics.EgressMessageSpoolCongestion, stats.getEgressDiscards().getMessageSpoolCongestion());
             result.put(Metrics.Statistics.MsgSpoolEgressDiscards, stats.getEgressDiscards().getMsgSpoolEgressDiscards());
@@ -213,7 +214,7 @@ public class SempReplyFactory_r9_2_0 implements SempReplyFactory<RpcReply> {
     }
 
     public List<Map<String, Object>> getMsgVpnList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         List<RpcReply.Rpc.Show.MessageVpn.Vpn> vpns = reply.getRpc()
                 .getShow()
                 .getMessageVpn()
@@ -267,7 +268,7 @@ public class SempReplyFactory_r9_2_0 implements SempReplyFactory<RpcReply> {
     }
 
     public List<Map<String, Object>> getMsgVpnSpoolList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         List<Object> vpns = reply.getRpc()
                 .getShow()
                 .getMessageSpool()
@@ -294,7 +295,7 @@ public class SempReplyFactory_r9_2_0 implements SempReplyFactory<RpcReply> {
     }
 
     public List<Map<String, Object>> getQueueList(RpcReply rpcReply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         List<QueueType> queues = rpcReply.getRpc()
                 .getShow()
                 .getQueue()
@@ -316,7 +317,7 @@ public class SempReplyFactory_r9_2_0 implements SempReplyFactory<RpcReply> {
     }
 
     public List<Map<String, Object>> getQueueRatesList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
                 .getShow()
                 .getQueue()
@@ -338,7 +339,7 @@ public class SempReplyFactory_r9_2_0 implements SempReplyFactory<RpcReply> {
     }
 
     public List<Map<String, Object>> getQueueStatsList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         if (!serverConfigs.getExcludeExtendedStats()) {
             RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
                     .getShow()
@@ -361,7 +362,7 @@ public class SempReplyFactory_r9_2_0 implements SempReplyFactory<RpcReply> {
     }
 
     public List<Map<String, Object>> getTopicEndpointList(RpcReply rpcReply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         List<RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2> endpoints = rpcReply.getRpc()
                 .getShow()
                 .getTopicEndpoint()
@@ -383,30 +384,28 @@ public class SempReplyFactory_r9_2_0 implements SempReplyFactory<RpcReply> {
     }
 
     public List<Map<String, Object>> getTopicEndpointRatesList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
-        if (!serverConfigs.getExcludeExtendedStats()) {
-            RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints eps = reply.getRpc()
-                    .getShow()
-                    .getTopicEndpoint()
-                    .getTopicEndpoints();
-            for (RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2 t : eps.getTopicEndpoint()) {
-                Map<String, Object> result = new HashMap<>();
-                result.put(Metrics.TopicEndpoint.TopicEndpointName, t.getName());
-                result.put(Metrics.TopicEndpoint.VpnName, t.getInfo().getMessageVpn());
-                for (RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2.Rates r : t.getRates()) {
-                    result.put(Metrics.TopicEndpoint.CurrentIngressRatePerSecond, r.getQendptDataRates().getCurrentIngressRatePerSecond());
-                    result.put(Metrics.TopicEndpoint.CurrentIngressByteRatePerSecond, r.getQendptDataRates().getCurrentIngressByteRatePerSecond());
-                    result.put(Metrics.TopicEndpoint.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
-                    result.put(Metrics.TopicEndpoint.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
-                }
-                results.add(result);
+        List<Map<String, Object>> results = new ArrayList<>();
+        RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints eps = reply.getRpc()
+                .getShow()
+                .getTopicEndpoint()
+                .getTopicEndpoints();
+        for (RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2 t : eps.getTopicEndpoint()) {
+            Map<String, Object> result = new HashMap<>();
+            result.put(Metrics.TopicEndpoint.TopicEndpointName, t.getName());
+            result.put(Metrics.TopicEndpoint.VpnName, t.getInfo().getMessageVpn());
+            for (RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2.Rates r : t.getRates()) {
+                result.put(Metrics.TopicEndpoint.CurrentIngressRatePerSecond, r.getQendptDataRates().getCurrentIngressRatePerSecond());
+                result.put(Metrics.TopicEndpoint.CurrentIngressByteRatePerSecond, r.getQendptDataRates().getCurrentIngressByteRatePerSecond());
+                result.put(Metrics.TopicEndpoint.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
+                result.put(Metrics.TopicEndpoint.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
             }
+            results.add(result);
         }
         return results;
     }
 
     public List<Map<String, Object>> getTopicEndpointStatsList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         if (!serverConfigs.getExcludeExtendedStats()) {
             RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints endpoints = reply.getRpc()
                     .getShow()
@@ -429,8 +428,8 @@ public class SempReplyFactory_r9_2_0 implements SempReplyFactory<RpcReply> {
     }
 
 
-    public List<Map<String,Object>> getGlobalBridgeList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+    public List<Map<String, Object>> getGlobalBridgeList(RpcReply reply) {
+        List<Map<String, Object>> results = new ArrayList<>();
         List<RpcReply.Rpc.Show.Bridge.Bridges.Bridge2> bridges = reply.getRpc()
                 .getShow()
                 .getBridge()

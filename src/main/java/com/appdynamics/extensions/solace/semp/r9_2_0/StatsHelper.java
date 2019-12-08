@@ -1,6 +1,5 @@
 package com.appdynamics.extensions.solace.semp.r9_2_0;
 
-
 import com.appdynamics.extensions.solace.Helper;
 import com.appdynamics.extensions.solace.semp.Metrics;
 import com.solacesystems.semp_jaxb.r9_2_0.reply.*;
@@ -64,7 +63,6 @@ public class StatsHelper {
 
     static Long countIngressDiscards(MessageSpoolStatsType stats) {
         return Helper.longOrDefault(stats.getSpoolUsageExceeded(), 0) +
-                Helper.longOrDefault(stats.getSpoolUsageExceeded(), 0) +
                 Helper.longOrDefault(stats.getMaxMessageSizeExceeded(), 0) +
                 Helper.longOrDefault(stats.getSpoolShutdownDiscard(), 0) +
                 Helper.longOrDefault(stats.getUserProfileDenyGuaranteed(), 0) +

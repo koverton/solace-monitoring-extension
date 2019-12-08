@@ -8,7 +8,7 @@
             <info>
               <message-vpn>default</message-vpn>
               <durable>true</durable>
-              <endpt-id>2119</endpt-id>
+              <endpt-id>2120</endpt-id>
               <type>Primary</type>
               <ingress-config-status>Down</ingress-config-status>
               <egress-config-status>Down</egress-config-status>
@@ -23,7 +23,7 @@
               <reject-msg-to-sender-on-discard>Yes</reject-msg-to-sender-on-discard>
               <reject-msg-to-sender-on-discard-including-when-shutdown>Yes</reject-msg-to-sender-on-discard-including-when-shutdown>
               <bind-time-forwarding-mode>Store-And-Forward</bind-time-forwarding-mode>
-              <num-messages-spooled>10941</num-messages-spooled>
+              <num-messages-spooled>22675</num-messages-spooled>
               <current-spool-usage-in-mb>0.0752468</current-spool-usage-in-mb>
               <current-spool-usage-in-bytes>78902</current-spool-usage-in-bytes>
               <high-water-mark-in-mb>0.0752468</high-water-mark-in-mb>
@@ -37,7 +37,7 @@
               <reject-low-priority-msg-limit>0</reject-low-priority-msg-limit>
               <low-priority-msg-congestion-state>Disabled</low-priority-msg-congestion-state>
               <oldest-msg-id>4595274</oldest-msg-id>
-              <newest-msg-id>4606696</newest-msg-id>
+              <newest-msg-id>4618602</newest-msg-id>
               <max-message-size>10000000</max-message-size>
               <bind-count>0</bind-count>
               <bind-count-threshold-high-percentage>80</bind-count-threshold-high-percentage>
@@ -71,7 +71,7 @@
             <info>
               <message-vpn>default</message-vpn>
               <durable>true</durable>
-              <endpt-id>2120</endpt-id>
+              <endpt-id>2121</endpt-id>
               <type>Primary</type>
               <ingress-config-status>Down</ingress-config-status>
               <egress-config-status>Down</egress-config-status>
@@ -86,11 +86,11 @@
               <reject-msg-to-sender-on-discard>Yes</reject-msg-to-sender-on-discard>
               <reject-msg-to-sender-on-discard-including-when-shutdown>Yes</reject-msg-to-sender-on-discard-including-when-shutdown>
               <bind-time-forwarding-mode>Store-And-Forward</bind-time-forwarding-mode>
-              <num-messages-spooled>4</num-messages-spooled>
-              <current-spool-usage-in-mb>0.375603</current-spool-usage-in-mb>
-              <current-spool-usage-in-bytes>393848</current-spool-usage-in-bytes>
-              <high-water-mark-in-mb>0.375603</high-water-mark-in-mb>
-              <high-water-mark-in-bytes>393848</high-water-mark-in-bytes>
+              <num-messages-spooled>10</num-messages-spooled>
+              <current-spool-usage-in-mb>0.939018</current-spool-usage-in-mb>
+              <current-spool-usage-in-bytes>984632</current-spool-usage-in-bytes>
+              <high-water-mark-in-mb>0.939018</high-water-mark-in-mb>
+              <high-water-mark-in-bytes>984632</high-water-mark-in-bytes>
               <total-delivered-unacked-msgs>0</total-delivered-unacked-msgs>
               <max-delivered-unacked-msgs-per-flow>10000</max-delivered-unacked-msgs-per-flow>
               <total-acked-msgs-in-progress>0</total-acked-msgs-in-progress>
@@ -100,7 +100,7 @@
               <reject-low-priority-msg-limit>0</reject-low-priority-msg-limit>
               <low-priority-msg-congestion-state>Disabled</low-priority-msg-congestion-state>
               <oldest-msg-id>4598909</oldest-msg-id>
-              <newest-msg-id>4605608</newest-msg-id>
+              <newest-msg-id>4618147</newest-msg-id>
               <max-message-size>10000000</max-message-size>
               <bind-count>0</bind-count>
               <bind-count-threshold-high-percentage>80</bind-count-threshold-high-percentage>
@@ -210,7 +210,7 @@
               <reject-msg-to-sender-on-discard>Yes</reject-msg-to-sender-on-discard>
               <reject-msg-to-sender-on-discard-including-when-shutdown>No</reject-msg-to-sender-on-discard-including-when-shutdown>
               <bind-time-forwarding-mode>Store-And-Forward</bind-time-forwarding-mode>
-              <num-messages-spooled>0</num-messages-spooled>
+              <num-messages-spooled>1</num-messages-spooled>
               <current-spool-usage-in-mb>0</current-spool-usage-in-mb>
               <current-spool-usage-in-bytes>0</current-spool-usage-in-bytes>
               <high-water-mark-in-mb>0</high-water-mark-in-mb>
@@ -223,6 +223,8 @@
               <reject-low-priority-msg>No</reject-low-priority-msg>
               <reject-low-priority-msg-limit>0</reject-low-priority-msg-limit>
               <low-priority-msg-congestion-state>Disabled</low-priority-msg-congestion-state>
+              <oldest-msg-id>4606864</oldest-msg-id>
+              <newest-msg-id>4606864</newest-msg-id>
               <max-message-size>10000000</max-message-size>
               <bind-count>0</bind-count>
               <bind-count-threshold-high-percentage>80</bind-count-threshold-high-percentage>
@@ -437,11 +439,74 @@
             </info>
           </queue>
           <queue>
-            <name>svcqueue</name>
+            <name>onlyfoo</name>
             <info>
               <message-vpn>default</message-vpn>
               <durable>true</durable>
               <endpt-id>2112</endpt-id>
+              <type>Primary</type>
+              <ingress-config-status>Up</ingress-config-status>
+              <egress-config-status>Up</egress-config-status>
+              <access-type>exclusive</access-type>
+              <owner>onlyfoo</owner>
+              <created-by-mgmt>No</created-by-mgmt>
+              <others-permission>No-Access (0000)</others-permission>
+              <quota>1500</quota>
+              <respect-message-priority>No</respect-message-priority>
+              <respect-ttl>No</respect-ttl>
+              <max-ttl>0</max-ttl>
+              <reject-msg-to-sender-on-discard>Yes</reject-msg-to-sender-on-discard>
+              <reject-msg-to-sender-on-discard-including-when-shutdown>No</reject-msg-to-sender-on-discard-including-when-shutdown>
+              <bind-time-forwarding-mode>Store-And-Forward</bind-time-forwarding-mode>
+              <num-messages-spooled>50</num-messages-spooled>
+              <current-spool-usage-in-mb>0</current-spool-usage-in-mb>
+              <current-spool-usage-in-bytes>0</current-spool-usage-in-bytes>
+              <high-water-mark-in-mb>0</high-water-mark-in-mb>
+              <high-water-mark-in-bytes>0</high-water-mark-in-bytes>
+              <total-delivered-unacked-msgs>0</total-delivered-unacked-msgs>
+              <max-delivered-unacked-msgs-per-flow>10000</max-delivered-unacked-msgs-per-flow>
+              <total-acked-msgs-in-progress>0</total-acked-msgs-in-progress>
+              <max-redelivery>0</max-redelivery>
+              <consumer-ack-propagation>Yes</consumer-ack-propagation>
+              <reject-low-priority-msg>No</reject-low-priority-msg>
+              <reject-low-priority-msg-limit>0</reject-low-priority-msg-limit>
+              <low-priority-msg-congestion-state>Disabled</low-priority-msg-congestion-state>
+              <oldest-msg-id>4618553</oldest-msg-id>
+              <newest-msg-id>4618602</newest-msg-id>
+              <max-message-size>10000000</max-message-size>
+              <bind-count>0</bind-count>
+              <bind-count-threshold-high-percentage>80</bind-count-threshold-high-percentage>
+              <bind-count-threshold-high-clear-percentage>60</bind-count-threshold-high-clear-percentage>
+              <max-bind-count>1000</max-bind-count>
+              <topic-subscription-count>0</topic-subscription-count>
+              <network-topic>#P2P/QUE/onlyfoo</network-topic>
+              <egress-selector-present>No</egress-selector-present>
+              <dead-message-queue>#DEAD_MSG_QUEUE</dead-message-queue>
+              <event>
+                <event-thresholds>
+                  <name>bind-count</name>
+                  <set-percentage>80</set-percentage>
+                  <clear-percentage>60</clear-percentage>
+                </event-thresholds>
+                <event-thresholds>
+                  <name>spool-usage</name>
+                  <set-percentage>80</set-percentage>
+                  <clear-percentage>60</clear-percentage>
+                </event-thresholds>
+                <event-thresholds>
+                  <name>reject-low-priority-msg-limit</name>
+                  <set-percentage>80</set-percentage>
+                  <clear-percentage>60</clear-percentage>
+                </event-thresholds>
+              </event>
+            </info>
+          </queue>
+          <queue>
+            <name>svcqueue</name>
+            <info>
+              <message-vpn>default</message-vpn>
+              <durable>true</durable>
+              <endpt-id>2113</endpt-id>
               <type>Primary</type>
               <ingress-config-status>Up</ingress-config-status>
               <egress-config-status>Up</egress-config-status>
@@ -502,7 +567,7 @@
             <info>
               <message-vpn>default</message-vpn>
               <durable>true</durable>
-              <endpt-id>2113</endpt-id>
+              <endpt-id>2114</endpt-id>
               <type>Primary</type>
               <ingress-config-status>Up</ingress-config-status>
               <egress-config-status>Up</egress-config-status>
@@ -563,7 +628,7 @@
             <info>
               <message-vpn>SolaceEast</message-vpn>
               <durable>true</durable>
-              <endpt-id>2115</endpt-id>
+              <endpt-id>2116</endpt-id>
               <type>Primary</type>
               <ingress-config-status>Down</ingress-config-status>
               <egress-config-status>Down</egress-config-status>
@@ -626,7 +691,7 @@
             <info>
               <message-vpn>SolaceEast</message-vpn>
               <durable>true</durable>
-              <endpt-id>2116</endpt-id>
+              <endpt-id>2117</endpt-id>
               <type>Primary</type>
               <ingress-config-status>Down</ingress-config-status>
               <egress-config-status>Down</egress-config-status>
@@ -743,7 +808,7 @@
               </event>
               <clients>
                 <client>
-                  <name>#bridge/local/SolaceEast_SolaceWest/eventmesh/500/0</name>
+                  <name>#bridge/local/SolaceEast_SolaceWest/eventmesh/511/0</name>
                   <is-active>Active-Consumer</is-active>
                   <deliver-from>input stream</deliver-from>
                   <status-updates>Not Requested</status-updates>
@@ -751,10 +816,10 @@
                   <request-redelivery>No</request-redelivery>
                   <egress-selector></egress-selector>
                   <window-size>255</window-size>
-                  <connect-time>2019-11-21 13:00:34 UTC</connect-time>
-                  <connect-time-seconds>1574341234</connect-time-seconds>
-                  <activation-time>2019-11-21 13:00:34 UTC</activation-time>
-                  <activation-time-seconds>1574341234</activation-time-seconds>
+                  <connect-time>2019-12-03 13:35:25 UTC</connect-time>
+                  <connect-time-seconds>1575380125</connect-time-seconds>
+                  <activation-time>2019-12-03 13:35:25 UTC</activation-time>
+                  <activation-time-seconds>1575380125</activation-time-seconds>
                   <flow-id>1</flow-id>
                   <last-msg-id-delivered>0</last-msg-id-delivered>
                 </client>
@@ -949,7 +1014,7 @@
             <info>
               <message-vpn>SolaceWest</message-vpn>
               <durable>true</durable>
-              <endpt-id>2117</endpt-id>
+              <endpt-id>2118</endpt-id>
               <type>Primary</type>
               <ingress-config-status>Down</ingress-config-status>
               <egress-config-status>Down</egress-config-status>
@@ -1012,7 +1077,7 @@
             <info>
               <message-vpn>SolaceWest</message-vpn>
               <durable>true</durable>
-              <endpt-id>2118</endpt-id>
+              <endpt-id>2119</endpt-id>
               <type>Primary</type>
               <ingress-config-status>Down</ingress-config-status>
               <egress-config-status>Down</egress-config-status>
@@ -1129,7 +1194,7 @@
               </event>
               <clients>
                 <client>
-                  <name>#bridge/remote/SolaceEast_SolaceWest/v:eventmesh/498/0</name>
+                  <name>#bridge/remote/SolaceEast_SolaceWest/v:eventmesh/509/0</name>
                   <is-active>Active-Consumer</is-active>
                   <deliver-from>input stream</deliver-from>
                   <status-updates>Not Requested</status-updates>
@@ -1137,10 +1202,10 @@
                   <request-redelivery>No</request-redelivery>
                   <egress-selector></egress-selector>
                   <window-size>255</window-size>
-                  <connect-time>2019-11-21 13:00:31 UTC</connect-time>
-                  <connect-time-seconds>1574341231</connect-time-seconds>
-                  <activation-time>2019-11-21 13:00:31 UTC</activation-time>
-                  <activation-time-seconds>1574341231</activation-time-seconds>
+                  <connect-time>2019-12-03 13:35:23 UTC</connect-time>
+                  <connect-time-seconds>1575380123</connect-time-seconds>
+                  <activation-time>2019-12-03 13:35:23 UTC</activation-time>
+                  <activation-time-seconds>1575380123</activation-time-seconds>
                   <flow-id>0</flow-id>
                   <last-msg-id-delivered>0</last-msg-id-delivered>
                 </client>

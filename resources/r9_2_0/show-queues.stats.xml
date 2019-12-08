@@ -146,7 +146,7 @@
                 <low-message-id-ack-received>0</low-message-id-ack-received>
                 <high-message-id-ack-received>0</high-message-id-ack-received>
                 <messages-redelivered>0</messages-redelivered>
-                <spool-usage-exceeded>0</spool-usage-exceeded>
+                <spool-usage-exceeded>9876</spool-usage-exceeded>
                 <max-message-size-exceeded>0</max-message-size-exceeded>
                 <spool-shutdown-discard>0</spool-shutdown-discard>
                 <user-profile-deny-guaranteed>0</user-profile-deny-guaranteed>
@@ -160,7 +160,7 @@
                 <max-redelivery-exceeded-discard-messages>0</max-redelivery-exceeded-discard-messages>
                 <max-redelivery-exceeded-to-dmq-messages>0</max-redelivery-exceeded-to-dmq-messages>
                 <max-redelivery-exceeded-to-dmq-failures>0</max-redelivery-exceeded-to-dmq-failures>
-                <total-ttl-exceeded-discard-messages>0</total-ttl-exceeded-discard-messages>
+                <total-ttl-exceeded-discard-messages>7654</total-ttl-exceeded-discard-messages>
                 <total-bytes-spooled>0</total-bytes-spooled>
                 <total-messages-spooled>8765</total-messages-spooled>
                 <replication-stats>

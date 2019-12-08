@@ -329,6 +329,10 @@ public class SempMarshaller_r9_2_0Test
             if (q.get(Metrics.Queue.QueueName).equals("q1")) {
                 Long totalSpooled = (Long) q.get(Metrics.Queue.TotalMessagesSpooled);
                 assertEquals(8765, totalSpooled.intValue());
+                Long ingressDiscarded = (Long) q.get(Metrics.Queue.TotalIngressDiscards);
+                assertEquals(9876, ingressDiscarded.intValue());
+                Long egressDiscarded = (Long) q.get(Metrics.Queue.TotalEgressDiscards);
+                assertEquals(7654, egressDiscarded.intValue());
             }
         }
     }
