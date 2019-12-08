@@ -2,7 +2,7 @@ package com.appdynamics.extensions.solace.semp.r8_13_0;
 
 import com.appdynamics.extensions.solace.ServerConfigs;
 import com.appdynamics.extensions.solace.semp.Metrics;
-import com.appdynamics.extensions.solace.semp.SempReplyFactory;
+import com.appdynamics.extensions.solace.semp.*;
 import com.solacesystems.semp_jaxb.r8_13_0.reply.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,6 @@ import java.util.Map;
 
 import static com.appdynamics.extensions.solace.Helper.*;
 import static com.appdynamics.extensions.solace.semp.r8_13_0.StatsHelper.*;
-
 
 public class SempReplyFactory_r8_13_0 implements SempReplyFactory<RpcReply> {
     private static final Logger logger = LoggerFactory.getLogger(SempReplyFactory_r8_13_0.class);
@@ -52,9 +51,6 @@ public class SempReplyFactory_r8_13_0 implements SempReplyFactory<RpcReply> {
         result.put(Metrics.Statistics.CurrentEgressByteRatePerSecond, stats.getCurrentEgressByteRatePerSecond());
         result.put(Metrics.Statistics.TotalClientDataMessagesReceived, stats.getClientDataMessagesReceived());
         result.put(Metrics.Statistics.TotalClientDataMessagesSent, stats.getClientDataMessagesSent());
-
-        stats.getClientDataMessagesReceived();
-        stats.getClientDataMessagesSent();
 
         if (!serverConfigs.getExcludeCompressionMetrics()) {
             result.put(Metrics.Statistics.CurrentIngressCompressedRatePerSecond, stats.getZipStats().getCurrentIngressCompressedRatePerSecond());
@@ -136,16 +132,6 @@ public class SempReplyFactory_r8_13_0 implements SempReplyFactory<RpcReply> {
         return result;
     }
 
-    private static String getRedundantNodeSpoolStatus(RedundancyDetailInfoType detail) {
-        String result = "NOT-FOUND";
-        try {
-            result = detail.getMessageSpoolStatus().getInternal().getRedundancy();
-        }
-        catch(Throwable t) {
-            logger.error("Exception thrown processing Redundancy detail msg-spool status.");
-        }
-        return result;
-    }
     public Map<String, Object> getGlobalRedundancy(RpcReply reply) {
         RpcReply.Rpc.Show.Redundancy redundancy = reply.getRpc()
                 .getShow()
@@ -155,6 +141,10 @@ public class SempReplyFactory_r8_13_0 implements SempReplyFactory<RpcReply> {
         result.put(Metrics.Redundancy.ConfiguredStatus, redundancy.getConfigStatus().equals("Enabled") ? 1 : 0);
         result.put(Metrics.Redundancy.OperationalStatus, redundancy.getRedundancyStatus().equals("Up") ? 1 : 0);
         // result.put(Metrics.Redundancy.IsPrimary, redundancy.getActiveStandbyRole().equals("Primary") ? 1 : 0);
+        if ( ((Integer)result.get(Metrics.Redundancy.ConfiguredStatus)) == 0L) {
+            result.put(Metrics.Redundancy.IsActive, 0);
+            return result;
+        }
         // TODO: Need a way to figure out if we are active or backup
         // if ((Integer) result.get(Metrics.Redundancy.IsPrimary) == 1) {
         try {
@@ -245,8 +235,6 @@ public class SempReplyFactory_r8_13_0 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.Vpn.TotalClientDataMessagesReceived, stats.getClientDataMessagesReceived());
             result.put(Metrics.Vpn.TotalClientDataMessagesSent, stats.getClientDataMessagesSent());
 
-            stats.getClientDataMessagesSent();
-            stats.getClientDataMessagesReceived();
             if (!serverConfigs.getExcludeDiscardMetrics()) {
                 result.put(Metrics.Vpn.TotalIngressDiscards, stats.getIngressDiscards().getTotalIngressDiscards());
                 result.put(Metrics.Vpn.NoSubscriptionMatch, stats.getIngressDiscards().getNoSubscriptionMatch());
@@ -397,21 +385,23 @@ public class SempReplyFactory_r8_13_0 implements SempReplyFactory<RpcReply> {
 
     public List<Map<String, Object>> getTopicEndpointRatesList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
-        RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints eps = reply.getRpc()
-                .getShow()
-                .getTopicEndpoint()
-                .getTopicEndpoints();
-        for (RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2 t : eps.getTopicEndpoint()) {
-            Map<String, Object> result = new HashMap<>();
-            result.put(Metrics.TopicEndpoint.TopicEndpointName, t.getName());
-            result.put(Metrics.TopicEndpoint.VpnName, t.getInfo().getMessageVpn());
-            for (RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2.Rates r : t.getRates()) {
-                result.put(Metrics.TopicEndpoint.CurrentIngressRatePerSecond, r.getQendptDataRates().getCurrentIngressRatePerSecond());
-                result.put(Metrics.TopicEndpoint.CurrentIngressByteRatePerSecond, r.getQendptDataRates().getCurrentIngressByteRatePerSecond());
-                result.put(Metrics.TopicEndpoint.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
-                result.put(Metrics.TopicEndpoint.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
+        if (!serverConfigs.getExcludeExtendedStats()) {
+            RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints eps = reply.getRpc()
+                    .getShow()
+                    .getTopicEndpoint()
+                    .getTopicEndpoints();
+            for (RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2 t : eps.getTopicEndpoint()) {
+                Map<String, Object> result = new HashMap<>();
+                result.put(Metrics.TopicEndpoint.TopicEndpointName, t.getName());
+                result.put(Metrics.TopicEndpoint.VpnName, t.getInfo().getMessageVpn());
+                for (RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2.Rates r : t.getRates()) {
+                    result.put(Metrics.TopicEndpoint.CurrentIngressRatePerSecond, r.getQendptDataRates().getCurrentIngressRatePerSecond());
+                    result.put(Metrics.TopicEndpoint.CurrentIngressByteRatePerSecond, r.getQendptDataRates().getCurrentIngressByteRatePerSecond());
+                    result.put(Metrics.TopicEndpoint.CurrentEgressRatePerSecond, r.getQendptDataRates().getCurrentEgressRatePerSecond());
+                    result.put(Metrics.TopicEndpoint.CurrentEgressByteRatePerSecond, r.getQendptDataRates().getCurrentEgressByteRatePerSecond());
+                }
+                results.add(result);
             }
-            results.add(result);
         }
         return results;
     }

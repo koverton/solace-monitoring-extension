@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.appdynamics.extensions.solace.MonitorConfigs.EXCLUDE_DISCARD_METRICS;
 import static com.appdynamics.extensions.solace.MonitorConfigs.EXCLUDE_EXTENDED_STATS;
 import static org.junit.Assert.assertEquals;
 
@@ -64,8 +65,8 @@ public class ConnectorTest {
         assertEquals(SempVersion.INVALID_VERSION, ver.getVersionNumber(), 0.0001);
     }
 
-    ///@Test
-    public void localhostQueueListTest() throws Exception {
+    // @Test
+    public void localhostDefaultConfigsQueueListTest() throws Exception {
         String sempVersion = "9_2_0VMR";
         Sempv1Connector connector = new Sempv1Connector(
                 "http://localhost:8080/SEMP", "admin", "admin", "localdocker"
@@ -87,14 +88,15 @@ public class ConnectorTest {
         }
     }
 
-    ///@Test
-    public void localhostQueueStatsTest() throws Exception {
+    @Test
+    public void localhostExtendedConfigsQueueStatsTest() throws Exception {
         String sempVersion = "9_2_0VMR";
         Sempv1Connector connector = new Sempv1Connector(
                 "http://localhost:8080/SEMP", "admin", "admin", "localdocker"
         );
         Map<String,String> configMap = new HashMap<>();
         configMap.put(EXCLUDE_EXTENDED_STATS, "false");
+        configMap.put(EXCLUDE_DISCARD_METRICS, "false");
         ServerConfigs serverConfigs = new ServerConfigs(configMap);
         SempRequestFactory_r9_2_0VMR factory = new SempRequestFactory_r9_2_0VMR(serverConfigs);
         SempMarshaller_r9_2_0VMR marshaller = new SempMarshaller_r9_2_0VMR();

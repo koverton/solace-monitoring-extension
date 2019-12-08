@@ -3,7 +3,6 @@ package com.appdynamics.extensions.solace.semp.r9_2_0VMR;
 import com.appdynamics.extensions.solace.ServerConfigs;
 import com.appdynamics.extensions.solace.semp.*;
 import com.solacesystems.semp_jaxb.r9_2_0VMR.reply.*;
-import com.solacesystems.semp_jaxb.r9_2_0VMR.reply.RpcReply.Rpc.Show.Bridge.Bridges.Bridge2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +24,7 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
     }
 
     public boolean isSuccess(RpcReply reply) {
-        if (reply.getParseError() != null && reply.getParseError().length()!=0)
+        if (reply.getParseError() != null && reply.getParseError().length() != 0)
             return false;
         return reply.getExecuteResult().getCode().equals("ok");
     }
@@ -36,7 +35,7 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
                 .getVersion();
     }
 
-    public Map<String,Object> getGlobalStats(RpcReply reply) {
+    public Map<String, Object> getGlobalStats(RpcReply reply) {
         SolStatsType stats = reply.getRpc()
                 .getShow()
                 .getStats()
@@ -44,7 +43,7 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
                 .getGlobal()
                 .getStats();
 
-        Map<String,Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
         result.put(Metrics.Statistics.CurrentIngressRatePerSecond, stats.getCurrentIngressRatePerSecond());
         result.put(Metrics.Statistics.CurrentEgressRatePerSecond, stats.getCurrentEgressRatePerSecond());
         result.put(Metrics.Statistics.CurrentIngressByteRatePerSecond, stats.getCurrentIngressByteRatePerSecond());
@@ -55,8 +54,8 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
         if (!serverConfigs.getExcludeCompressionMetrics()) {
             result.put(Metrics.Statistics.CurrentIngressCompressedRatePerSecond, stats.getZipStats().getCurrentIngressCompressedRatePerSecond());
             result.put(Metrics.Statistics.CurrentEgressCompressedRatePerSecond, stats.getZipStats().getCurrentEgressCompressedRatePerSecond());
-            result.put(Metrics.Statistics.IngressCompressionRatio, stats.getZipStats().getIngressCompressionRatio());
-            result.put(Metrics.Statistics.EgressCompressionRatio, stats.getZipStats().getEgressCompressionRatio());
+            result.put(Metrics.Statistics.IngressCompressionRatio, stats.getZipStats().getIngressCompressionRatio()*100);
+            result.put(Metrics.Statistics.EgressCompressionRatio, stats.getZipStats().getEgressCompressionRatio()*100);
         }
 
         if (!serverConfigs.getExcludeTlsMetrics()) {
@@ -93,18 +92,18 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
         return result;
     }
 
-    public Map<String,Object> getGlobalMsgSpool(RpcReply reply) {
+    public Map<String, Object> getGlobalMsgSpool(RpcReply reply) {
         RpcReply.Rpc.Show.MessageSpool.MessageSpoolInfo stats = reply.getRpc()
                 .getShow()
                 .getMessageSpool()
                 .getMessageSpoolInfo();
 
-        Map<String,Object> result = new HashMap<>();
-        result.put(Metrics.MsgSpool.IsEnabled, stats.getConfigStatus().startsWith("Enabled") ? 1:0);
-        result.put(Metrics.MsgSpool.IsActive, stats.getOperationalStatus().equals("AD-Active") ? 1:0);
-        result.put(Metrics.MsgSpool.IsStandby, stats.getOperationalStatus().equals("AD-Standby") ? 1:0);
-        result.put(Metrics.MsgSpool.IsDatapathUp, stats.isDatapathUp() ? 1:0);
-        result.put(Metrics.MsgSpool.IsSynchronized, stats.getSynchronizationStatus().equals("Synced") ? 1:0);
+        Map<String, Object> result = new HashMap<>();
+        result.put(Metrics.MsgSpool.IsEnabled, stats.getConfigStatus().startsWith("Enabled") ? 1 : 0);
+        result.put(Metrics.MsgSpool.IsActive, stats.getOperationalStatus().equals("AD-Active") ? 1 : 0);
+        result.put(Metrics.MsgSpool.IsStandby, stats.getOperationalStatus().equals("AD-Standby") ? 1 : 0);
+        result.put(Metrics.MsgSpool.IsDatapathUp, stats.isDatapathUp() ? 1 : 0);
+        result.put(Metrics.MsgSpool.IsSynchronized, stats.getSynchronizationStatus().equals("Synced") ? 1 : 0);
         result.put(Metrics.MsgSpool.CurrentIngressFlowsCount, stats.getIngressFlowCount());
         result.put(Metrics.MsgSpool.CurrentEgressFlowsCount,
                 longOrDefault(stats.getActiveFlowCount(),0)
@@ -132,25 +131,19 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
         return result;
     }
 
-    private static String getRedundantNodeSpoolStatus(RedundancyDetailInfoType detail) {
-        String result = "NOT-FOUND";
-        try {
-            result = detail.getMessageSpoolStatus().getInternal().getRedundancy();
-        }
-        catch(Throwable t) {
-            logger.error("Exception thrown processing Redundancy detail msg-spool status.");
-        }
-        return result;
-    }
-    public Map<String,Object> getGlobalRedundancy(RpcReply reply) {
+    public Map<String, Object> getGlobalRedundancy(RpcReply reply) {
         RpcReply.Rpc.Show.Redundancy redundancy = reply.getRpc()
                 .getShow()
                 .getRedundancy();
 
-        Map<String,Object> result = new HashMap<>();
-        result.put(Metrics.Redundancy.ConfiguredStatus, redundancy.getConfigStatus().equals("Enabled") ? 1:0);
-        result.put(Metrics.Redundancy.OperationalStatus, redundancy.getRedundancyStatus().equals("Up") ? 1:0);
-        //result.put(Metrics.Redundancy.IsPrimary, redundancy.getActiveStandbyRole().equals("Primary") ? 1:0);
+        Map<String, Object> result = new HashMap<>();
+        result.put(Metrics.Redundancy.ConfiguredStatus, redundancy.getConfigStatus().equals("Enabled") ? 1 : 0);
+        result.put(Metrics.Redundancy.OperationalStatus, redundancy.getRedundancyStatus().equals("Up") ? 1 : 0);
+        // result.put(Metrics.Redundancy.IsPrimary, redundancy.getActiveStandbyRole().equals("Primary") ? 1 : 0);
+        if ( ((Integer)result.get(Metrics.Redundancy.ConfiguredStatus)) == 0L) {
+            result.put(Metrics.Redundancy.IsActive, 0);
+            return result;
+        }
         // TODO: Need a way to figure out if we are active or backup
         // if ((Integer) result.get(Metrics.Redundancy.IsPrimary) == 1) {
         try {
@@ -185,21 +178,21 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
         return result;
     }
 
-    public Map<String,Object> getGlobalService(RpcReply reply) {
+    public Map<String, Object> getGlobalService(RpcReply reply) {
         RpcReply.Rpc.Show.Service service = reply.getRpc()
                 .getShow()
                 .getService();
 
-        Map<String,Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
         for (RpcReply.Rpc.Show.Service.Services.Service2 svc : service.getServices().getService()) {
             if (svc.getName().equals("SMF")) {
-                result.put(Metrics.Service.SmfPortUp, svc.getListenPortOperationalStatus().equals("Up") ? 1:0 );
-                result.put(Metrics.Service.SmfCompressedPortUp, svc.getCompressionListenPortOperationalStatus().equals("Up") ? 1:0 );
-                result.put(Metrics.Service.SmfSslPortUp, svc.getSsl().getListenPortOperationalStatus().equals("Up") ? 1:0 );
+                result.put(Metrics.Service.SmfPortUp, svc.getListenPortOperationalStatus().equals("Up") ? 1 : 0);
+                result.put(Metrics.Service.SmfCompressedPortUp, svc.getCompressionListenPortOperationalStatus().equals("Up") ? 1 : 0);
+                result.put(Metrics.Service.SmfSslPortUp, svc.getSsl().getListenPortOperationalStatus().equals("Up") ? 1 : 0);
             } else if (svc.getName().equals("SEMP")) {
                 result.put(Metrics.Service.SempPortUp, svc.getListenPortOperationalStatus().equals("Up") ? 1 : 0);
             } else if (svc.getName().equals("WEB")) {
-                result.put(Metrics.Service.WebPortUp, svc.getListenPortOperationalStatus().equals("Up") ? 1:0 );
+                result.put(Metrics.Service.WebPortUp, svc.getListenPortOperationalStatus().equals("Up") ? 1 : 0);
                 RpcReply.Rpc.Show.Service.Services.Service2.Ssl ssl = svc.getSsl();
                 if (ssl != null) {
                     result.put(Metrics.Service.WebSslPortUp, ssl.getListenPortOperationalStatus().equals("Up") ? 1 : 0);
@@ -221,7 +214,7 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
     }
 
     public List<Map<String, Object>> getMsgVpnList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         List<RpcReply.Rpc.Show.MessageVpn.Vpn> vpns = reply.getRpc()
                 .getShow()
                 .getMessageVpn()
@@ -275,7 +268,7 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
     }
 
     public List<Map<String, Object>> getMsgVpnSpoolList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         List<Object> vpns = reply.getRpc()
                 .getShow()
                 .getMessageSpool()
@@ -301,9 +294,9 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
         return results;
     }
 
-    public List<Map<String, Object>> getQueueList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
-        List<QueueType> queues = reply.getRpc()
+    public List<Map<String, Object>> getQueueList(RpcReply rpcReply) {
+        List<Map<String, Object>> results = new ArrayList<>();
+        List<QueueType> queues = rpcReply.getRpc()
                 .getShow()
                 .getQueue()
                 .getQueues()
@@ -324,7 +317,7 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
     }
 
     public List<Map<String, Object>> getQueueRatesList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
                 .getShow()
                 .getQueue()
@@ -346,7 +339,7 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
     }
 
     public List<Map<String, Object>> getQueueStatsList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         if (!serverConfigs.getExcludeExtendedStats()) {
             RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
                     .getShow()
@@ -369,7 +362,7 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
     }
 
     public List<Map<String, Object>> getTopicEndpointList(RpcReply rpcReply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         List<RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints.TopicEndpoint2> endpoints = rpcReply.getRpc()
                 .getShow()
                 .getTopicEndpoint()
@@ -391,7 +384,7 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
     }
 
     public List<Map<String, Object>> getTopicEndpointRatesList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints eps = reply.getRpc()
                 .getShow()
                 .getTopicEndpoint()
@@ -412,7 +405,7 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
     }
 
     public List<Map<String, Object>> getTopicEndpointStatsList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
         if (!serverConfigs.getExcludeExtendedStats()) {
             RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints endpoints = reply.getRpc()
                     .getShow()
@@ -435,14 +428,14 @@ public class SempReplyFactory_r9_2_0VMR implements SempReplyFactory<RpcReply> {
     }
 
 
-    public List<Map<String,Object>> getGlobalBridgeList(RpcReply reply) {
-        List<Map<String,Object>> results = new ArrayList<>();
-        List<Bridge2> bridges = reply.getRpc()
+    public List<Map<String, Object>> getGlobalBridgeList(RpcReply reply) {
+        List<Map<String, Object>> results = new ArrayList<>();
+        List<RpcReply.Rpc.Show.Bridge.Bridges.Bridge2> bridges = reply.getRpc()
                 .getShow()
                 .getBridge()
                 .getBridges()
                 .getBridge();
-        for(Bridge2 b : bridges) {
+        for(RpcReply.Rpc.Show.Bridge.Bridges.Bridge2 b : bridges) {
             // Skip the generated local side of bridges that the user doesn't configure
             if (b.getAdminState().equals("N/A"))
                 continue;
