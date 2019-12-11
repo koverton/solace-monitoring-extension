@@ -36,20 +36,22 @@ public class ServerConfigs {
         this.log();
     }
 
-    private void log() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Redundancy Model: {}", redundancyModel.toString());
-            logger.debug("VPN Exclusion policy: {}", vpnExclusionPolicy);
-            for (Pattern excludedVpnPattern : vpnFilter)
-                logger.debug("VPN Exclusion Pattern: {}", excludedVpnPattern);
-            logger.debug("Queue Exclusion policy: {}", queueExclusionPolicy.toString());
-            for (Pattern excludedQueuePattern : queueFilter)
-                logger.debug("Queue Exclusion Pattern: {}", excludedQueuePattern.toString());
-            logger.debug("TopicEndpoint Exclusion policy: {}", topicEndpointExclusionPolicy.toString());
-            for (Pattern topicEndpointPattern : topicEndpointFilter)
-                logger.debug("Queue Exclusion Pattern: {}", topicEndpointPattern.toString());
-            logger.debug("Temporary endpoint exclusion policy: {}", excludeTemporaries);
-        }
+    public void log() {
+        logger.info("Redundancy Model: {}", redundancyModel.toString());
+        logger.info("VPN Exclusion policy: {}", vpnExclusionPolicy);
+        for (Pattern excludedVpnPattern : vpnFilter)
+            logger.info("VPN Exclusion Pattern: {}", excludedVpnPattern);
+        logger.info("Queue Exclusion policy: {}", queueExclusionPolicy.toString());
+        for (Pattern excludedQueuePattern : queueFilter)
+            logger.info("Queue Exclusion Pattern: {}", excludedQueuePattern.toString());
+        logger.info("TopicEndpoint Exclusion policy: {}", topicEndpointExclusionPolicy.toString());
+        for (Pattern topicEndpointPattern : topicEndpointFilter)
+            logger.info("Queue Exclusion Pattern: {}", topicEndpointPattern.toString());
+        logger.info("Temporary endpoint exclusion policy: {}", excludeTemporaries);
+        logger.info("Compress exclusion policy: {}", excludeCompressionMetrics);
+        logger.info("TLS exclusion policy: {}", excludeTemporaries);
+        logger.info("Discards exclusion policy: {}", excludeDiscardMetrics);
+        logger.info("Extended Stats exclusion policy: {}", excludeExtendedStats);
     }
 
     public MonitorConfigs.RedundancyModel getRedundancyModel() { return redundancyModel; }

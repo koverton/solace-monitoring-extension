@@ -348,24 +348,22 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
 
     public List<Map<String, Object>> getQueueStatsList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
-        if (!serverConfigs.getExcludeExtendedStats()) {
-            RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
-                    .getShow()
-                    .getQueue()
-                    .getQueues();
-            for (QueueType q : queues.getQueue()) {
-                QueueType.Stats stats = q.getStats();
-                MessageSpoolStatsType spoolStats = stats.getMessageSpoolStats();
-                Map<String, Object> result = new HashMap<>();
-                result.put(Metrics.Queue.QueueName, q.getName());
-                result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
-                result.put(Metrics.Queue.TotalIngressDiscards, countIngressDiscards(spoolStats));
-                result.put(Metrics.Queue.TotalEgressDiscards, countEgressDiscards(spoolStats));
-                // This is total messages spooled cumulatively
-                result.put(Metrics.Queue.TotalMessagesSpooled, spoolStats.getTotalMessagesSpooled().longValue());
-                result.put(Metrics.Queue.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
-                results.add(result);
-            }
+        RpcReply.Rpc.Show.Queue.Queues queues = reply.getRpc()
+                .getShow()
+                .getQueue()
+                .getQueues();
+        for (QueueType q : queues.getQueue()) {
+            QueueType.Stats stats = q.getStats();
+            MessageSpoolStatsType spoolStats = stats.getMessageSpoolStats();
+            Map<String, Object> result = new HashMap<>();
+            result.put(Metrics.Queue.QueueName, q.getName());
+            result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
+            result.put(Metrics.Queue.TotalIngressDiscards, countIngressDiscards(spoolStats));
+            result.put(Metrics.Queue.TotalEgressDiscards, countEgressDiscards(spoolStats));
+            // This is total messages spooled cumulatively
+            result.put(Metrics.Queue.TotalMessagesSpooled, spoolStats.getTotalMessagesSpooled().longValue());
+            result.put(Metrics.Queue.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
+            results.add(result);
         }
         return results;
     }
@@ -416,23 +414,21 @@ public class SempReplyFactory_r7_2_2 implements SempReplyFactory<RpcReply> {
 
     public List<Map<String, Object>> getTopicEndpointStatsList(RpcReply reply) {
         List<Map<String,Object>> results = new ArrayList<>();
-        if (!serverConfigs.getExcludeExtendedStats()) {
-            RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints endpoints = reply.getRpc()
-                    .getShow()
-                    .getTopicEndpoint()
-                    .getTopicEndpoints();
-            for (TopicEndpoint2 e : endpoints.getTopicEndpoint()) {
-                TopicEndpoint2.Stats stats = e.getStats();
-                MessageSpoolStatsType spoolStats = stats.getMessageSpoolStats();
-                Map<String, Object> result = new HashMap<>();
-                result.put(Metrics.TopicEndpoint.TopicEndpointName, e.getName());
-                result.put(Metrics.TopicEndpoint.VpnName, e.getInfo().getMessageVpn());
-                result.put(Metrics.TopicEndpoint.TotalIngressDiscards, countIngressDiscards(spoolStats));
-                result.put(Metrics.TopicEndpoint.TotalEgressDiscards, countEgressDiscards(spoolStats));
-                result.put(Metrics.TopicEndpoint.TotalMessagesSpooled, spoolStats.getTotalMessagesSpooled().longValue());
-                result.put(Metrics.TopicEndpoint.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
-                results.add(result);
-            }
+        RpcReply.Rpc.Show.TopicEndpoint.TopicEndpoints endpoints = reply.getRpc()
+                .getShow()
+                .getTopicEndpoint()
+                .getTopicEndpoints();
+        for (TopicEndpoint2 e : endpoints.getTopicEndpoint()) {
+            TopicEndpoint2.Stats stats = e.getStats();
+            MessageSpoolStatsType spoolStats = stats.getMessageSpoolStats();
+            Map<String, Object> result = new HashMap<>();
+            result.put(Metrics.TopicEndpoint.TopicEndpointName, e.getName());
+            result.put(Metrics.TopicEndpoint.VpnName, e.getInfo().getMessageVpn());
+            result.put(Metrics.TopicEndpoint.TotalIngressDiscards, countIngressDiscards(spoolStats));
+            result.put(Metrics.TopicEndpoint.TotalEgressDiscards, countEgressDiscards(spoolStats));
+            result.put(Metrics.TopicEndpoint.TotalMessagesSpooled, spoolStats.getTotalMessagesSpooled().longValue());
+            result.put(Metrics.TopicEndpoint.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
+            results.add(result);
         }
         return results;
     }
