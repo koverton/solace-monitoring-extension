@@ -31,6 +31,7 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
 
         startTimeMillis = System.currentTimeMillis();
         logger.info("SolaceGlobalMonitorTask started at {}.", startTimeMillis);
+        serverConfigs.log();
 
         final String serverName = svc.getDisplayName();
         logger.info("Configured metricPrefix: {}, ServerName {}", basePrefix, serverName);
@@ -103,11 +104,15 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     private void checkQueues(String serverName) {
         for(Map<String,Object> queue : svc.checkQueueList())
             checkQueue(queue, serverName);
-        for(Map<String,Object> queue : svc.checkQueueStatsList())
-            checkQueue(queue, serverName);
-        if (!serverConfigs.getExcludeExtendedStats())
-            for(Map<String,Object> queue : svc.checkQueueRatesList())
+        if (!serverConfigs.getExcludeExtendedStats()) {
+            for(Map<String,Object> queue : svc.checkQueueStatsList())
                 checkQueue(queue, serverName);
+            for (Map<String, Object> queue : svc.checkQueueRatesList())
+                checkQueue(queue, serverName);
+        }
+        else {
+            logger.info("SKIPPING extended queue and endpoint stats for " + serverName);
+        }
     }
 
     private void checkQueue(Map<String,Object> queue, String serverName) {
@@ -132,19 +137,18 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         }
         queue.remove(Metrics.Queue.VpnName);
         queue.remove(Metrics.Queue.QueueName);
-        metricPrinter.printMetrics(queue, basePrefix, serverName,
-                Metrics.Vpn.PREFIX, vpnName,
-                Metrics.Queue.PREFIX, qname);
+        metricPrinter.printMetrics(queue, basePrefix, serverName, Metrics.Vpn.PREFIX, vpnName, Metrics.Queue.PREFIX, qname);
     }
 
     private void checkTopicEndpoints(String serverName) {
         for (Map<String, Object> endpoint : svc.checkTopicEndpointList())
             checkTopicEndpoint(endpoint, serverName);
-        for (Map<String, Object> endpoint : svc.checkTopicEndpointStatsList())
-            checkTopicEndpoint(endpoint, serverName);
-        if (!serverConfigs.getExcludeExtendedStats())
+        if (!serverConfigs.getExcludeExtendedStats()) {
+            for (Map<String, Object> endpoint : svc.checkTopicEndpointStatsList())
+                checkTopicEndpoint(endpoint, serverName);
             for (Map<String, Object> endpoint : svc.checkTopicEndpointRatesList())
                 checkTopicEndpoint(endpoint, serverName);
+        }
     }
 
     private void checkTopicEndpoint(Map<String,Object> endpoint, String serverName) {

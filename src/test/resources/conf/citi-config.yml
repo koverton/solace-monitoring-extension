@@ -1,0 +1,44 @@
+### ANY CHANGES TO THIS FILE DOES NOT REQUIRE A RESTART ###
+
+# This will create this metric in a specific component so that the same
+# custom metric name will be distinct under different applications
+# see: https://tinyurl.com/yaatjgb2
+# See for Solace Plugin details:
+# https://github.com/koverton/solace-monitoring-extension
+
+
+# --------------------------------------------------------------------
+# AppD Config for Citi Global Consumer Solace Appliances
+# Data Center: MW PROD
+# --------------------------------------------------------------------
+# 1.5 01/22/19 - Enabling ExtendedStats
+# 1.4 01/14/18 - Restricting Queue listings
+
+---
+metricPrefix: "Server|Component:3605|Custom Metrics|Solace|"
+servers:
+  - mgmtUrl: "http://10.96.195.70:80/SEMP"
+    adminUser: "solace_appd"
+    # password: "*****"
+    encryptedPassword: "11eweCqM3P3wcQgrkGHHPg=="
+    encryptionKey: "DRppvgaVt6X8UHEY"
+    displayName: "GT-GCGNAMSLAP01T"
+    # requestTimeout: 1000000 # one second timeout
+    vpnExclusionPolicy: "whitelist"
+    excludeMsgVpns:
+      - "SOLACE_POC_GT_01"
+      - "SOLACE_POC_GT_02"      
+    queueExclusionPolicy: "whitelist"
+    excludeQueues:
+      - "mexlPerformanceTest"
+      - "APP_Q_SAMPLE_SUB_APP_DELAYED"
+      - "AppD_Test_MessageSpool_Queue"    
+    topicEndpointExclusionPolicy: "whitelist"
+    excludeTopicEndpoints:
+      - ""
+    excludeTemporaries: true
+    redundancy: "STANDALONE"
+    excludeExtendedStats: false
+    excludeDiscardMetrics: false
+# number of concurrent tasks
+numberOfThreads: 2

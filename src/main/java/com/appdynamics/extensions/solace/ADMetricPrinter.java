@@ -35,27 +35,21 @@ public class ADMetricPrinter implements MetricPrinter
             metricValue = ((Double)metricValue).longValue();
 
         if (metricWriter != null) {
-            // void printMetric(String metricPath, String metricValue, String aggregationType, String timeRollup, String clusterRollup)
+            // NO NEED TO LOG THIS; metricwriter logs this when loglevel = DEBUG
             metricWriter.printMetric(metricPath, metricValue.toString(),
                     MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
                     MetricWriter.METRIC_TIME_ROLLUP_TYPE_AVERAGE,
                     MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
         }
         else {
-            logger.warn("No AD MetricWriter available so skipping.");
+            logger.warn("No AD MetricWriter available so skipping metric: {}", metricPath);
         }
-
-        logger.debug("Metric [{}/{}/{}] metric = {} = {}",
-                MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
-                MetricWriter.METRIC_TIME_ROLLUP_TYPE_AVERAGE,
-                MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE,
-                metricPath, metricValue);
     }
 
     private String makePrefix(String... fields) {
         StringBuilder sb = new StringBuilder(512);
-        for(int i = 0; i < fields.length; i++) {
-            sb.append(fields[i]);
+        for (String field : fields) {
+            sb.append(field);
             sb.append(DELIM);
         }
         return sb.toString();
