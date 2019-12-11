@@ -7,13 +7,13 @@ metricPrefix: "Server|Component:<Component_id>|Custom Metrics|Solace"
 
 # List of Solace Servers
 servers:
-  - mgmtUrl: "http://192.168.128.15/SEMP"
+  - mgmtUrl: "http://localhost:8080/SEMP"
     adminUser: "admin"
     password: "admin"
     #displayName is required. Displays your server name in metric path.
     displayName: "Primary"
     # requestTimeout: 1000000 # one second timeout
-    redundancy: "REDUNDANT"
+    redundancy: "STANDALONE"
     vpnExclusionPolicy: "blacklist"
     excludeMsgVpns: ["#config-sync"]
     queueExclusionPolicy: "blacklist"
@@ -21,23 +21,7 @@ servers:
     topicEndpointExclusionPolicy: "blacklist"
     excludeTopicEndpoints: ["log/.*"]
     excludeTemporaries: true
-    excludeTlsMetrics: false
-    excludeDiscardMetrics: false
-  - mgmtUrl: "http://192.168.129.60/SEMP"
-    adminUser: "admin"
-    password: "admin"
-    #displayName is required. Displays your server name in metric path.
-    displayName: "Backup"
-    # requestTimeout: 1000000 # one second timeout
-    redundancy: "REDUNDANT"
-    vpnExclusionPolicy: "blacklist"
-    excludeMsgVpns: ["#config-sync"]
-    queueExclusionPolicy: "blacklist"
-    excludeQueues: ["#P2P/.*"]
-    topicEndpointExclusionPolicy: "blacklist"
-    excludeTopicEndpoints: ["log/.*"]
-    excludeTemporaries: true
-    excludeTlsMetrics: false
+    excludeExtendedStats: false
     excludeDiscardMetrics: false
 
 
