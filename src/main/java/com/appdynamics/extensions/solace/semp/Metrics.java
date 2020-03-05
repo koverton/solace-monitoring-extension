@@ -145,13 +145,29 @@ public final class Metrics {
         public final static String UsageInMB = "UsageInMB";
         public final static String ConsumerCount = "ConsumerCount";
         public final static String RedeliveredCount = "RedeliveredCount";
-        public final static String TotalIngressDiscards = "TotalIngressDiscards";
-        public final static String TotalEgressDiscards = "TotalEgressDiscards";
         public final static String TotalMessagesSpooled = "TotalMessagesSpooled";
         public final static String CurrentIngressRatePerSecond = "CurrentIngressRatePerSecond";
         public final static String CurrentEgressRatePerSecond = "CurrentEgressRatePerSecond";
         public final static String CurrentIngressByteRatePerSecond = "CurrentIngressByteRatePerSecond";
         public final static String CurrentEgressByteRatePerSecond = "CurrentEgressByteRatePerSecond";
+
+        // Ingress discards
+        public final static String TotalIngressDiscards = "Discards|TotalIngressDiscards";
+        public final static String MsgSpoolDiscards = "Discards|Ingress|MsgSpoolDiscards";
+        public final static String MsgTooBig = "Discards|Ingress|MsgTooBig";
+        public final static String SpoolShutdown = "Discards|Ingress|SpoolShutdown";
+        public final static String UserProfileDenial = "Discards|Ingress|UserProfileDenial";
+        public final static String NoLocalDelivery = "Discards|Ingress|NoLocalDelivery";
+        public final static String DestinationGroupError = "Discards|Ingress|DestinationGroupError";
+        public final static String LowPriorityMsgCongestion = "Discards|Ingress|LowPriorityMsgCongestion";
+        // Egress discards
+        public final static String TotalEgressDiscards = "Discards|TotalEgressDiscards";
+        public final static String TTLExceeded = "Discards|Egress|TTLExceeded";
+        public final static String TTLExpiredToDMQ = "Discards|Egress|TTLExpiredToDMQ";
+        public final static String TTLExpireToDMQFailed = "Discards|Egress|TTLExpireToDMQFailed";
+        public final static String MaxRedelivery = "Discards|Egress|MaxRedelivery";
+        public final static String MaxRedeliveryToDMQ = "Discards|Egress|MaxRedeliveryToDMQ";
+        public final static String MaxRedeliveryToDMQFailed = "Discards|Egress|MaxRedeliveryToDMQFailed";
     }
 
     public class TopicEndpoint {
@@ -166,13 +182,29 @@ public final class Metrics {
         public final static String UsageInMB = "UsageInMB";
         public final static String ConsumerCount = "ConsumerCount";
         public final static String RedeliveredCount = "RedeliveredCount";
-        public final static String TotalIngressDiscards = "TotalIngressDiscards";
-        public final static String TotalEgressDiscards = "TotalEgressDiscards";
         public final static String TotalMessagesSpooled = "TotalMessagesSpooled";
         public final static String CurrentIngressRatePerSecond = "CurrentIngressRatePerSecond";
         public final static String CurrentEgressRatePerSecond = "CurrentEgressRatePerSecond";
         public final static String CurrentIngressByteRatePerSecond = "CurrentIngressByteRatePerSecond";
         public final static String CurrentEgressByteRatePerSecond = "CurrentEgressByteRatePerSecond";
+
+        // Ingress discards
+        public final static String TotalIngressDiscards = "Discards|TotalIngressDiscards";
+        public final static String MsgSpoolDiscards = "Discards|Ingress|MsgSpoolDiscards";
+        public final static String MsgTooBig = "Discards|Ingress|MsgTooBig";
+        public final static String SpoolShutdown = "Discards|Ingress|SpoolShutdown";
+        public final static String UserProfileDenial = "Discards|Ingress|UserProfileDenial";
+        public final static String NoLocalDelivery = "Discards|Ingress|NoLocalDelivery";
+        public final static String DestinationGroupError = "Discards|Ingress|DestinationGroupError";
+        public final static String LowPriorityMsgCongestion = "Discards|Ingress|LowPriorityMsgCongestion";
+        // Egress discards
+        public final static String TotalEgressDiscards = "Discards|TotalEgressDiscards";
+        public final static String TTLExceeded = "Discards|Egress|TTLExceeded";
+        public final static String TTLExpiredToDMQ = "Discards|Egress|TTLExpiredToDMQ";
+        public final static String TTLExpireToDMQFailed = "Discards|Egress|TTLExpireToDMQFailed";
+        public final static String MaxRedelivery = "Discards|Egress|MaxRedelivery";
+        public final static String MaxRedeliveryToDMQ = "Discards|Egress|MaxRedeliveryToDMQ";
+        public final static String MaxRedeliveryToDMQFailed = "Discards|Egress|MaxRedeliveryToDMQFailed";
     }
 
     public final class Bridge {
