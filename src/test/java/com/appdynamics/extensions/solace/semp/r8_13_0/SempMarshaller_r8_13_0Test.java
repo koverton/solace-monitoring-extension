@@ -77,6 +77,20 @@ public class SempMarshaller_r8_13_0Test
     }
 
     @Test
+    public void showService91Test() throws Exception {
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-service91.xml"));
+        assertTrue(factory.isSuccess(reply));
+        Map<String, Object> service = factory.getGlobalService(reply);
+        assertNotNull(service);
+        SempTestHelper.noNullValuesCheck(service);
+        assertEquals(1, service.get(Metrics.Service.SmfPortUp));
+        assertEquals(1, service.get(Metrics.Service.SmfCompressedPortUp));
+        for(Map.Entry<String,Object> metric : service.entrySet()) {
+            System.out.println(metric.getKey() + " : " + metric.getValue());
+        }
+    }
+
+    @Test
     public void showGlobalStatsTest() throws Exception {
         RpcReply reply = marshaller.fromReplyXml(readFile("show-stats.client.detail.xml"));
         Map<String, Object> stats =
@@ -248,7 +262,8 @@ public class SempMarshaller_r8_13_0Test
     }
     @Test
     public void showActiveStandbyBackupStandbyRedundancyTest() throws Exception {
-        RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-actstby.backup-inactive.xml"));
+        //RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-actstby.backup-inactive.xml"));
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-redundancy.detail-actstby.backup-standby.xml"));
         Map<String, Object> redundancy = factory.getGlobalRedundancy(reply);
         SempTestHelper.noNullValuesCheck(redundancy);
         SempStateTest.redundancyTest(redundancy);

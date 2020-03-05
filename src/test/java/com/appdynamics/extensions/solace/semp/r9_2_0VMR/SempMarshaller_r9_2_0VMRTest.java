@@ -238,6 +238,9 @@ public class SempMarshaller_r9_2_0VMRTest
                 Long totalSpooled = (Long) q.get(Metrics.Queue.TotalMessagesSpooled);
                 assertEquals(8765, totalSpooled.intValue());
             }
+            for(Map.Entry<String,Object> pair : q.entrySet()) {
+                System.out.println("    " + pair.getKey() + " => " + pair.getValue() );
+            }
         }
     }
 
@@ -265,6 +268,9 @@ public class SempMarshaller_r9_2_0VMRTest
         assertEquals(2, endpoints.size());
         for(Map<String,Object> e : endpoints) {
             SempTestHelper.noNullValuesCheck(e);
+            for(Map.Entry<String,Object> pair : e.entrySet()) {
+                System.out.println("    " + pair.getKey() + " => " + pair.getValue() );
+            }
             if (e.get(Metrics.TopicEndpoint.TopicEndpointName).equals("t2")) {
                 assertEquals(190L, e.get(Metrics.TopicEndpoint.RedeliveredCount));
                 assertEquals(190L, e.get(Metrics.TopicEndpoint.TotalEgressDiscards));
