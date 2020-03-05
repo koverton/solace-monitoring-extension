@@ -1,5 +1,6 @@
 package com.appdynamics.extensions.solace.semp.r8_6VMR;
 
+import com.appdynamics.extensions.solace.Helper;
 import com.appdynamics.extensions.solace.ServerConfigs;
 import com.appdynamics.extensions.solace.semp.*;
 import com.solacesystems.semp_jaxb.r8_6VMR.reply.*;
@@ -357,10 +358,27 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
             Map<String, Object> result = new HashMap<>();
             result.put(Metrics.Queue.QueueName, q.getName());
             result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
-            result.put(Metrics.Queue.TotalIngressDiscards, countIngressDiscards(spoolStats));
-            result.put(Metrics.Queue.TotalEgressDiscards, countEgressDiscards(spoolStats));
             result.put(Metrics.Queue.TotalMessagesSpooled, spoolStats.getTotalMessagesSpooled().longValue());
             result.put(Metrics.Queue.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
+            if (!serverConfigs.getExcludeDiscardMetrics()) {
+                // Ingress
+                result.put(Metrics.Queue.TotalIngressDiscards, countIngressDiscards(spoolStats));
+                result.put(Metrics.Queue.MsgSpoolDiscards, Helper.longOrDefault(spoolStats.getSpoolUsageExceeded(), 0) );
+                result.put(Metrics.Queue.MsgTooBig, Helper.longOrDefault(spoolStats.getMaxMessageSizeExceeded(), 0) );
+                result.put(Metrics.Queue.SpoolShutdown, Helper.longOrDefault(spoolStats.getSpoolShutdownDiscard(), 0) );
+                result.put(Metrics.Queue.UserProfileDenial, Helper.longOrDefault(spoolStats.getUserProfileDenyGuaranteed(), 0) );
+                result.put(Metrics.Queue.NoLocalDelivery, Helper.longOrDefault(spoolStats.getNoLocalDeliveryDiscard(), 0) );
+                result.put(Metrics.Queue.DestinationGroupError, Helper.longOrDefault(spoolStats.getDestinationGroupError(), 0) );
+                result.put(Metrics.Queue.LowPriorityMsgCongestion, Helper.longOrDefault(spoolStats.getLowPriorityMsgCongestionDiscard(), 0) );
+                // Egress
+                result.put(Metrics.Queue.TotalEgressDiscards, countEgressDiscards(spoolStats));
+                result.put(Metrics.Queue.TTLExceeded,             Helper.longOrDefault(spoolStats.getTotalTtlExpiredDiscardMessages(), 0) );
+                result.put(Metrics.Queue.TTLExpiredToDMQ,         Helper.longOrDefault(spoolStats.getTotalTtlExpiredToDmqMessages(), 0) );
+                result.put(Metrics.Queue.TTLExpireToDMQFailed,    Helper.longOrDefault(spoolStats.getTotalTtlExpiredToDmqFailures(), 0) );
+                result.put(Metrics.Queue.MaxRedelivery,           Helper.longOrDefault(spoolStats.getMaxRedeliveryExceededDiscardMessages(), 0) );
+                result.put(Metrics.Queue.MaxRedeliveryToDMQ,      Helper.longOrDefault(spoolStats.getMaxRedeliveryExceededToDmqMessages(), 0) );
+                result.put(Metrics.Queue.MaxRedeliveryToDMQFailed,Helper.longOrDefault(spoolStats.getMaxRedeliveryExceededToDmqFailures(), 0) );
+            }
             results.add(result);
         }
         return results;
@@ -421,10 +439,27 @@ public class SempReplyFactory_r8_6VMR implements SempReplyFactory<RpcReply> {
             Map<String, Object> result = new HashMap<>();
             result.put(Metrics.TopicEndpoint.TopicEndpointName, e.getName());
             result.put(Metrics.TopicEndpoint.VpnName, e.getInfo().getMessageVpn());
-            result.put(Metrics.TopicEndpoint.TotalIngressDiscards, countIngressDiscards(spoolStats));
-            result.put(Metrics.TopicEndpoint.TotalEgressDiscards, countEgressDiscards(spoolStats));
             result.put(Metrics.TopicEndpoint.TotalMessagesSpooled, spoolStats.getTotalMessagesSpooled().longValue());
             result.put(Metrics.TopicEndpoint.RedeliveredCount, spoolStats.getMessagesRedelivered().longValue());
+            if (!serverConfigs.getExcludeDiscardMetrics()) {
+                // Ingress
+                result.put(Metrics.TopicEndpoint.TotalIngressDiscards, countIngressDiscards(spoolStats));
+                result.put(Metrics.TopicEndpoint.MsgSpoolDiscards,        Helper.longOrDefault(spoolStats.getSpoolUsageExceeded(), 0) );
+                result.put(Metrics.TopicEndpoint.MsgTooBig,               Helper.longOrDefault(spoolStats.getMaxMessageSizeExceeded(), 0) );
+                result.put(Metrics.TopicEndpoint.SpoolShutdown,           Helper.longOrDefault(spoolStats.getSpoolShutdownDiscard(), 0) );
+                result.put(Metrics.TopicEndpoint.UserProfileDenial,       Helper.longOrDefault(spoolStats.getUserProfileDenyGuaranteed(), 0) );
+                result.put(Metrics.TopicEndpoint.NoLocalDelivery,         Helper.longOrDefault(spoolStats.getNoLocalDeliveryDiscard(), 0) );
+                result.put(Metrics.TopicEndpoint.DestinationGroupError,   Helper.longOrDefault(spoolStats.getDestinationGroupError(), 0) );
+                result.put(Metrics.TopicEndpoint.LowPriorityMsgCongestion,Helper.longOrDefault(spoolStats.getLowPriorityMsgCongestionDiscard(), 0) );
+                // Egress
+                result.put(Metrics.TopicEndpoint.TotalEgressDiscards, countEgressDiscards(spoolStats));
+                result.put(Metrics.TopicEndpoint.TTLExceeded,             Helper.longOrDefault(spoolStats.getTotalTtlExpiredDiscardMessages(), 0) );
+                result.put(Metrics.TopicEndpoint.TTLExpiredToDMQ,         Helper.longOrDefault(spoolStats.getTotalTtlExpiredToDmqMessages(), 0) );
+                result.put(Metrics.TopicEndpoint.TTLExpireToDMQFailed,    Helper.longOrDefault(spoolStats.getTotalTtlExpiredToDmqFailures(), 0) );
+                result.put(Metrics.TopicEndpoint.MaxRedelivery,           Helper.longOrDefault(spoolStats.getMaxRedeliveryExceededDiscardMessages(), 0) );
+                result.put(Metrics.TopicEndpoint.MaxRedeliveryToDMQ,      Helper.longOrDefault(spoolStats.getMaxRedeliveryExceededToDmqMessages(), 0) );
+                result.put(Metrics.TopicEndpoint.MaxRedeliveryToDMQFailed,Helper.longOrDefault(spoolStats.getMaxRedeliveryExceededToDmqFailures(), 0) );
+            }
             results.add(result);
         }
         return results;

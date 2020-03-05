@@ -3,6 +3,7 @@ package com.appdynamics.extensions.solace;
 import com.appdynamics.extensions.ABaseMonitor;
 import com.appdynamics.extensions.MetricWriteHelper;
 import com.appdynamics.extensions.TasksExecutionServiceProvider;
+import com.appdynamics.extensions.conf.MonitorConfiguration;
 import com.appdynamics.extensions.solace.semp.SempConnector;
 import com.appdynamics.extensions.solace.semp.SempService;
 import com.appdynamics.extensions.solace.semp.SempServiceFactory;
@@ -25,17 +26,14 @@ public class SolaceStandaloneMonitor extends ABaseMonitor {
     private static final Logger logger = LoggerFactory.getLogger(SolaceStandaloneMonitor.class);
     private static final String DEFAULT_PREFIX = "Custom Metrics|Solace";
 
-    @Override
     protected String getDefaultMetricPrefix() {
         return DEFAULT_PREFIX;
     }
 
-    @Override
     public String getMonitorName() {
         return this.getClass().getSimpleName();
     }
 
-    @Override
     protected void doRun(TasksExecutionServiceProvider serviceProvider) {
         // Internally, we don't want prefixes to end with delimiters, so strip off
         String baseMetricPrefix  = getBasePrefix();
@@ -85,7 +83,6 @@ public class SolaceStandaloneMonitor extends ABaseMonitor {
         }
     }
 
-    @Override
     protected int getTaskCount() {
         return Helper.getMonitorServerList(configuration).size();
     }
@@ -100,7 +97,6 @@ public class SolaceStandaloneMonitor extends ABaseMonitor {
             return baseMetricPrefix.substring(0, baseMetricPrefix.lastIndexOf("|"));
         return baseMetricPrefix;
     }
-
 
     public static void main(String[] args) {
         try {
