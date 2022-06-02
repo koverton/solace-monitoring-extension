@@ -1,0 +1,23 @@
+<rpc-reply semp-version="soltr/9_2_0VMR">
+  <rpc>
+    <show>
+      <message-spool>
+        <message-vpn>
+          <vpn>
+            <name>default</name>
+            <current-messages-spooled>0</current-messages-spooled>
+            <current-spool-usage-mb>0</current-spool-usage-mb>
+            <maximum-spool-usage-mb>1500</maximum-spool-usage-mb>
+          </vpn>
+          <vpn>
+            <name>test01</name>
+            <current-messages-spooled>0</current-messages-spooled>
+            <current-spool-usage-mb>0</current-spool-usage-mb>
+            <maximum-spool-usage-mb>1000</maximum-spool-usage-mb>
+          </vpn>
+        </message-vpn>
+      </message-spool>
+    </show>
+  </rpc>
+<execute-result code="ok"/>
+</rpc-reply>
