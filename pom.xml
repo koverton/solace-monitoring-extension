@@ -4,7 +4,7 @@
 
     <groupId>com.appdynamics.extensions</groupId>
     <artifactId>solace-monitoring-extension</artifactId>
-    <version>1.2.3</version>
+    <version>1.9.0</version>
     <packaging>jar</packaging>
 
     <name>solace-monitoring-extension</name>
@@ -23,6 +23,11 @@
         <!-- VMR -->
         <dependency>
             <groupId>com.solacesystems</groupId>
+            <artifactId>semp_jaxb_9_9VMR</artifactId>
+            <version>9.9.0.45</version>
+        </dependency>
+        <dependency>
+            <groupId>com.solacesystems</groupId>
             <artifactId>semp_jaxb_9_2_0VMR</artifactId>
             <version>9.2.0.14</version>
         </dependency>
@@ -34,6 +39,11 @@
         <!-- hardware -->
         <dependency>
             <groupId>com.solacesystems</groupId>
+            <artifactId>semp_jaxb_9_9</artifactId>
+            <version>9.9.0.45</version>
+        </dependency>
+        <dependency>
+            <groupId>com.solacesystems</groupId>
             <artifactId>semp_jaxb_9_2_0</artifactId>
             <version>9.2.0.14</version>
         </dependency>
@@ -42,16 +52,8 @@
             <artifactId>semp_jaxb_8_13_0</artifactId>
             <version>8.13.0.30</version>
         </dependency>
-        <dependency>
-            <groupId>com.solacesystems</groupId>
-            <artifactId>semp_jaxb_8_2_0</artifactId>
-            <version>8.2.1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.solacesystems</groupId>
-            <artifactId>semp_jaxb_7_2_2</artifactId>
-            <version>7.2.2.278</version>
-        </dependency>
+
+        <!-- jaxb v1 api -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
@@ -61,13 +63,13 @@
         <!-- AppDynamics agent libs -->
         <dependency>
             <groupId>com.appdynamics</groupId>
-            <artifactId>machine-agent</artifactId>
-            <version>3.7.11</version>
+            <artifactId>machineagent-repackaged</artifactId>
+            <version>4.0.5.1</version>
         </dependency>
         <dependency>
             <groupId>com.appdynamics</groupId>
             <artifactId>appd-exts-commons</artifactId>
-            <version>2.0.2</version>
+            <version>2.2.6</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
