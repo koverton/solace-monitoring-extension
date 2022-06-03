@@ -1,10 +1,10 @@
 package com.appdynamics.extensions.solace.semp;
 
 import com.appdynamics.extensions.solace.ServerConfigs;
-import com.appdynamics.extensions.solace.semp.r7_2_2.*;
-import com.appdynamics.extensions.solace.semp.r8_2_0.*;
 import com.appdynamics.extensions.solace.semp.r8_13_0.*;
 import com.appdynamics.extensions.solace.semp.r9_2_0.*;
+import com.appdynamics.extensions.solace.semp.r9_9.*;
+import com.appdynamics.extensions.solace.semp.r9_9VMR.*;
 import com.appdynamics.extensions.solace.semp.r8_6VMR.*;
 import com.appdynamics.extensions.solace.semp.r9_2_0VMR.*;
 import org.slf4j.Logger;
@@ -37,17 +37,31 @@ public class SempServiceFactory {
             logger.info("SempServiceFactory instantiating VMR SEMP-service");
 
             // Prefer newest version we can
-            if (sempVersion.getVersionNumber() >= SempVersion.v9_2_0VMR.getVersionNumber()) {
+            if (sempVersion.getVersionNumber() >= SempVersion.v9_9VMR.getVersionNumber()) {
                 try {
                     return new GenericSempService<>(
-                            new SempConnectionContext<>(connector,
-                                    new SempRequestFactory_r9_2_0VMR(serverConfigs),
-                                    new SempReplyFactory_r9_2_0VMR(serverConfigs),
-                                    new SempMarshaller_r9_2_0VMR(),
-                                    sempVersion.getVersionString()));
+                        new SempConnectionContext<>(connector,
+                            new SempRequestFactory_r9_9VMR(serverConfigs),
+                            new SempReplyFactory_r9_9VMR(serverConfigs),
+                            new SempMarshaller_r9_9VMR(),
+                            sempVersion.getVersionString()));
                 } catch (JAXBException ex) {
                     logger.error("Exception thrown attempting to create SempService version: "
-                            + SempVersion.v8_6VMR.getVersionString(), ex);
+                        + SempVersion.v8_6VMR.getVersionString(), ex);
+                    ex.printStackTrace();
+                }
+            }
+            else if (sempVersion.getVersionNumber() >= SempVersion.v9_2_0VMR.getVersionNumber()) {
+                try {
+                    return new GenericSempService<>(
+                        new SempConnectionContext<>(connector,
+                            new SempRequestFactory_r9_2_0VMR(serverConfigs),
+                            new SempReplyFactory_r9_2_0VMR(serverConfigs),
+                            new SempMarshaller_r9_2_0VMR(),
+                            sempVersion.getVersionString()));
+                } catch (JAXBException ex) {
+                    logger.error("Exception thrown attempting to create SempService version: "
+                        + SempVersion.v8_6VMR.getVersionString(), ex);
                     ex.printStackTrace();
                 }
             }
@@ -71,22 +85,37 @@ public class SempServiceFactory {
         else {
             logger.info("SempServiceFactory instantiating Hardware SEMP-service");
             // Prefer newest version we can
-            if (sempVersion.getVersionNumber() >= SempVersion.v9_2_0.getVersionNumber()) {
+            if (sempVersion.getVersionNumber() >= SempVersion.v9_9.getVersionNumber()) {
                 try {
                     return new GenericSempService<>(
-                            new SempConnectionContext<>(connector,
-                                    new SempRequestFactory_r9_2_0(serverConfigs),
-                                    new SempReplyFactory_r9_2_0(serverConfigs),
-                                    new SempMarshaller_r9_2_0(),
-                                    sempVersion.getVersionString()));
+                        new SempConnectionContext<>(connector,
+                            new SempRequestFactory_r9_9(serverConfigs),
+                            new SempReplyFactory_r9_9(serverConfigs),
+                            new SempMarshaller_r9_9(),
+                            sempVersion.getVersionString()));
                 }
                 catch(JAXBException ex) {
                     logger.error("Exception thrown attempting to create SempService version: "
-                            + SempVersion.v9_2_0.getVersionString(), ex);
+                        + SempVersion.v9_2_0.getVersionString(), ex);
                     ex.printStackTrace();
                 }
             }
-            else if (sempVersion.getVersionNumber() >= SempVersion.v8_13_0.getVersionNumber()) {
+            else if (sempVersion.getVersionNumber() >= SempVersion.v9_2_0.getVersionNumber()) {
+                try {
+                    return new GenericSempService<>(
+                        new SempConnectionContext<>(connector,
+                            new SempRequestFactory_r9_2_0(serverConfigs),
+                            new SempReplyFactory_r9_2_0(serverConfigs),
+                            new SempMarshaller_r9_2_0(),
+                            sempVersion.getVersionString()));
+                }
+                catch(JAXBException ex) {
+                    logger.error("Exception thrown attempting to create SempService version: "
+                        + SempVersion.v9_2_0.getVersionString(), ex);
+                    ex.printStackTrace();
+                }
+            }
+            else {
                 try {
                     return new GenericSempService<>(
                             new SempConnectionContext<>(connector,
@@ -98,36 +127,6 @@ public class SempServiceFactory {
                 catch(JAXBException ex) {
                     logger.error("Exception thrown attempting to create SempService version: "
                             + SempVersion.v8_13_0.getVersionString(), ex);
-                    ex.printStackTrace();
-                }
-            }
-            else if (sempVersion.getVersionNumber() >= SempVersion.v8_2_0.getVersionNumber()) {
-                try {
-                    return new GenericSempService<>(
-                            new SempConnectionContext<>(connector,
-                                    new SempRequestFactory_r8_2_0(serverConfigs),
-                                    new SempReplyFactory_r8_2_0(serverConfigs),
-                                    new SempMarshaller_r8_2_0(),
-                                    sempVersion.getVersionString()));
-                }
-                catch(JAXBException ex) {
-                    logger.error("Exception thrown attempting to create SempService version: "
-                            + SempVersion.v8_2_0.getVersionString(), ex);
-                    ex.printStackTrace();
-                }
-            }
-            else {
-                try {
-                    return new GenericSempService<>(
-                            new SempConnectionContext<>(connector,
-                                    new SempRequestFactory_r7_2_2(serverConfigs),
-                                    new SempReplyFactory_r7_2_2(serverConfigs),
-                                    new SempMarshaller_r7_2_2(),
-                                    sempVersion.getVersionString()));
-                }
-                catch(JAXBException ex) {
-                    logger.error("Exception thrown attempting to create SempService version: "
-                            + SempVersion.v7_2_2.getVersionString(), ex);
                     ex.printStackTrace();
                 }
             }

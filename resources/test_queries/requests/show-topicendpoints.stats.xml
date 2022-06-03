@@ -1,1 +1,0 @@
-<rpc semp-version="soltr/7_2_2"><show><topic-endpoint><name>*</name><stats/><durable/><count/><num-elements>100</num-elements></topic-endpoint></show></rpc>
