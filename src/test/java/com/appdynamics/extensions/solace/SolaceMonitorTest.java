@@ -3,6 +3,8 @@ package com.appdynamics.extensions.solace;
 import com.appdynamics.extensions.ABaseMonitor;
 import com.appdynamics.extensions.TasksExecutionServiceProvider;
 import org.junit.Test;
+
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
@@ -58,8 +60,14 @@ public class SolaceMonitorTest {
         public String getMonitorName() {
             return "TEST";
         }
+
+        @Override
+        protected List<Map<String, ?>> getServers() {
+            return null;
+        }
+
         protected void doRun(TasksExecutionServiceProvider tasksExecutionServiceProvider) {
-            Map<String, ?>  configs = this.configuration.getConfigYml();
+            Map<String, ?>  configs = this.getContextConfiguration().getConfigYml();
             for(Map.Entry<String, ?> e : configs.entrySet()) {
                 System.out.println(e.getKey() + " = " + e.getValue().toString());
             }

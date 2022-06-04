@@ -1,9 +1,10 @@
-<rpc-reply semp-version="soltr/8_13_0">
+<rpc-reply semp-version="soltr/9_9VMR">
   <rpc>
     <show>
       <message-vpn>
         <vpn>
-          <name>#config-sync</name>
+          <name>default</name>
+          <alias></alias>
           <is-management-message-vpn>false</is-management-message-vpn>
           <enabled>true</enabled>
           <operational>true</operational>
@@ -12,44 +13,48 @@
           <distributed-cache-management-enabled>true</distributed-cache-management-enabled>
           <ssl-plain-text-downgrade-allowed>false</ssl-plain-text-downgrade-allowed>
           <rest-mode>messaging</rest-mode>
-          <unique-subscriptions>4</unique-subscriptions>
-          <total-local-unique-subscriptions>4</total-local-unique-subscriptions>
+          <service-rest-authorization-header-handling>drop</service-rest-authorization-header-handling>
+          <unique-subscriptions>20</unique-subscriptions>
+          <total-local-unique-subscriptions>20</total-local-unique-subscriptions>
           <total-remote-unique-subscriptions>0</total-remote-unique-subscriptions>
-          <total-unique-subscriptions>4</total-unique-subscriptions>
-          <max-subscriptions-effective>5000000</max-subscriptions-effective>
-          <max-subscriptions>5000000</max-subscriptions>
+          <total-unique-subscriptions>20</total-unique-subscriptions>
+          <max-subscriptions-effective>500000</max-subscriptions-effective>
+          <max-subscriptions>500000</max-subscriptions>
           <export-subscriptions>false</export-subscriptions>
           <export-subscriptions-percent-complete>100</export-subscriptions-percent-complete>
           <prefer-ip-version>ipv6</prefer-ip-version>
-          <connections>1</connections>
-          <connections-service-smf>1</connections-service-smf>
+          <connections>2</connections>
+          <connections-service-smf>2</connections-service-smf>
           <connections-service-web>0</connections-service-web>
           <connections-service-rest-incoming>0</connections-service-rest-incoming>
           <connections-service-mqtt>0</connections-service-mqtt>
           <connections-service-amqp>0</connections-service-amqp>
           <connections-service-rest-outgoing>0</connections-service-rest-outgoing>
-          <max-connections>9000</max-connections>
-          <max-connections-service-smf>9000</max-connections-service-smf>
-          <max-connections-service-web>9000</max-connections-service-web>
-          <max-connections-service-rest-incoming>9000</max-connections-service-rest-incoming>
-          <max-connections-service-mqtt>9000</max-connections-service-mqtt>
-          <max-connections-service-amqp>9000</max-connections-service-amqp>
-          <max-connections-service-rest-outgoing>6000</max-connections-service-rest-outgoing>
-          <auth-type>Internal database authentication</auth-type>
+          <max-connections>1000</max-connections>
+          <max-connections-service-smf>1000</max-connections-service-smf>
+          <max-connections-service-web>1000</max-connections-service-web>
+          <max-connections-service-rest-incoming>1000</max-connections-service-rest-incoming>
+          <max-connections-service-mqtt>1000</max-connections-service-mqtt>
+          <max-connections-service-amqp>1000</max-connections-service-amqp>
+          <max-connections-service-rest-outgoing>1000</max-connections-service-rest-outgoing>
+          <request-client-certificate-service-mqtt>when-enabled-in-message-vpn</request-client-certificate-service-mqtt>
+          <request-client-certificate-service-rest-incoming>when-enabled-in-message-vpn</request-client-certificate-service-rest-incoming>
+          <request-client-certificate-service-web>when-enabled-in-message-vpn</request-client-certificate-service-web>
+          <auth-type>no authentication</auth-type>
           <auth-profile></auth-profile>
           <radius-domain></radius-domain>
           <authentication>
             <basic-auth>
               <enabled>true</enabled>
-              <auth-type>Internal database authentication</auth-type>
+              <auth-type>no authentication</auth-type>
               <auth-profile></auth-profile>
               <radius-domain></radius-domain>
             </basic-auth>
             <client-cert-auth>
-              <enabled>true</enabled>
+              <enabled>false</enabled>
               <max-chain-depth>3</max-chain-depth>
               <validate-cert-date>true</validate-cert-date>
-              <allow-api-provided-username>true</allow-api-provided-username>
+              <allow-api-provided-username>false</allow-api-provided-username>
               <username-source>common-name</username-source>
               <revocation-check-mode>allow-valid</revocation-check-mode>
             </client-cert-auth>
@@ -57,13 +62,17 @@
               <enabled>false</enabled>
               <allow-api-provided-username>false</allow-api-provided-username>
             </kerberos-auth>
+            <oauth>
+              <enabled>No</enabled>
+              <default-provider></default-provider>
+            </oauth>
           </authentication>
-          <maximum-spool-usage-mb>400</maximum-spool-usage-mb>
-          <maximum-transacted-sessions>16000</maximum-transacted-sessions>
-          <maximum-transactions>50000</maximum-transactions>
+          <maximum-spool-usage-mb>1500</maximum-spool-usage-mb>
+          <maximum-transacted-sessions>1000</maximum-transacted-sessions>
+          <maximum-transactions>5000</maximum-transactions>
           <stats>
-            <total-client-messages-received>19</total-client-messages-received>
-            <total-client-messages-sent>8</total-client-messages-sent>
+            <total-client-messages-received>17</total-client-messages-received>
+            <total-client-messages-sent>101</total-client-messages-sent>
             <client-data-messages-received>0</client-data-messages-received>
             <client-data-messages-sent>0</client-data-messages-sent>
             <client-persistent-messages-received>0</client-persistent-messages-received>
@@ -74,10 +83,10 @@
             <client-direct-messages-sent>0</client-direct-messages-sent>
             <large-messages-received>0</large-messages-received>
             <dto-messages-received>0</dto-messages-received>
-            <client-control-messages-received>19</client-control-messages-received>
-            <client-control-messages-sent>8</client-control-messages-sent>
-            <login-msgs-received>3</login-msgs-received>
-            <login-msgs-sent>3</login-msgs-sent>
+            <client-control-messages-received>17</client-control-messages-received>
+            <client-control-messages-sent>101</client-control-messages-sent>
+            <login-msgs-received>2</login-msgs-received>
+            <login-msgs-sent>2</login-msgs-sent>
             <certificate-revocation-check-stats>
               <total>0</total>
               <allowed-valid>0</allowed-valid>
@@ -93,10 +102,10 @@
             <update-msgs-sent>0</update-msgs-sent>
             <keepalive-msgs-received>0</keepalive-msgs-received>
             <keepalive-msgs-sent>0</keepalive-msgs-sent>
-            <assured-ctrl-msgs-received>0</assured-ctrl-msgs-received>
-            <assured-ctrl-msgs-sent>0</assured-ctrl-msgs-sent>
-            <add-subscription-msgs-received>14</add-subscription-msgs-received>
-            <add-subscription-msgs-sent>5</add-subscription-msgs-sent>
+            <assured-ctrl-msgs-received>1</assured-ctrl-msgs-received>
+            <assured-ctrl-msgs-sent>91</assured-ctrl-msgs-sent>
+            <add-subscription-msgs-received>6</add-subscription-msgs-received>
+            <add-subscription-msgs-sent>1</add-subscription-msgs-sent>
             <add-subscription-manager-msgs-received>0</add-subscription-manager-msgs-received>
             <add-subscription-manager-msgs-sent>0</add-subscription-manager-msgs-sent>
             <already-exists-msgs-sent>0</already-exists-msgs-sent>
@@ -104,9 +113,12 @@
             <max-exceeded-msgs-sent>0</max-exceeded-msgs-sent>
             <parse-error-on-add-msgs-sent>0</parse-error-on-add-msgs-sent>
             <denied-subscribe-topic-acl>0</denied-subscribe-topic-acl>
+            <denied-subscribe-topic-reserved>0</denied-subscribe-topic-reserved>
+            <shared-subscription-permission-denied>0</shared-subscription-permission-denied>
             <denied-subscribe-permission>0</denied-subscribe-permission>
             <subscribe-client-not-found>0</subscribe-client-not-found>
-            <remove-subscription-msgs-received>2</remove-subscription-msgs-received>
+            <subscription-manager-shared-subscription-permission-denied>0</subscription-manager-shared-subscription-permission-denied>
+            <remove-subscription-msgs-received>0</remove-subscription-msgs-received>
             <remove-subscription-msgs-sent>0</remove-subscription-msgs-sent>
             <remove-subscription-manager-msgs-received>0</remove-subscription-manager-msgs-received>
             <remove-subscription-manager-msgs-sent>0</remove-subscription-manager-msgs-sent>
@@ -115,8 +127,8 @@
             <denied-unsubscribe-topic-acl>0</denied-unsubscribe-topic-acl>
             <denied-unsubscribe-permission>0</denied-unsubscribe-permission>
             <unsubscribe-client-not-found>0</unsubscribe-client-not-found>
-            <total-client-bytes-received>1351</total-client-bytes-received>
-            <total-client-bytes-sent>1033</total-client-bytes-sent>
+            <total-client-bytes-received>1295</total-client-bytes-received>
+            <total-client-bytes-sent>5725</total-client-bytes-sent>
             <client-data-bytes-received>0</client-data-bytes-received>
             <client-data-bytes-sent>0</client-data-bytes-sent>
             <client-persistent-bytes-received>0</client-persistent-bytes-received>
@@ -125,8 +137,8 @@
             <client-non-persistent-bytes-sent>0</client-non-persistent-bytes-sent>
             <client-direct-bytes-received>0</client-direct-bytes-received>
             <client-direct-bytes-sent>0</client-direct-bytes-sent>
-            <client-control-bytes-received>1351</client-control-bytes-received>
-            <client-control-bytes-sent>1033</client-control-bytes-sent>
+            <client-control-bytes-received>1295</client-control-bytes-received>
+            <client-control-bytes-sent>5725</client-control-bytes-sent>
             <ingress-compressed-bytes>0</ingress-compressed-bytes>
             <egress-compressed-bytes>0</egress-compressed-bytes>
             <current-ingress-rate-per-second>0</current-ingress-rate-per-second>
@@ -163,46 +175,50 @@
           </stats>
         </vpn>
         <vpn>
-          <name>default</name>
+          <name>testvpn</name>
+          <alias></alias>
           <is-management-message-vpn>false</is-management-message-vpn>
-          <enabled>false</enabled>
-          <operational>false</operational>
+          <enabled>true</enabled>
+          <operational>true</operational>
           <locally-configured>true</locally-configured>
-          <local-status>Down</local-status>
-          <down-reason>Message VPN Disabled</down-reason>
+          <local-status>Up</local-status>
           <distributed-cache-management-enabled>true</distributed-cache-management-enabled>
           <ssl-plain-text-downgrade-allowed>false</ssl-plain-text-downgrade-allowed>
           <rest-mode>messaging</rest-mode>
-          <unique-subscriptions>0</unique-subscriptions>
-          <total-local-unique-subscriptions>0</total-local-unique-subscriptions>
+          <service-rest-authorization-header-handling>drop</service-rest-authorization-header-handling>
+          <unique-subscriptions>12</unique-subscriptions>
+          <total-local-unique-subscriptions>12</total-local-unique-subscriptions>
           <total-remote-unique-subscriptions>0</total-remote-unique-subscriptions>
-          <total-unique-subscriptions>0</total-unique-subscriptions>
-          <max-subscriptions-effective>5000000</max-subscriptions-effective>
-          <max-subscriptions>5000000</max-subscriptions>
-          <export-subscriptions>true</export-subscriptions>
+          <total-unique-subscriptions>12</total-unique-subscriptions>
+          <max-subscriptions-effective>500000</max-subscriptions-effective>
+          <max-subscriptions>500000</max-subscriptions>
+          <export-subscriptions>false</export-subscriptions>
           <export-subscriptions-percent-complete>100</export-subscriptions-percent-complete>
           <prefer-ip-version>ipv6</prefer-ip-version>
-          <connections>0</connections>
-          <connections-service-smf>0</connections-service-smf>
+          <connections>2</connections>
+          <connections-service-smf>2</connections-service-smf>
           <connections-service-web>0</connections-service-web>
           <connections-service-rest-incoming>0</connections-service-rest-incoming>
           <connections-service-mqtt>0</connections-service-mqtt>
           <connections-service-amqp>0</connections-service-amqp>
           <connections-service-rest-outgoing>0</connections-service-rest-outgoing>
-          <max-connections>9000</max-connections>
-          <max-connections-service-smf>9000</max-connections-service-smf>
-          <max-connections-service-web>9000</max-connections-service-web>
-          <max-connections-service-rest-incoming>9000</max-connections-service-rest-incoming>
-          <max-connections-service-mqtt>9000</max-connections-service-mqtt>
-          <max-connections-service-amqp>9000</max-connections-service-amqp>
-          <max-connections-service-rest-outgoing>6000</max-connections-service-rest-outgoing>
-          <auth-type>no authentication</auth-type>
+          <max-connections>1000</max-connections>
+          <max-connections-service-smf>1000</max-connections-service-smf>
+          <max-connections-service-web>1000</max-connections-service-web>
+          <max-connections-service-rest-incoming>1000</max-connections-service-rest-incoming>
+          <max-connections-service-mqtt>1000</max-connections-service-mqtt>
+          <max-connections-service-amqp>1000</max-connections-service-amqp>
+          <max-connections-service-rest-outgoing>1000</max-connections-service-rest-outgoing>
+          <request-client-certificate-service-mqtt>when-enabled-in-message-vpn</request-client-certificate-service-mqtt>
+          <request-client-certificate-service-rest-incoming>when-enabled-in-message-vpn</request-client-certificate-service-rest-incoming>
+          <request-client-certificate-service-web>when-enabled-in-message-vpn</request-client-certificate-service-web>
+          <auth-type>Internal database authentication</auth-type>
           <auth-profile></auth-profile>
           <radius-domain></radius-domain>
           <authentication>
             <basic-auth>
               <enabled>true</enabled>
-              <auth-type>no authentication</auth-type>
+              <auth-type>Internal database authentication</auth-type>
               <auth-profile></auth-profile>
               <radius-domain></radius-domain>
             </basic-auth>
@@ -218,13 +234,17 @@
               <enabled>false</enabled>
               <allow-api-provided-username>false</allow-api-provided-username>
             </kerberos-auth>
+            <oauth>
+              <enabled>No</enabled>
+              <default-provider></default-provider>
+            </oauth>
           </authentication>
-          <maximum-spool-usage-mb>60000</maximum-spool-usage-mb>
-          <maximum-transacted-sessions>16000</maximum-transacted-sessions>
-          <maximum-transactions>50000</maximum-transactions>
+          <maximum-spool-usage-mb>100</maximum-spool-usage-mb>
+          <maximum-transacted-sessions>1000</maximum-transacted-sessions>
+          <maximum-transactions>5000</maximum-transactions>
           <stats>
-            <total-client-messages-received>24</total-client-messages-received>
-            <total-client-messages-sent>10</total-client-messages-sent>
+            <total-client-messages-received>107</total-client-messages-received>
+            <total-client-messages-sent>9</total-client-messages-sent>
             <client-data-messages-received>0</client-data-messages-received>
             <client-data-messages-sent>0</client-data-messages-sent>
             <client-persistent-messages-received>0</client-persistent-messages-received>
@@ -235,10 +255,10 @@
             <client-direct-messages-sent>0</client-direct-messages-sent>
             <large-messages-received>0</large-messages-received>
             <dto-messages-received>0</dto-messages-received>
-            <client-control-messages-received>24</client-control-messages-received>
-            <client-control-messages-sent>10</client-control-messages-sent>
-            <login-msgs-received>4</login-msgs-received>
-            <login-msgs-sent>4</login-msgs-sent>
+            <client-control-messages-received>107</client-control-messages-received>
+            <client-control-messages-sent>9</client-control-messages-sent>
+            <login-msgs-received>2</login-msgs-received>
+            <login-msgs-sent>2</login-msgs-sent>
             <certificate-revocation-check-stats>
               <total>0</total>
               <allowed-valid>0</allowed-valid>
@@ -254,9 +274,9 @@
             <update-msgs-sent>0</update-msgs-sent>
             <keepalive-msgs-received>0</keepalive-msgs-received>
             <keepalive-msgs-sent>0</keepalive-msgs-sent>
-            <assured-ctrl-msgs-received>0</assured-ctrl-msgs-received>
-            <assured-ctrl-msgs-sent>0</assured-ctrl-msgs-sent>
-            <add-subscription-msgs-received>18</add-subscription-msgs-received>
+            <assured-ctrl-msgs-received>94</assured-ctrl-msgs-received>
+            <assured-ctrl-msgs-sent>1</assured-ctrl-msgs-sent>
+            <add-subscription-msgs-received>11</add-subscription-msgs-received>
             <add-subscription-msgs-sent>6</add-subscription-msgs-sent>
             <add-subscription-manager-msgs-received>0</add-subscription-manager-msgs-received>
             <add-subscription-manager-msgs-sent>0</add-subscription-manager-msgs-sent>
@@ -265,9 +285,12 @@
             <max-exceeded-msgs-sent>0</max-exceeded-msgs-sent>
             <parse-error-on-add-msgs-sent>0</parse-error-on-add-msgs-sent>
             <denied-subscribe-topic-acl>0</denied-subscribe-topic-acl>
+            <denied-subscribe-topic-reserved>0</denied-subscribe-topic-reserved>
+            <shared-subscription-permission-denied>0</shared-subscription-permission-denied>
             <denied-subscribe-permission>0</denied-subscribe-permission>
             <subscribe-client-not-found>0</subscribe-client-not-found>
-            <remove-subscription-msgs-received>2</remove-subscription-msgs-received>
+            <subscription-manager-shared-subscription-permission-denied>0</subscription-manager-shared-subscription-permission-denied>
+            <remove-subscription-msgs-received>0</remove-subscription-msgs-received>
             <remove-subscription-msgs-sent>0</remove-subscription-msgs-sent>
             <remove-subscription-manager-msgs-received>0</remove-subscription-manager-msgs-received>
             <remove-subscription-manager-msgs-sent>0</remove-subscription-manager-msgs-sent>
@@ -276,8 +299,8 @@
             <denied-unsubscribe-topic-acl>0</denied-unsubscribe-topic-acl>
             <denied-unsubscribe-permission>0</denied-unsubscribe-permission>
             <unsubscribe-client-not-found>0</unsubscribe-client-not-found>
-            <total-client-bytes-received>1722</total-client-bytes-received>
-            <total-client-bytes-sent>1321</total-client-bytes-sent>
+            <total-client-bytes-received>5417</total-client-bytes-received>
+            <total-client-bytes-sent>879</total-client-bytes-sent>
             <client-data-bytes-received>0</client-data-bytes-received>
             <client-data-bytes-sent>0</client-data-bytes-sent>
             <client-persistent-bytes-received>0</client-persistent-bytes-received>
@@ -286,8 +309,8 @@
             <client-non-persistent-bytes-sent>0</client-non-persistent-bytes-sent>
             <client-direct-bytes-received>0</client-direct-bytes-received>
             <client-direct-bytes-sent>0</client-direct-bytes-sent>
-            <client-control-bytes-received>1722</client-control-bytes-received>
-            <client-control-bytes-sent>1321</client-control-bytes-sent>
+            <client-control-bytes-received>5417</client-control-bytes-received>
+            <client-control-bytes-sent>879</client-control-bytes-sent>
             <ingress-compressed-bytes>0</ingress-compressed-bytes>
             <egress-compressed-bytes>0</egress-compressed-bytes>
             <current-ingress-rate-per-second>0</current-ingress-rate-per-second>

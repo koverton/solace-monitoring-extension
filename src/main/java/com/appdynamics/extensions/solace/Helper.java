@@ -1,10 +1,8 @@
 package com.appdynamics.extensions.solace;
 
-import com.appdynamics.extensions.TaskInputArgs;
-import com.appdynamics.extensions.conf.MonitorConfiguration;
-import com.appdynamics.extensions.crypto.CryptoUtil;
+import com.appdynamics.extensions.conf.MonitorContextConfiguration;
+import com.appdynamics.extensions.crypto.Decryptor;
 import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static com.appdynamics.extensions.TaskInputArgs.PASSWORD;
-import static com.appdynamics.extensions.TaskInputArgs.PASSWORD_ENCRYPTED;
 import static com.appdynamics.extensions.solace.MonitorConfigs.*;
 
 /**
@@ -115,10 +111,10 @@ public class Helper {
     }
 
     @SuppressWarnings("unchecked")
-    static List<Map<String,String>> getMonitorServerList(MonitorConfiguration config) {
+    static List<Map<String,?>> getMonitorServerList(MonitorContextConfiguration config) {
         Object obj = config.getConfigYml().get(SERVERS);
         if (obj instanceof List)
-            return (List<Map<String,String>>)obj;
+            return (List<Map<String,?>>)obj;
         throw new ClassCastException("config.yml entry for " + SERVERS + " must be a list of Maps");
     }
 
@@ -213,9 +209,6 @@ public class Helper {
     }
 
     private static String getEncryptedPassword(String encryptionKey, String encryptedPassword) {
-        Map<String, String> cryptoMap = Maps.newHashMap();
-        cryptoMap.put(PASSWORD_ENCRYPTED, encryptedPassword);
-        cryptoMap.put(TaskInputArgs.ENCRYPTION_KEY, encryptionKey);
-        return CryptoUtil.getPassword(cryptoMap);
+        return new Decryptor( encryptionKey ).decrypt( encryptedPassword );
     }
 }

@@ -368,7 +368,7 @@ public class SempMarshaller_r8_13_0Test
         RpcReply reply = marshaller.fromReplyXml(readFile("show-topicendpoints.stats.xml"));
         List<Map<String, Object>> endpoints = factory.getTopicEndpointStatsList(reply);
         assertNotNull(endpoints);
-        assertEquals(0, endpoints.size());
+        assertEquals(3, endpoints.size());
         for(Map<String,Object> e : endpoints) {
             SempTestHelper.noNullValuesCheck(e);
             if (e.get(Metrics.TopicEndpoint.TopicEndpointName).equals("t2")) {

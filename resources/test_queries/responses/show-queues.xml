@@ -1,27 +1,10 @@
-<rpc-reply semp-version="soltr/9_2_0VMR">
+<rpc-reply semp-version="soltr/9_9VMR">
   <rpc>
     <show>
       <queue>
         <queues>
           <queue>
-            <name>default_test01_Queue</name>
-            <info>
-              <message-vpn>default</message-vpn>
-              <durable>true</durable>
-              <type>Primary</type>
-              <num-messages-spooled>0</num-messages-spooled>
-              <current-spool-usage-in-mb>0</current-spool-usage-in-mb>
-              <high-water-mark-in-mb>0</high-water-mark-in-mb>
-              <bind-count>1</bind-count>
-              <ingress-config-status>Up</ingress-config-status>
-              <egress-config-status>Up</egress-config-status>
-              <access-type>exclusive</access-type>
-              <egress-selector-present>No</egress-selector-present>
-              <topic-subscription-count>0</topic-subscription-count>
-            </info>
-          </queue>
-          <queue>
-            <name>q1</name>
+            <name>default_testvpn_Queue</name>
             <info>
               <message-vpn>default</message-vpn>
               <durable>true</durable>
@@ -34,11 +17,12 @@
               <egress-config-status>Up</egress-config-status>
               <access-type>exclusive</access-type>
               <egress-selector-present>No</egress-selector-present>
+              <quota>5000</quota>
               <topic-subscription-count>0</topic-subscription-count>
             </info>
           </queue>
           <queue>
-            <name>q2</name>
+            <name>testq01</name>
             <info>
               <message-vpn>default</message-vpn>
               <durable>true</durable>
@@ -49,15 +33,16 @@
               <bind-count>0</bind-count>
               <ingress-config-status>Up</ingress-config-status>
               <egress-config-status>Up</egress-config-status>
-              <access-type>exclusive</access-type>
+              <access-type>non-exclusive</access-type>
               <egress-selector-present>No</egress-selector-present>
-              <topic-subscription-count>0</topic-subscription-count>
+              <quota>5000</quota>
+              <topic-subscription-count>6</topic-subscription-count>
             </info>
           </queue>
           <queue>
-            <name>default_test01_Queue</name>
+            <name>default_testvpn_Queue</name>
             <info>
-              <message-vpn>test01</message-vpn>
+              <message-vpn>testvpn</message-vpn>
               <durable>true</durable>
               <type>Primary</type>
               <num-messages-spooled>0</num-messages-spooled>
@@ -68,7 +53,8 @@
               <egress-config-status>Up</egress-config-status>
               <access-type>exclusive</access-type>
               <egress-selector-present>No</egress-selector-present>
-              <topic-subscription-count>1</topic-subscription-count>
+              <quota>5000</quota>
+              <topic-subscription-count>0</topic-subscription-count>
             </info>
           </queue>
         </queues>

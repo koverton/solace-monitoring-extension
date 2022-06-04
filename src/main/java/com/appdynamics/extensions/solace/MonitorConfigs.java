@@ -27,6 +27,7 @@ public class MonitorConfigs {
     public final static String MGMT_URL = "mgmtUrl";
     public final static String ADMIN_USER = "adminUser";
     public final static String DISPLAY_NAME = "displayName";
+    public final static String PASSWORD = "password";
     public final static String ENCRYPTED_PASSWORD = "encryptedPassword";
     public final static String ENCRYPTION_KEY = "encryptionKey";
     public final static String TIMEOUT = "requestTimeout";

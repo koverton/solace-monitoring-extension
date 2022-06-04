@@ -1,5 +1,4 @@
-
-<rpc-reply semp-version="soltr/7_2VMR">
+<rpc-reply semp-version="soltr/9_2_0VMR">
     <!-- ERROR: Replication cannot be enabled unless replication mate is configured.
 <execute-result code="fail" reason="nothing to do" reasonCode="21"/>
      -->

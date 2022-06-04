@@ -1,20 +1,20 @@
-<rpc-reply semp-version="soltr/8_13_0">
+<rpc-reply semp-version="soltr/9_9VMR">
   <rpc>
     <show>
       <stats>
         <client>
           <global>
             <stats>
-              <total-clients>1</total-clients>
-              <total-clients-connected>1</total-clients-connected>
+              <total-clients>5</total-clients>
+              <total-clients-connected>4</total-clients-connected>
               <total-clients-connected-with-compression>0</total-clients-connected-with-compression>
               <total-clients-connected-with-ssl>0</total-clients-connected-with-ssl>
-              <total-clients-connected-service-smf>1</total-clients-connected-service-smf>
+              <total-clients-connected-service-smf>4</total-clients-connected-service-smf>
               <total-clients-connected-service-web>0</total-clients-connected-service-web>
               <total-clients-connected-service-rest>0</total-clients-connected-service-rest>
               <total-clients-connected-service-mqtt>0</total-clients-connected-service-mqtt>
-              <total-client-messages-received>43</total-client-messages-received>
-              <total-client-messages-sent>18</total-client-messages-sent>
+              <total-client-messages-received>124</total-client-messages-received>
+              <total-client-messages-sent>110</total-client-messages-sent>
               <client-data-messages-received>0</client-data-messages-received>
               <client-data-messages-sent>0</client-data-messages-sent>
               <client-persistent-messages-received>0</client-persistent-messages-received>
@@ -25,10 +25,10 @@
               <client-direct-messages-sent>0</client-direct-messages-sent>
               <large-messages-received>0</large-messages-received>
               <dto-messages-received>0</dto-messages-received>
-              <client-control-messages-received>43</client-control-messages-received>
-              <client-control-messages-sent>18</client-control-messages-sent>
-              <login-msgs-received>7</login-msgs-received>
-              <login-msgs-sent>7</login-msgs-sent>
+              <client-control-messages-received>124</client-control-messages-received>
+              <client-control-messages-sent>110</client-control-messages-sent>
+              <login-msgs-received>6</login-msgs-received>
+              <login-msgs-sent>6</login-msgs-sent>
               <certificate-revocation-check-stats>
                 <total>0</total>
                 <allowed-valid>0</allowed-valid>
@@ -38,7 +38,7 @@
                 <denied-revoked>0</denied-revoked>
               </certificate-revocation-check-stats>
               <denied-duplicate-clients>0</denied-duplicate-clients>
-              <denied-authorization-failed>0</denied-authorization-failed>
+              <denied-authorization-failed>4</denied-authorization-failed>
               <denied-client-connect-acl>0</denied-client-connect-acl>
               <current-login-req-received-rate-per-second>0</current-login-req-received-rate-per-second>
               <current-login-rsp-sent-rate-per-second>0</current-login-rsp-sent-rate-per-second>
@@ -52,10 +52,10 @@
               <average-jndi-rsp-sent-rate-per-minute>0</average-jndi-rsp-sent-rate-per-minute>
               <keepalive-msgs-received>0</keepalive-msgs-received>
               <keepalive-msgs-sent>0</keepalive-msgs-sent>
-              <assured-ctrl-msgs-received>0</assured-ctrl-msgs-received>
-              <assured-ctrl-msgs-sent>0</assured-ctrl-msgs-sent>
-              <add-subscription-msgs-received>32</add-subscription-msgs-received>
-              <add-subscription-msgs-sent>11</add-subscription-msgs-sent>
+              <assured-ctrl-msgs-received>95</assured-ctrl-msgs-received>
+              <assured-ctrl-msgs-sent>92</assured-ctrl-msgs-sent>
+              <add-subscription-msgs-received>17</add-subscription-msgs-received>
+              <add-subscription-msgs-sent>7</add-subscription-msgs-sent>
               <add-subscription-manager-msgs-received>0</add-subscription-manager-msgs-received>
               <add-subscription-manager-msgs-sent>0</add-subscription-manager-msgs-sent>
               <already-exists-msgs-sent>0</already-exists-msgs-sent>
@@ -63,10 +63,13 @@
               <max-exceeded-msgs-sent>0</max-exceeded-msgs-sent>
               <parse-error-on-add-msgs-sent>0</parse-error-on-add-msgs-sent>
               <denied-subscribe-topic-acl>0</denied-subscribe-topic-acl>
+              <denied-subscribe-topic-reserved>0</denied-subscribe-topic-reserved>
               <denied-unsubscribe-topic-acl>0</denied-unsubscribe-topic-acl>
+              <shared-subscription-permission-denied>0</shared-subscription-permission-denied>
               <denied-subscribe-permission>0</denied-subscribe-permission>
               <subscribe-client-not-found>0</subscribe-client-not-found>
-              <remove-subscription-msgs-received>4</remove-subscription-msgs-received>
+              <subscription-manager-shared-subscription-permission-denied>0</subscription-manager-shared-subscription-permission-denied>
+              <remove-subscription-msgs-received>0</remove-subscription-msgs-received>
               <remove-subscription-msgs-sent>0</remove-subscription-msgs-sent>
               <remove-subscription-manager-msgs-received>0</remove-subscription-manager-msgs-received>
               <remove-subscription-manager-msgs-sent>0</remove-subscription-manager-msgs-sent>
@@ -74,8 +77,8 @@
               <parse-error-on-remove-msgs-sent>0</parse-error-on-remove-msgs-sent>
               <denied-unsubscribe-permission>0</denied-unsubscribe-permission>
               <unsubscribe-client-not-found>0</unsubscribe-client-not-found>
-              <total-client-bytes-received>3073</total-client-bytes-received>
-              <total-client-bytes-sent>2354</total-client-bytes-sent>
+              <total-client-bytes-received>6712</total-client-bytes-received>
+              <total-client-bytes-sent>6604</total-client-bytes-sent>
               <client-data-bytes-received>0</client-data-bytes-received>
               <client-data-bytes-sent>0</client-data-bytes-sent>
               <client-persistent-bytes-received>0</client-persistent-bytes-received>
@@ -84,16 +87,40 @@
               <client-non-persistent-bytes-sent>0</client-non-persistent-bytes-sent>
               <client-direct-bytes-received>0</client-direct-bytes-received>
               <client-direct-bytes-sent>0</client-direct-bytes-sent>
-              <client-control-bytes-received>3073</client-control-bytes-received>
-              <client-control-bytes-sent>2354</client-control-bytes-sent>
+              <client-control-bytes-received>6712</client-control-bytes-received>
+              <client-control-bytes-sent>6604</client-control-bytes-sent>
               <current-ingress-rate-per-second>0</current-ingress-rate-per-second>
               <current-egress-rate-per-second>0</current-egress-rate-per-second>
+              <current-ingress-persistent-rate-per-second>0</current-ingress-persistent-rate-per-second>
+              <current-egress-persistent-rate-per-second>0</current-egress-persistent-rate-per-second>
+              <current-ingress-nonpersistent-rate-per-second>0</current-ingress-nonpersistent-rate-per-second>
+              <current-egress-nonpersistent-rate-per-second>0</current-egress-nonpersistent-rate-per-second>
+              <current-ingress-direct-rate-per-second>0</current-ingress-direct-rate-per-second>
+              <current-egress-direct-rate-per-second>0</current-egress-direct-rate-per-second>
               <average-ingress-rate-per-minute>0</average-ingress-rate-per-minute>
               <average-egress-rate-per-minute>0</average-egress-rate-per-minute>
+              <average-ingress-persistent-rate-per-minute>0</average-ingress-persistent-rate-per-minute>
+              <average-egress-persistent-rate-per-minute>0</average-egress-persistent-rate-per-minute>
+              <average-ingress-nonpersistent-rate-per-minute>0</average-ingress-nonpersistent-rate-per-minute>
+              <average-egress-nonpersistent-rate-per-minute>0</average-egress-nonpersistent-rate-per-minute>
+              <average-ingress-direct-rate-per-minute>0</average-ingress-direct-rate-per-minute>
+              <average-egress-direct-rate-per-minute>0</average-egress-direct-rate-per-minute>
               <current-ingress-byte-rate-per-second>0</current-ingress-byte-rate-per-second>
               <current-egress-byte-rate-per-second>0</current-egress-byte-rate-per-second>
+              <current-ingress-persistent-byte-rate-per-second>0</current-ingress-persistent-byte-rate-per-second>
+              <current-egress-persistent-byte-rate-per-second>0</current-egress-persistent-byte-rate-per-second>
+              <current-ingress-nonpersistent-byte-rate-per-second>0</current-ingress-nonpersistent-byte-rate-per-second>
+              <current-egress-nonpersistent-byte-rate-per-second>0</current-egress-nonpersistent-byte-rate-per-second>
+              <current-ingress-direct-byte-rate-per-second>0</current-ingress-direct-byte-rate-per-second>
+              <current-egress-direct-byte-rate-per-second>0</current-egress-direct-byte-rate-per-second>
               <average-ingress-byte-rate-per-minute>0</average-ingress-byte-rate-per-minute>
               <average-egress-byte-rate-per-minute>0</average-egress-byte-rate-per-minute>
+              <average-ingress-persistent-byte-rate-per-minute>0</average-ingress-persistent-byte-rate-per-minute>
+              <average-egress-persistent-byte-rate-per-minute>0</average-egress-persistent-byte-rate-per-minute>
+              <average-ingress-nonpersistent-byte-rate-per-minute>0</average-ingress-nonpersistent-byte-rate-per-minute>
+              <average-egress-nonpersistent-byte-rate-per-minute>0</average-egress-nonpersistent-byte-rate-per-minute>
+              <average-ingress-direct-byte-rate-per-minute>0</average-ingress-direct-byte-rate-per-minute>
+              <average-egress-direct-byte-rate-per-minute>0</average-egress-direct-byte-rate-per-minute>
               <zip-stats>
                 <ingress-compressed-bytes>0</ingress-compressed-bytes>
                 <egress-compressed-bytes>0</egress-compressed-bytes>

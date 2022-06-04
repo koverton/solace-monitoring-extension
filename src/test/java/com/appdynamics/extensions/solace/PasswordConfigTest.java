@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.appdynamics.extensions.TaskInputArgs.PASSWORD;
+import static com.appdynamics.extensions.solace.MonitorConfigs.PASSWORD;
 import static com.appdynamics.extensions.solace.MonitorConfigs.ADMIN_USER;
 import static com.appdynamics.extensions.solace.MonitorConfigs.ENCRYPTED_PASSWORD;
 import static com.appdynamics.extensions.solace.MonitorConfigs.ENCRYPTION_KEY;
