@@ -29,6 +29,9 @@ about downloading and installing that, we've documented it [here](docs/machine-a
 
 ## Solace SEMP Libraries
 
+Because of a dependency on the jaxb v1 api, this library must be built against JDK 1.8 or earlier.
+The setjdk8.sh script is an example of setting the JAVA_HOME variable for this purpose.
+
 The protocol for querying metrics is currently an XML-based POST request protocol. 
 Schemas for request and reply messages are provided by Solace, which can be used 
 to generate Java request and reply objects. I have a project for generating these 
