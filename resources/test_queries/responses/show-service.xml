@@ -1,4 +1,4 @@
-<rpc-reply semp-version="soltr/8_13_0">
+<rpc-reply semp-version="soltr/9_9VMR">
   <rpc>
     <show>
       <service>
@@ -6,18 +6,21 @@
           <service>
             <name>SEMP</name>
             <vrf>management</vrf>
-            <listen-port>80</listen-port>
+            <listen-port>8080</listen-port>
             <enabled>true</enabled>
             <listen-port-operational-status>Up</listen-port-operational-status>
+            <legacy-timeout>false</legacy-timeout>
+            <session-idle-timeout>15</session-idle-timeout>
+            <session-max-lifetime>43200</session-max-lifetime>
             <ssl>
-              <listen-port>443</listen-port>
+              <listen-port>1943</listen-port>
               <enabled>true</enabled>
               <listen-port-operational-status>No Cert</listen-port-operational-status>
             </ssl>
           </service>
           <service>
             <name>SMF</name>
-            <vrf>msg-backbone</vrf>
+            <vrf>management</vrf>
             <listen-port>55555</listen-port>
             <enabled>true</enabled>
             <listen-port-operational-status>Up</listen-port-operational-status>
@@ -34,63 +37,142 @@
           </service>
           <service>
             <name>WEB</name>
-            <vrf>msg-backbone</vrf>
-            <listen-port>80</listen-port>
+            <vrf>management</vrf>
+            <listen-port>8008</listen-port>
             <enabled>true</enabled>
             <listen-port-operational-status>Up</listen-port-operational-status>
             <web-url-suffix></web-url-suffix>
             <ssl>
-              <listen-port>443</listen-port>
+              <listen-port>1443</listen-port>
               <listen-port-operational-status>No Cert</listen-port-operational-status>
             </ssl>
           </service>
           <service>
-            <name>HEALTHCHECK</name>
+            <name>MQTT</name>
+            <vrf>management</vrf>
+            <vpn-name>default</vpn-name>
+            <listen-port>1883</listen-port>
+            <enabled>true</enabled>
+            <listen-port-operational-status>Up</listen-port-operational-status>
+            <ssl>
+              <enabled>true</enabled>
+              <listen-port>8883</listen-port>
+              <listen-port-operational-status>No Cert</listen-port-operational-status>
+            </ssl>
+            <websocket>
+              <enabled>true</enabled>
+              <listen-port>8000</listen-port>
+              <listen-port-operational-status>Up</listen-port-operational-status>
+            </websocket>
+            <websocket-secure>
+              <enabled>true</enabled>
+              <listen-port>8443</listen-port>
+              <listen-port-operational-status>No Cert</listen-port-operational-status>
+            </websocket-secure>
+          </service>
+          <service>
+            <name>AMQP</name>
+            <vrf>management</vrf>
+            <enabled>true</enabled>
+            <ssl>
+              <listen-port>0</listen-port>
+              <enabled>true</enabled>
+              <listen-port-operational-status>No Cert</listen-port-operational-status>
+            </ssl>
+          </service>
+          <service>
+            <name>AMQP</name>
             <vrf>msg-backbone</vrf>
+            <vpn-name>default</vpn-name>
+            <listen-port>5672</listen-port>
+            <enabled>true</enabled>
+            <listen-port-operational-status>Up</listen-port-operational-status>
+            <ssl>
+              <enabled>true</enabled>
+              <listen-port>5671</listen-port>
+              <listen-port-operational-status>No Cert</listen-port-operational-status>
+            </ssl>
+          </service>
+          <service>
+            <name>REST</name>
+            <vrf>management</vrf>
+            <vpn-name>default</vpn-name>
+            <listen-port>9000</listen-port>
+            <enabled>true</enabled>
+            <listen-port-operational-status>Up</listen-port-operational-status>
+            <ssl>
+              <enabled>true</enabled>
+              <listen-port>9443</listen-port>
+              <listen-port-operational-status>No Cert</listen-port-operational-status>
+            </ssl>
+          </service>
+          <service>
+            <name>MATELINK</name>
+            <vrf>management</vrf>
+            <listen-port>8741</listen-port>
+            <enabled>true</enabled>
+            <listen-port-operational-status>Missing Mate Address</listen-port-operational-status>
+          </service>
+          <service>
+            <name>HEALTHCHECK</name>
+            <vrf>management</vrf>
             <listen-port>5550</listen-port>
-            <enabled>false</enabled>
+            <enabled>true</enabled>
+            <listen-port-operational-status>Up</listen-port-operational-status>
+          </service>
+          <service>
+            <name>REDUNDAN</name>
+            <vrf>management</vrf>
+            <listen-port>8300</listen-port>
+            <enabled>true</enabled>
+            <listen-port-operational-status>Down</listen-port-operational-status>
+          </service>
+          <service>
+            <name>REDUNDAN</name>
+            <vrf>management</vrf>
+            <listen-port>8301</listen-port>
+            <enabled>true</enabled>
+            <listen-port-operational-status>Down</listen-port-operational-status>
+          </service>
+          <service>
+            <name>REDUNDAN</name>
+            <vrf>management</vrf>
+            <listen-port>8302</listen-port>
+            <enabled>true</enabled>
             <listen-port-operational-status>Down</listen-port-operational-status>
           </service>
           <msg-backbone>Enabled</msg-backbone>
-          <msg-backbone-vrf>msg-backbone</msg-backbone-vrf>
-          <rest-incoming-admin-state>Shutdown</rest-incoming-admin-state>
-          <rest-outgoing-admin-state>Shutdown</rest-outgoing-admin-state>
-          <mqtt-incoming-admin-state>Shutdown</mqtt-incoming-admin-state>
-          <amqp-incoming-admin-state>Shutdown</amqp-incoming-admin-state>
-          <max-connections>9000</max-connections>
-          <max-connections-service-smf>9000</max-connections-service-smf>
-          <max-connections-service-web>9000</max-connections-service-web>
-          <max-connections-service-mqtt>9000</max-connections-service-mqtt>
-          <max-connections-service-amqp>9000</max-connections-service-amqp>
-          <max-connections-service-rest-incoming>9000</max-connections-service-rest-incoming>
-          <max-connections-service-rest-outgoing>6000</max-connections-service-rest-outgoing>
-          <max-connections-service-ssl>9000</max-connections-service-ssl>
+          <msg-backbone-vrf>management</msg-backbone-vrf>
+          <rest-incoming-admin-state>Enabled</rest-incoming-admin-state>
+          <rest-outgoing-admin-state>Enabled</rest-outgoing-admin-state>
+          <mqtt-incoming-admin-state>Enabled</mqtt-incoming-admin-state>
+          <amqp-incoming-admin-state>Enabled</amqp-incoming-admin-state>
+          <max-connections>1000</max-connections>
+          <max-connections-service-smf>1000</max-connections-service-smf>
+          <max-connections-service-web>1000</max-connections-service-web>
+          <max-connections-service-mqtt>1000</max-connections-service-mqtt>
+          <max-connections-service-amqp>1000</max-connections-service-amqp>
+          <max-connections-service-rest-incoming>1000</max-connections-service-rest-incoming>
+          <max-connections-service-rest-outgoing>1000</max-connections-service-rest-outgoing>
+          <max-connections-service-ssl>1000</max-connections-service-ssl>
           <event-configuration>
             <event-thresholds>
               <name>connections-service</name>
-              <set-value>7200</set-value>
-              <clear-value>5400</clear-value>
               <set-percentage>80</set-percentage>
               <clear-percentage>60</clear-percentage>
             </event-thresholds>
             <event-thresholds>
               <name>connections-service-smf</name>
-              <set-value>7200</set-value>
-              <clear-value>5400</clear-value>
               <set-percentage>80</set-percentage>
               <clear-percentage>60</clear-percentage>
             </event-thresholds>
             <event-thresholds>
               <name>connections-service-rest-outgoing</name>
-              <set-value>4800</set-value>
-              <clear-value>3600</clear-value>
               <set-percentage>80</set-percentage>
               <clear-percentage>60</clear-percentage>
             </event-thresholds>
             <event-thresholds>
               <name>ssl-connections</name>
-              <set-value>7200</set-value>
-              <clear-value>5400</clear-value>
               <set-percentage>80</set-percentage>
               <clear-percentage>60</clear-percentage>
             </event-thresholds>

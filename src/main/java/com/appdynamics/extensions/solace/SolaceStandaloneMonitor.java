@@ -1,9 +1,7 @@
 package com.appdynamics.extensions.solace;
 
 import com.appdynamics.extensions.ABaseMonitor;
-import com.appdynamics.extensions.MetricWriteHelper;
 import com.appdynamics.extensions.TasksExecutionServiceProvider;
-import com.appdynamics.extensions.conf.MonitorConfiguration;
 import com.appdynamics.extensions.solace.semp.SempConnector;
 import com.appdynamics.extensions.solace.semp.SempService;
 import com.appdynamics.extensions.solace.semp.SempServiceFactory;
@@ -13,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.appdynamics.extensions.solace.MonitorConfigs.*;
@@ -34,18 +33,24 @@ public class SolaceStandaloneMonitor extends ABaseMonitor {
         return this.getClass().getSimpleName();
     }
 
+    @Override
+    protected List<Map<String, ?>> getServers() {
+        return Helper.getMonitorServerList( getContextConfiguration() );
+    }
+
     protected void doRun(TasksExecutionServiceProvider serviceProvider) {
         // Internally, we don't want prefixes to end with delimiters, so strip off
         String baseMetricPrefix  = getBasePrefix();
 
         // Each Solace server monitored comes with a number of configurations
-        for (Map<String, String> server : Helper.getMonitorServerList(configuration)) {
-            String mgmtUrl     = server.get(MGMT_URL);
-            String adminUser   = server.get(ADMIN_USER);
+        for (Map<String, ?> server : getServers() ) {
+            Map<String,String> solaceServer = (Map<String,String>)server;
+            String mgmtUrl     = solaceServer.get(MGMT_URL);
+            String adminUser   = solaceServer.get(ADMIN_USER);
             String adminPass   = Helper.getPassword(server);
-            String displayName = server.get(DISPLAY_NAME);
-            Integer timeout    = Helper.getIntOrDefault(server, TIMEOUT, Sempv1Connector.DEFAULT_TIMEOUT);
-            ServerConfigs serverConfigs = new ServerConfigs(server);
+            String displayName = solaceServer.get(DISPLAY_NAME);
+            Integer timeout    = Helper.getIntOrDefault(solaceServer, TIMEOUT, Sempv1Connector.DEFAULT_TIMEOUT);
+            ServerConfigs serverConfigs = new ServerConfigs(solaceServer);
 
             logger.info("Adding task to poll [Server:{}, Mgmt URL:{}, Admin User:{}]",
                     displayName, mgmtUrl, adminUser);
@@ -84,7 +89,7 @@ public class SolaceStandaloneMonitor extends ABaseMonitor {
     }
 
     protected int getTaskCount() {
-        return Helper.getMonitorServerList(configuration).size();
+        return getServers().size();
     }
 
     /**
@@ -92,7 +97,7 @@ public class SolaceStandaloneMonitor extends ABaseMonitor {
      * @return Base prefix string ensured to be terminated with a symbol rather than a delimiter
      */
     private String getBasePrefix() {
-        String baseMetricPrefix  = (String) configuration.getConfigYml().get(METRIC_PREFIX);
+        String baseMetricPrefix  = (String) getContextConfiguration().getConfigYml().get(METRIC_PREFIX);
         if (baseMetricPrefix.endsWith("|"))
             return baseMetricPrefix.substring(0, baseMetricPrefix.lastIndexOf("|"));
         return baseMetricPrefix;

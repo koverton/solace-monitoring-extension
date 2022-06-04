@@ -1,56 +1,48 @@
-<rpc-reply semp-version="soltr/8_13_0">
+<rpc-reply semp-version="soltr/9_9VMR">
   <rpc>
     <show>
       <version>
-        <description>Solace PubSub+ 3560 Version 100.0longer_selectors.0.24</description>
+        <description>Solace PubSub+ Enterprise Version 9.9.0.45</description>
         <executables>
           <executable>
             <name>CLI</name>
-            <release>100.0longer_selectors.0.24</release>
-            <build-date>2018-10-10T18:34:30+00:00</build-date>
+            <release>9.9.0.45</release>
+            <build-date>2022-03-11T19:08:03+00:00</build-date>
           </executable>
           <executable>
             <name>DataplaneMgr</name>
-            <release>100.0longer_selectors.0.24</release>
-            <build-date>2018-10-10T18:34:30+00:00</build-date>
+            <release>9.9.0.45</release>
+            <build-date>2022-03-11T19:08:03+00:00</build-date>
           </executable>
           <executable>
             <name>Controlplane</name>
-            <release>100.0longer_selectors.0.24</release>
-            <build-date>2018-10-10T18:34:30+00:00</build-date>
+            <release>9.9.0.45</release>
+            <build-date>2022-03-11T19:08:03+00:00</build-date>
           </executable>
           <executable>
             <name>Managementplane</name>
-            <release>100.0longer_selectors.0.24</release>
-            <build-date>2018-10-10T18:34:30+00:00</build-date>
+            <release>9.9.0.45</release>
+            <build-date>2022-03-11T19:08:03+00:00</build-date>
           </executable>
         </executables>
-        <current-load>soltr_100.0longer_selectors.0.24</current-load>
+        <current-load>soltr_9.9.0.45</current-load>
         <backout-load-not-existant></backout-load-not-existant>
         <loads>
           <load>
             <index>1</index>
-            <version>soltr_100.0longer_selectors.0.24</version>
-            <solbase-version>2.2.2.34</solbase-version>
-            <is-solbase-present>1</is-solbase-present>
+            <version>soltr_9.9.0.45</version>
+            <solbase-version>VMR_SolBase-2.2.17.7</solbase-version>
+            <is-solbase-present>0</is-solbase-present>
           </load>
         </loads>
         <solbases>
-          <solbase>
-            <index>1</index>
-            <version>solbase_1.0.0.5</version>
-          </solbase>
-          <solbase>
-            <index>2</index>
-            <version>solbase_2.2.2.34</version>
-          </solbase>
         </solbases>
         <uptime>
           <days>0</days>
-          <hours>7</hours>
-          <mins>49</mins>
-          <secs>37</secs>
-          <total-secs>28177</total-secs>
+          <hours>0</hours>
+          <mins>4</mins>
+          <secs>51</secs>
+          <total-secs>291</total-secs>
         </uptime>
       </version>
     </show>
