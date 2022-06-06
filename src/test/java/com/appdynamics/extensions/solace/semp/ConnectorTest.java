@@ -88,7 +88,7 @@ public class ConnectorTest {
         }
     }
 
-    @Test
+//    @Test
     public void localhostExtendedConfigsQueueStatsTest() throws Exception {
         String sempVersion = "9_2_0VMR";
         Sempv1Connector connector = new Sempv1Connector(
