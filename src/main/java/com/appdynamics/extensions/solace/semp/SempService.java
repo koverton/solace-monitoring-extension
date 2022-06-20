@@ -60,42 +60,42 @@ public interface SempService {
      *
      * @return List of key-&gt;value maps of queue metrics per queue
      */
-    List<Map<String,Object>> checkQueueList();
+    List<Map<String,Object>> checkQueueList(String namePattern);
 
     /**
      * Equivalent CLI: show queue * rates
      *
      * @return List of key-&gt;value maps of queue rate statistics per queue
      */
-    List<Map<String,Object>> checkQueueRatesList();
+    List<Map<String,Object>> checkQueueRatesList(String namePattern);
 
     /**
      * Equivalent CLI: show queue * stats
      *
      * @return List of key-&gt;value maps of queue statistics per queue
      */
-    List<Map<String,Object>> checkQueueStatsList();
+    List<Map<String,Object>> checkQueueStatsList(String namePattern);
 
     /**
      * Equivalent CLI: show topic-endpoint * detail
      *
      * @return List of key-&gt;value maps of DTE metrics per DTE
      */
-    List<Map<String,Object>> checkTopicEndpointList();
+    List<Map<String,Object>> checkTopicEndpointList(String namePattern);
 
     /**
      * Equivalent CLI: show topic-endpoint * rates
      *
      * @return List of key-&gt;value maps of rate statistics per DTE
      */
-    List<Map<String,Object>> checkTopicEndpointRatesList();
+    List<Map<String,Object>> checkTopicEndpointRatesList(String namePattern);
 
     /**
      * Equivalent CLI: show topic-endpoint * stats
      *
      * @return List of key-&gt;value maps of statistics per DTE
      */
-    List<Map<String,Object>> checkTopicEndpointStatsList();
+    List<Map<String,Object>> checkTopicEndpointStatsList(String namePattern);
 
     /**
      * Equivalent CLI: show bridge * detail

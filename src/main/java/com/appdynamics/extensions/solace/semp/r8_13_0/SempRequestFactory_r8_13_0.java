@@ -67,10 +67,10 @@ public class SempRequestFactory_r8_13_0 implements SempRequestFactory<Rpc> {
         return request;
     }
 
-    public Rpc createQueueListRequest(String sempVersion) {
+    public Rpc createQueueListRequest(String sempVersion, String namePattern) {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setQueue(factory.createRpcShowQueue());
-        request.getShow().getQueue().setName("*");
+        request.getShow().getQueue().setName(namePattern);
         if (serverConfigs.getExcludeTemporaries())
             request.getShow().getQueue().setDurable(factory.createKeywordType());
         request.getShow().getQueue().setDetail(factory.createKeywordType());
@@ -79,10 +79,10 @@ public class SempRequestFactory_r8_13_0 implements SempRequestFactory<Rpc> {
         return request;
     }
 
-    public Rpc createQueueRatesListRequest(String sempVersion) {
+    public Rpc createQueueRatesListRequest(String sempVersion, String namePattern) {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setQueue(factory.createRpcShowQueue());
-        request.getShow().getQueue().setName("*");
+        request.getShow().getQueue().setName(namePattern);
         if (serverConfigs.getExcludeTemporaries())
             request.getShow().getQueue().setDurable(factory.createKeywordType());
         request.getShow().getQueue().setRates(factory.createKeywordType());
@@ -91,10 +91,10 @@ public class SempRequestFactory_r8_13_0 implements SempRequestFactory<Rpc> {
         return request;
     }
 
-    public Rpc createQueueStatsListRequest(String sempVersion) {
+    public Rpc createQueueStatsListRequest(String sempVersion, String namePattern) {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setQueue(factory.createRpcShowQueue());
-        request.getShow().getQueue().setName("*");
+        request.getShow().getQueue().setName(namePattern);
         if (serverConfigs.getExcludeTemporaries())
             request.getShow().getQueue().setDurable(factory.createKeywordType());
         request.getShow().getQueue().setStats(factory.createKeywordType());
@@ -103,10 +103,10 @@ public class SempRequestFactory_r8_13_0 implements SempRequestFactory<Rpc> {
         return request;
     }
 
-    public Rpc createTopicEndpointListRequest(String sempVersion) {
+    public Rpc createTopicEndpointListRequest(String sempVersion, String namePattern) {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setTopicEndpoint(factory.createRpcShowTopicEndpoint());
-        request.getShow().getTopicEndpoint().setName("*");
+        request.getShow().getTopicEndpoint().setName(namePattern);
         if (serverConfigs.getExcludeTemporaries())
             request.getShow().getTopicEndpoint().setDurable(factory.createKeywordType());
         request.getShow().getTopicEndpoint().setDetail(factory.createKeywordType());
@@ -115,10 +115,10 @@ public class SempRequestFactory_r8_13_0 implements SempRequestFactory<Rpc> {
         return request;
     }
 
-    public Rpc createTopicEndpointRatesListRequest(String sempVersion) {
+    public Rpc createTopicEndpointRatesListRequest(String sempVersion, String namePattern) {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setTopicEndpoint(factory.createRpcShowTopicEndpoint());
-        request.getShow().getTopicEndpoint().setName("*");
+        request.getShow().getTopicEndpoint().setName(namePattern);
         if (serverConfigs.getExcludeTemporaries())
             request.getShow().getTopicEndpoint().setDurable(factory.createKeywordType());
         request.getShow().getTopicEndpoint().setRates(factory.createKeywordType());
@@ -127,10 +127,10 @@ public class SempRequestFactory_r8_13_0 implements SempRequestFactory<Rpc> {
         return request;
     }
 
-    public Rpc createTopicEndpointStatsListRequest(String sempVersion) {
+    public Rpc createTopicEndpointStatsListRequest(String sempVersion, String namePattern) {
         final Rpc request = newShowRequest(sempVersion);
         request.getShow().setTopicEndpoint(factory.createRpcShowTopicEndpoint());
-        request.getShow().getTopicEndpoint().setName("*");
+        request.getShow().getTopicEndpoint().setName(namePattern);
         if (serverConfigs.getExcludeTemporaries())
             request.getShow().getTopicEndpoint().setDurable(factory.createKeywordType());
         request.getShow().getTopicEndpoint().setStats(factory.createKeywordType());

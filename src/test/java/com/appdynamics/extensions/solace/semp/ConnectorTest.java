@@ -75,7 +75,7 @@ public class ConnectorTest {
         SempMarshaller_r9_2_0VMR marshaller = new SempMarshaller_r9_2_0VMR();
         SempReplyFactory_r9_2_0VMR replyFactory = new SempReplyFactory_r9_2_0VMR(new ServerConfigs(new HashMap<>()));
 
-        String request =  marshaller.toRequestXml( factory.createQueueListRequest(sempVersion) );
+        String request =  marshaller.toRequestXml( factory.createQueueListRequest(sempVersion, "*") );
         String response = connector.doPost(request);
         RpcReply reply = marshaller.fromReplyXml(response);
         List<Map<String, Object>> queues = replyFactory.getQueueList(reply);
@@ -102,7 +102,7 @@ public class ConnectorTest {
         SempMarshaller_r9_2_0VMR marshaller = new SempMarshaller_r9_2_0VMR();
         SempReplyFactory_r9_2_0VMR replyFactory = new SempReplyFactory_r9_2_0VMR(serverConfigs);
 
-        String request =  marshaller.toRequestXml( factory.createQueueStatsListRequest(sempVersion) );
+        String request =  marshaller.toRequestXml( factory.createQueueStatsListRequest(sempVersion, "*") );
         String response = connector.doPost(request);
         System.out.println(response);
         RpcReply reply = marshaller.fromReplyXml(response);
