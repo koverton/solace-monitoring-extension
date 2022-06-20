@@ -10,7 +10,7 @@ xsi:schemaLocation="
 </formats>
 <files>
     <file>
-        <source>target/solace-monitoring-extension-1.9.1.jar</source>
+        <source>target/solace-monitoring-extension-1.9.2.jar</source>
         <outputDirectory>lib</outputDirectory>
     </file>
     <file>

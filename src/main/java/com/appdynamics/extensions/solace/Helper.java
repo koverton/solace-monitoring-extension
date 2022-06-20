@@ -11,8 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.appdynamics.extensions.solace.MonitorConfigs.*;
+import static com.appdynamics.extensions.solace.MonitorConfigs.ExclusionPolicy.BLACKLIST;
+import static java.util.Arrays.asList;
 
 /**
  * <p>Internal helper methods for {@link com.appdynamics.extensions.solace.SolaceMonitor}.
@@ -148,7 +151,7 @@ public class Helper {
     }
 
     static ExclusionPolicy parseExclusionPolicy(String value) {
-        if (value == null) return ExclusionPolicy.BLACKLIST;
+        if (value == null) return BLACKLIST;
 
         for (ExclusionPolicy each : ExclusionPolicy.class.getEnumConstants()) {
             if (each.name().compareToIgnoreCase(value) == 0) {
@@ -156,7 +159,7 @@ public class Helper {
             }
         }
         logger.error("Failure parsing ExclusionPolicy configuration for value {}, defaulting to BLACKLIST", value);
-        return ExclusionPolicy.BLACKLIST;
+        return BLACKLIST;
     }
 
     static RedundancyModel parseRedundancyModel(String redundancy) {
@@ -167,8 +170,18 @@ public class Helper {
         return RedundancyModel.STANDALONE;
     }
 
+    static List<String> getPolicyPatternList(List<Pattern> policyList, ExclusionPolicy policy) {
+        if( BLACKLIST == policy ) {
+            return asList("*");
+        }
+        return policyList
+            .stream()
+            .map( (Pattern pattern) -> pattern.pattern() )
+            .collect( Collectors.toList() );
+    }
+
     static boolean isExcluded(String name, List<Pattern> policyList, ExclusionPolicy policy) {
-        if (policy == ExclusionPolicy.BLACKLIST) {
+        if (policy == BLACKLIST) {
             // Exclude this item because it was found in the blacklist
             for(Pattern p : policyList) {
                 if (p.matcher(name).matches())

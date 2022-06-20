@@ -21,17 +21,17 @@ public interface SempRequestFactory<Request> {
 
     Request createMsgVpnSpoolListRequest(String sempVersion);
 
-    Request createQueueListRequest(String sempVersion);
+    Request createQueueListRequest(String sempVersion, String namePattern);
 
-    Request createQueueRatesListRequest(String sempVersion);
+    Request createQueueRatesListRequest(String sempVersion, String namePattern);
 
-    Request createQueueStatsListRequest(String sempVersion);
+    Request createQueueStatsListRequest(String sempVersion, String namePattern);
 
-    Request createTopicEndpointListRequest(String sempVersion);
+    Request createTopicEndpointListRequest(String sempVersion, String namePattern);
 
-    Request createTopicEndpointRatesListRequest(String sempVersion);
+    Request createTopicEndpointRatesListRequest(String sempVersion, String namePattern);
 
-    Request createTopicEndpointStatsListRequest(String sempVersion);
+    Request createTopicEndpointStatsListRequest(String sempVersion, String namePattern);
 
     Request createGlobalBridgeListRequest(String sempVersion);
 }

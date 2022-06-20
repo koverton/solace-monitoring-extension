@@ -95,11 +95,11 @@ class GenericSempService<Request,Reply> implements SempService {
         return result;
     }
 
-    public List<Map<String,Object>> checkQueueList() {
+    public List<Map<String,Object>> checkQueueList(String namePattern) {
         logger.trace("<GenericSempService.checkQueueList>");
 
         List<Map<String,Object>> result = processor.repeatingQuery(
-                () -> ctx.getReqFactory().createQueueListRequest(ctx.getSchemaVersion()),
+                () -> ctx.getReqFactory().createQueueListRequest(ctx.getSchemaVersion(), namePattern),
                 (Reply reply) -> ctx.getReplyFactory().getQueueList(reply)
         );
 
@@ -107,11 +107,11 @@ class GenericSempService<Request,Reply> implements SempService {
         return result;
     }
 
-    public List<Map<String,Object>> checkQueueRatesList() {
+    public List<Map<String,Object>> checkQueueRatesList(String namePattern) {
         logger.trace("<GenericSempService.checkQueueRatesList>");
 
         List<Map<String,Object>> result = processor.repeatingQuery(
-                () -> ctx.getReqFactory().createQueueRatesListRequest(ctx.getSchemaVersion()),
+                () -> ctx.getReqFactory().createQueueRatesListRequest(ctx.getSchemaVersion(), namePattern),
                 (Reply reply) -> ctx.getReplyFactory().getQueueRatesList(reply)
         );
 
@@ -119,11 +119,11 @@ class GenericSempService<Request,Reply> implements SempService {
         return result;
     }
 
-    public List<Map<String,Object>> checkQueueStatsList() {
+    public List<Map<String,Object>> checkQueueStatsList(String namePattern) {
         logger.trace("<GenericSempService.checkQueueStatsList>");
 
         List<Map<String,Object>> result = processor.repeatingQuery(
-                () -> ctx.getReqFactory().createQueueStatsListRequest(ctx.getSchemaVersion()),
+                () -> ctx.getReqFactory().createQueueStatsListRequest(ctx.getSchemaVersion(), namePattern),
                 (Reply reply) -> ctx.getReplyFactory().getQueueStatsList(reply)
         );
 
@@ -131,11 +131,11 @@ class GenericSempService<Request,Reply> implements SempService {
         return result;
     }
 
-    public List<Map<String,Object>> checkTopicEndpointList() {
+    public List<Map<String,Object>> checkTopicEndpointList(String namePattern) {
         logger.trace("<GenericSempService.checkTopicEndpointList>");
 
         List<Map<String,Object>> result = processor.repeatingQuery(
-                () -> ctx.getReqFactory().createTopicEndpointListRequest(ctx.getSchemaVersion()),
+                () -> ctx.getReqFactory().createTopicEndpointListRequest(ctx.getSchemaVersion(), namePattern),
                 (Reply reply) -> ctx.getReplyFactory().getTopicEndpointList(reply)
         );
 
@@ -143,11 +143,11 @@ class GenericSempService<Request,Reply> implements SempService {
         return result;
     }
 
-    public List<Map<String,Object>> checkTopicEndpointRatesList() {
+    public List<Map<String,Object>> checkTopicEndpointRatesList(String namePattern) {
         logger.trace("<GenericSempService.checkTopicEndpointRatesList>");
 
         List<Map<String,Object>> result = processor.repeatingQuery(
-                () -> ctx.getReqFactory().createTopicEndpointRatesListRequest(ctx.getSchemaVersion()),
+                () -> ctx.getReqFactory().createTopicEndpointRatesListRequest(ctx.getSchemaVersion(), namePattern),
                 (Reply reply) -> ctx.getReplyFactory().getTopicEndpointRatesList(reply)
         );
 
@@ -155,11 +155,11 @@ class GenericSempService<Request,Reply> implements SempService {
         return result;
     }
 
-    public List<Map<String,Object>> checkTopicEndpointStatsList() {
+    public List<Map<String,Object>> checkTopicEndpointStatsList(String namePattern) {
         logger.trace("<GenericSempService.checkTopicEndpointStatsList>");
 
         List<Map<String,Object>> result = processor.repeatingQuery(
-                () -> ctx.getReqFactory().createTopicEndpointStatsListRequest(ctx.getSchemaVersion()),
+                () -> ctx.getReqFactory().createTopicEndpointStatsListRequest(ctx.getSchemaVersion(), namePattern),
                 (Reply reply) -> ctx.getReplyFactory().getTopicEndpointStatsList(reply)
         );
 

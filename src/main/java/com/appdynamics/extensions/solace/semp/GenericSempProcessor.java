@@ -95,14 +95,14 @@ class GenericSempProcessor<Request,Reply> {
                 result.addAll(resultFactory.makeResult(reply));
             }
             requestXml = extractMoreCookie(replyXml);
-            if( requestXml != null ) {
-                try {
-                    Thread.sleep( 200 );
-                }
-                catch(InterruptedException e) {
-                    logger.error("Failed sleeping after request", e);
-                }
-            }
+//            if( requestXml != null ) {
+//                try {
+//                    Thread.sleep( 200 );
+//                }
+//                catch(InterruptedException e) {
+//                    logger.error("Failed sleeping after request", e);
+//                }
+//            }
         }
         return result;
     }

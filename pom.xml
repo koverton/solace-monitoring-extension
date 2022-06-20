@@ -4,7 +4,7 @@
 
     <groupId>com.appdynamics.extensions</groupId>
     <artifactId>solace-monitoring-extension</artifactId>
-    <version>1.9.1</version>
+    <version>1.9.2</version>
     <packaging>jar</packaging>
 
     <name>solace-monitoring-extension</name>
