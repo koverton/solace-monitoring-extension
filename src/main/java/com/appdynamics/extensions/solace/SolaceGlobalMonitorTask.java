@@ -105,6 +105,8 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         // HACK -- stats and rates queries do NOT include durability in the results
         Map<String,Object> durableQueueMap = new HashMap<>();
         for(String namePattern : Helper.getPolicyPatternList(serverConfigs.getQueueFilter(), serverConfigs.getQueueExclusionPolicy()) ) {
+            if( namePattern == null || namePattern.isEmpty() )
+                continue;
             for(Map<String,Object> queue : svc.checkQueueList(namePattern)) {
                 String vpnName= (String) queue.get(Metrics.Queue.VpnName);
                 String qname = (String) queue.get(Metrics.Queue.QueueName);
@@ -165,6 +167,8 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         // HACK -- stats and rates queries do NOT include durability in the results
         Map<String,Object> durableEndpointsMap = new HashMap<>();
         for(String namePattern : Helper.getPolicyPatternList(serverConfigs.getTopicEndpointFilter(), serverConfigs.getTopicEndpointExclusionPolicy()) ) {
+            if( namePattern == null || namePattern.isEmpty() )
+                continue;
             for ( Map<String, Object> endpoint : svc.checkTopicEndpointList(namePattern) ) {
                 String vpnName = (String) endpoint.get( Metrics.TopicEndpoint.VpnName );
                 String ename = (String) endpoint.get( Metrics.TopicEndpoint.TopicEndpointName );
