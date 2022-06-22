@@ -2,6 +2,7 @@ package com.appdynamics.extensions.solace;
 
 import com.appdynamics.extensions.ABaseMonitor;
 import com.appdynamics.extensions.TasksExecutionServiceProvider;
+import com.appdynamics.extensions.solace.semp.Sempv1Connector;
 import org.junit.Test;
 
 import java.util.List;
@@ -10,6 +11,11 @@ import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+
+import static com.appdynamics.extensions.solace.MonitorConfigs.*;
+import static com.appdynamics.extensions.solace.MonitorConfigs.TIMEOUT;
+import static org.junit.Assert.*;
 
 public class SolaceMonitorTest {
 
@@ -63,17 +69,45 @@ public class SolaceMonitorTest {
 
         @Override
         protected List<Map<String, ?>> getServers() {
-            return null;
+            return (List<Map<String, ?>>) Helper.getMonitorServerList( getContextConfiguration() );
         }
 
         protected void doRun(TasksExecutionServiceProvider tasksExecutionServiceProvider) {
             Map<String, ?>  configs = this.getContextConfiguration().getConfigYml();
-            for(Map.Entry<String, ?> e : configs.entrySet()) {
-                System.out.println(e.getKey() + " = " + e.getValue().toString());
+            for (Map<String, ?> server : getServers()) {
+                Map<String,String> solaceServer = (Map<String,String>)server;
+                ServerConfigs serverConfigs = new ServerConfigs(solaceServer);
+                for(String pattern : Helper.getPolicyPatternList(serverConfigs.getQueueFilter(), serverConfigs.getQueueExclusionPolicy()) ) {
+                    assertNotNull(pattern);
+                    assertFalse( pattern.isEmpty() );
+                }
+                for(String pattern : Helper.getPolicyPatternList(serverConfigs.getTopicEndpointFilter(), serverConfigs.getTopicEndpointExclusionPolicy()) ) {
+                    assertNotNull(pattern);
+                    assertFalse( pattern.isEmpty() );
+                }
             }
         }
         protected int getTaskCount() {
             return 0;
+        }
+    }
+
+    @Test
+    public void testSolaceMonitorWhitelistConfigs() {
+        try {
+            final ABaseMonitor monitor = new TestMonitor();
+            final Map<String, String> taskArgs = new HashMap<>();
+
+            taskArgs.put("config-file", "src/test/resources/conf/citi-config.yml");
+
+            try {
+                monitor.execute(taskArgs, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
         }
     }
 

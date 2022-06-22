@@ -177,6 +177,7 @@ public class Helper {
         return policyList
             .stream()
             .map( (Pattern pattern) -> pattern.pattern() )
+            .filter( (pattern) -> !pattern.isEmpty() )
             .collect( Collectors.toList() );
     }
 
