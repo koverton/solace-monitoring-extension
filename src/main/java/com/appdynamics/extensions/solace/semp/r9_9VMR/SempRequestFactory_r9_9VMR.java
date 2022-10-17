@@ -73,9 +73,9 @@ public class SempRequestFactory_r9_9VMR implements SempRequestFactory<Rpc> {
         request.getShow().getQueue().setName(namePattern);
         if (serverConfigs.getExcludeTemporaries())
             request.getShow().getQueue().setDurable(factory.createKeywordType());
-        request.getShow().getQueue().setDetail(factory.createKeywordType());
+//        request.getShow().getQueue().setDetail(factory.createKeywordType());
         request.getShow().getQueue().setCount(factory.createKeywordType());
-        request.getShow().getQueue().setNumElements(100L);
+        request.getShow().getQueue().setNumElements(1000L);
         return request;
     }
 
@@ -109,9 +109,9 @@ public class SempRequestFactory_r9_9VMR implements SempRequestFactory<Rpc> {
         request.getShow().getTopicEndpoint().setName(namePattern);
         if (serverConfigs.getExcludeTemporaries())
             request.getShow().getTopicEndpoint().setDurable(factory.createKeywordType());
-        request.getShow().getTopicEndpoint().setDetail(factory.createKeywordType());
+//        request.getShow().getTopicEndpoint().setDetail(factory.createKeywordType());
         request.getShow().getTopicEndpoint().setCount(factory.createKeywordType());
-        request.getShow().getTopicEndpoint().setNumElements(100L);
+        request.getShow().getTopicEndpoint().setNumElements(1000L);
         return request;
     }
 
