@@ -37,12 +37,16 @@ public class MockSempConnector implements SempConnector {
                 return readFile("show-vpn.spool.xml");
             else if (request.contains("<show><queue><name>*</name><durable/><detail/>"))
                 return readFile("show-queues.detail.xml");
+            else if (request.contains("<show><queue><name>*</name><durable/><count/>"))
+                return readFile("show-queues.xml");
             else if (request.contains("<show><queue><name>*</name><rates/><durable/>"))
                 return readFile("show-queues.rates.xml");
             else if (request.contains("<show><queue><name>*</name><stats/><durable/>"))
                 return readFile("show-queues.stats.xml");
             else if (request.contains("<show><topic-endpoint><name>*</name><durable/>"))
                 return readFile("show-topicendpoints.detail.xml");
+            else if (request.contains("<show><topic-endpoint><name>*</name><count/>"))
+                return readFile("show-topicendpoints.xml");
             else if (request.contains("<show><topic-endpoint><name>*</name><rates/><durable/>"))
                 return readFile("show-topicendpoints.rates.xml");
             else if (request.contains("<show><topic-endpoint><name>*</name><stats/><durable/>"))
