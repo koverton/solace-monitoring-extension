@@ -4,12 +4,12 @@
       <queue>
         <queues>
           <queue>
-            <name>aaa</name>
+            <name>q1</name>
             <info>
               <message-vpn>kov</message-vpn>
               <durable>true</durable>
               <type>Primary</type>
-              <num-messages-spooled>0</num-messages-spooled>
+              <num-messages-spooled>5432</num-messages-spooled>
               <current-spool-usage-in-mb>0</current-spool-usage-in-mb>
               <high-water-mark-in-mb>0</high-water-mark-in-mb>
               <bind-count>0</bind-count>
