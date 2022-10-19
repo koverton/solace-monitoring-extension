@@ -313,7 +313,7 @@ public class SempMarshaller_r8_13_0Test
 
     @Test
     public void showQueueListTest() throws Exception {
-        RpcReply reply = marshaller.fromReplyXml(readFile("show-queues.detail.xml"));
+        RpcReply reply = marshaller.fromReplyXml(readFile("show-queues.xml"));
         List<Map<String, Object>> queues = factory.getQueueList(reply);
         assertNotNull(queues);
         SempTestHelper.noNullValuesCheck(queues);
