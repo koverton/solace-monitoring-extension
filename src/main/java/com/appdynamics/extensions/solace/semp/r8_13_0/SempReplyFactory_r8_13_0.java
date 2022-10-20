@@ -8,6 +8,7 @@ import com.solacesystems.semp_jaxb.r8_13_0.reply.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -308,7 +309,10 @@ public class SempReplyFactory_r8_13_0 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.Queue.VpnName, q.getInfo().getMessageVpn());
             result.put(Metrics.Queue.IsEnabled, combineConfigStatus(q.getInfo()));
             result.put(Metrics.Queue.IsDurable, q.getInfo().isDurable() ? 1 : 0);
-            result.put(Metrics.Queue.QuotaInMB, 4000); //q.getInfo().getQuota().longValue());
+            result.put(Metrics.Queue.QuotaInMB, 4000);
+            BigInteger quota = q.getInfo().getQuota();
+            if( quota != null )
+                result.put(Metrics.Queue.QuotaInMB, quota.longValue());
             result.put(Metrics.Queue.MessagesSpooled, longOrDefault(q.getInfo().getNumMessagesSpooled(),0L).intValue());
             result.put(Metrics.Queue.UsageInMB, longOrDefault(q.getInfo().getCurrentSpoolUsageInMb(), 0));
             result.put(Metrics.Queue.ConsumerCount, longOrDefault(q.getInfo().getBindCount(), 0).intValue());
@@ -390,7 +394,10 @@ public class SempReplyFactory_r8_13_0 implements SempReplyFactory<RpcReply> {
             result.put(Metrics.TopicEndpoint.VpnName, t.getInfo().getMessageVpn());
             result.put(Metrics.TopicEndpoint.IsEnabled, combineConfigStatus(t.getInfo()));
             result.put(Metrics.TopicEndpoint.IsDurable, t.getInfo().isDurable() ? 1 : 0);
-            result.put(Metrics.TopicEndpoint.QuotaInMB, t.getInfo().getQuota().longValue());
+            result.put(Metrics.TopicEndpoint.QuotaInMB, 4000);
+            BigInteger quota = t.getInfo().getQuota();
+            if( quota != null )
+                result.put(Metrics.TopicEndpoint.QuotaInMB, quota.longValue());
             result.put(Metrics.TopicEndpoint.MessagesSpooled, longOrDefault(t.getInfo().getNumMessagesSpooled(),0).intValue());
             result.put(Metrics.TopicEndpoint.UsageInMB, longOrDefault(t.getInfo().getCurrentSpoolUsageInMb(),0));
             result.put(Metrics.TopicEndpoint.ConsumerCount, longOrDefault(t.getInfo().getBindCount(),0).intValue());
