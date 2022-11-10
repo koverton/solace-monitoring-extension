@@ -308,6 +308,15 @@ If extended vpn-level stats are not useful to you for high-level monitoring, thi
 uploaded to your controller.
 </td>
 </tr>
+<tr>
+<td class='confluenceTd'> <tt>repeatingQueryDelayMS</tt>
+<br>[Integer: default 0]
+</td>
+<td class='confluenceTd'> [ Integer ] Queries that return large lists of elements are frequently broken into multiple 
+results that are implemented as a repeating query to page through the results. This configuration introduces 
+a wait after each query to reduce load on the server when large lists are requested.
+</td>
+</tr>
 
 
 
