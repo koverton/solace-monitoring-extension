@@ -33,6 +33,7 @@ public class ServerConfigs {
         this.excludeTlsMetrics           = Helper.getBooleanOrDefault(server, EXCLUDE_TLS_METRICS, true);
         this.excludeDiscardMetrics       = Helper.getBooleanOrDefault(server, EXCLUDE_DISCARD_METRICS, true);
         this.excludeExtendedStats        = Helper.getBooleanOrDefault(server, EXCLUDE_EXTENDED_STATS, true);
+        this.repeatingQueryDelayMS       = Helper.getIntOrDefault(server, REPEATING_QUERY_DELAY_MS, 0);
         this.log();
     }
 
@@ -52,6 +53,7 @@ public class ServerConfigs {
         logger.info("TLS exclusion policy: {}", excludeTemporaries);
         logger.info("Discards exclusion policy: {}", excludeDiscardMetrics);
         logger.info("Extended Stats exclusion policy: {}", excludeExtendedStats);
+        logger.info("Repeating query delay ms: {}", repeatingQueryDelayMS);
     }
 
     public MonitorConfigs.RedundancyModel getRedundancyModel() { return redundancyModel; }
@@ -97,6 +99,7 @@ public class ServerConfigs {
     }
 
     public Boolean getExcludeExtendedStats() { return excludeExtendedStats; }
+    public Integer getRepeatingQueryDelayMS() { return repeatingQueryDelayMS; }
 
     final private MonitorConfigs.RedundancyModel redundancyModel;
 
@@ -114,4 +117,5 @@ public class ServerConfigs {
     final private Boolean excludeTlsMetrics;
     final private Boolean excludeDiscardMetrics;
     final private Boolean excludeExtendedStats;
+    final private Integer repeatingQueryDelayMS;
 }

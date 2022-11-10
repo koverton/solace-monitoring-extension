@@ -79,7 +79,8 @@ class GenericSempProcessor<Request,Reply> {
      * @return A mapping of metric names to metric values for the requested object.
      */
     List<Map<String,Object>> repeatingQuery(RequestFactory<Request> requestFactory,
-                                            ResultFactory<Reply,List<Map<String,Object>>> resultFactory) {
+                                            ResultFactory<Reply,List<Map<String,Object>>> resultFactory,
+                                            Integer delayMS) {
         Request request = requestFactory.makeRequest();
         String requestXml = ctx.getMarshaller().toRequestXml(request);
 
@@ -95,14 +96,14 @@ class GenericSempProcessor<Request,Reply> {
                 result.addAll(resultFactory.makeResult(reply));
             }
             requestXml = extractMoreCookie(replyXml);
-//            if( requestXml != null ) {
-//                try {
-//                    Thread.sleep( 200 );
-//                }
-//                catch(InterruptedException e) {
-//                    logger.error("Failed sleeping after request", e);
-//                }
-//            }
+            if( requestXml != null && delayMS > 0 ) {
+                try {
+                    Thread.sleep( delayMS );
+                }
+                catch(InterruptedException e) {
+                    logger.error("Failed sleeping after request", e);
+                }
+            }
         }
         return result;
     }

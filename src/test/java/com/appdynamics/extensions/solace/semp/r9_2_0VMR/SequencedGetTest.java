@@ -33,7 +33,7 @@ public class SequencedGetTest {
                 "admin",
                 "jimmy");
 
-        Rpc request = reqfactory.createQueueListRequest(SEMP_VERSION, "*");
+        Rpc request = reqfactory.createQueueListRequest(SEMP_VERSION, "*", null);
         String xmlrequest = marshaller.toRequestXml(request);
 
         List<Map<String,Object>> result = new ArrayList<>();

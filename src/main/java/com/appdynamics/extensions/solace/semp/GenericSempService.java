@@ -1,5 +1,6 @@
 package com.appdynamics.extensions.solace.semp;
 
+import com.appdynamics.extensions.solace.ServerConfigs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,8 @@ import java.util.Map;
 class GenericSempService<Request,Reply> implements SempService {
     private static final Logger logger = LoggerFactory.getLogger(GenericSempService.class);
 
-    GenericSempService(SempConnectionContext<Request,Reply> ctx) {
+    GenericSempService(ServerConfigs serverConfigs, SempConnectionContext<Request, Reply> ctx) {
+        this.serverConfigs = serverConfigs;
         this.ctx = ctx;
         this.processor = new GenericSempProcessor<>(ctx);
     }
@@ -76,7 +78,8 @@ class GenericSempService<Request,Reply> implements SempService {
 
         List<Map<String,Object>> result = processor.repeatingQuery(
                 () -> ctx.getReqFactory().createMsgVpnListRequest(ctx.getSchemaVersion()),
-                (Reply reply) -> ctx.getReplyFactory().getMsgVpnList(reply)
+                (Reply reply) -> ctx.getReplyFactory().getMsgVpnList(reply),
+                serverConfigs.getRepeatingQueryDelayMS()
         );
 
         logger.trace("</GenericSempService.checkMsgVpnList>");
@@ -88,79 +91,86 @@ class GenericSempService<Request,Reply> implements SempService {
 
         List<Map<String,Object>> result = processor.repeatingQuery(
                 () -> ctx.getReqFactory().createMsgVpnSpoolListRequest(ctx.getSchemaVersion()),
-                (Reply reply) -> ctx.getReplyFactory().getMsgVpnSpoolList(reply)
+                (Reply reply) -> ctx.getReplyFactory().getMsgVpnSpoolList(reply),
+                serverConfigs.getRepeatingQueryDelayMS()
         );
 
         logger.trace("</GenericSempService.checkMsgVpnSpoolList>");
         return result;
     }
 
-    public List<Map<String,Object>> checkQueueList(String namePattern) {
+    public List<Map<String,Object>> checkQueueList(String namePattern, String vpnName) {
         logger.trace("<GenericSempService.checkQueueList>");
 
         List<Map<String,Object>> result = processor.repeatingQuery(
-                () -> ctx.getReqFactory().createQueueListRequest(ctx.getSchemaVersion(), namePattern),
-                (Reply reply) -> ctx.getReplyFactory().getQueueList(reply)
+                () -> ctx.getReqFactory().createQueueListRequest(ctx.getSchemaVersion(), namePattern, vpnName),
+                (Reply reply) -> ctx.getReplyFactory().getQueueList(reply),
+                serverConfigs.getRepeatingQueryDelayMS()
         );
 
         logger.trace("</GenericSempService.checkQueueList>");
         return result;
     }
 
-    public List<Map<String,Object>> checkQueueRatesList(String namePattern) {
+    public List<Map<String,Object>> checkQueueRatesList(String namePattern, String vpnName) {
         logger.trace("<GenericSempService.checkQueueRatesList>");
 
         List<Map<String,Object>> result = processor.repeatingQuery(
-                () -> ctx.getReqFactory().createQueueRatesListRequest(ctx.getSchemaVersion(), namePattern),
-                (Reply reply) -> ctx.getReplyFactory().getQueueRatesList(reply)
+                () -> ctx.getReqFactory().createQueueRatesListRequest(ctx.getSchemaVersion(), namePattern, vpnName),
+                (Reply reply) -> ctx.getReplyFactory().getQueueRatesList(reply),
+                serverConfigs.getRepeatingQueryDelayMS()
         );
 
         logger.trace("</GenericSempService.checkQueueRatesList>");
         return result;
     }
 
-    public List<Map<String,Object>> checkQueueStatsList(String namePattern) {
+    public List<Map<String,Object>> checkQueueStatsList(String namePattern, String vpnName) {
         logger.trace("<GenericSempService.checkQueueStatsList>");
 
         List<Map<String,Object>> result = processor.repeatingQuery(
-                () -> ctx.getReqFactory().createQueueStatsListRequest(ctx.getSchemaVersion(), namePattern),
-                (Reply reply) -> ctx.getReplyFactory().getQueueStatsList(reply)
+                () -> ctx.getReqFactory().createQueueStatsListRequest(ctx.getSchemaVersion(), namePattern, vpnName),
+                (Reply reply) -> ctx.getReplyFactory().getQueueStatsList(reply),
+                serverConfigs.getRepeatingQueryDelayMS()
         );
 
         logger.trace("</GenericSempService.checkQueueStatsList>");
         return result;
     }
 
-    public List<Map<String,Object>> checkTopicEndpointList(String namePattern) {
+    public List<Map<String,Object>> checkTopicEndpointList(String namePattern, String vpnName) {
         logger.trace("<GenericSempService.checkTopicEndpointList>");
 
         List<Map<String,Object>> result = processor.repeatingQuery(
-                () -> ctx.getReqFactory().createTopicEndpointListRequest(ctx.getSchemaVersion(), namePattern),
-                (Reply reply) -> ctx.getReplyFactory().getTopicEndpointList(reply)
+                () -> ctx.getReqFactory().createTopicEndpointListRequest(ctx.getSchemaVersion(), namePattern, vpnName),
+                (Reply reply) -> ctx.getReplyFactory().getTopicEndpointList(reply),
+                serverConfigs.getRepeatingQueryDelayMS()
         );
 
         logger.trace("</GenericSempService.checkTopicEndpointList>");
         return result;
     }
 
-    public List<Map<String,Object>> checkTopicEndpointRatesList(String namePattern) {
+    public List<Map<String,Object>> checkTopicEndpointRatesList(String namePattern, String vpnName) {
         logger.trace("<GenericSempService.checkTopicEndpointRatesList>");
 
         List<Map<String,Object>> result = processor.repeatingQuery(
-                () -> ctx.getReqFactory().createTopicEndpointRatesListRequest(ctx.getSchemaVersion(), namePattern),
-                (Reply reply) -> ctx.getReplyFactory().getTopicEndpointRatesList(reply)
+                () -> ctx.getReqFactory().createTopicEndpointRatesListRequest(ctx.getSchemaVersion(), namePattern, vpnName),
+                (Reply reply) -> ctx.getReplyFactory().getTopicEndpointRatesList(reply),
+                serverConfigs.getRepeatingQueryDelayMS()
         );
 
         logger.trace("</GenericSempService.checkTopicEndpointRatesList>");
         return result;
     }
 
-    public List<Map<String,Object>> checkTopicEndpointStatsList(String namePattern) {
+    public List<Map<String,Object>> checkTopicEndpointStatsList(String namePattern, String vpnName) {
         logger.trace("<GenericSempService.checkTopicEndpointStatsList>");
 
         List<Map<String,Object>> result = processor.repeatingQuery(
-                () -> ctx.getReqFactory().createTopicEndpointStatsListRequest(ctx.getSchemaVersion(), namePattern),
-                (Reply reply) -> ctx.getReplyFactory().getTopicEndpointStatsList(reply)
+                () -> ctx.getReqFactory().createTopicEndpointStatsListRequest(ctx.getSchemaVersion(), namePattern, vpnName),
+                (Reply reply) -> ctx.getReplyFactory().getTopicEndpointStatsList(reply),
+                serverConfigs.getRepeatingQueryDelayMS()
         );
 
         logger.trace("</GenericSempService.checkTopicEndpointStatsList>");
@@ -172,7 +182,8 @@ class GenericSempService<Request,Reply> implements SempService {
 
         List<Map<String,Object>> result = processor.repeatingQuery(
                 () -> ctx.getReqFactory().createGlobalBridgeListRequest(ctx.getSchemaVersion()),
-                (Reply reply) -> ctx.getReplyFactory().getGlobalBridgeList(reply)
+                (Reply reply) -> ctx.getReplyFactory().getGlobalBridgeList(reply),
+                serverConfigs.getRepeatingQueryDelayMS()
         );
 
         logger.trace("</GenericSempService.checkGlobalBridgeList>");
@@ -183,6 +194,7 @@ class GenericSempService<Request,Reply> implements SempService {
         return ctx.getConnector().getDisplayName();
     }
 
+    final private ServerConfigs serverConfigs;
     final private SempConnectionContext<Request,Reply> ctx;
     final private GenericSempProcessor<Request,Reply> processor;
 }

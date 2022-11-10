@@ -75,42 +75,42 @@ public class SempRequestFactory_r8_6VMRTest {
 
     @Test
     public void getQueueListTest() {
-        Rpc request = factory.createQueueListRequest(SEMP_VERSION, "endpointName");
+        Rpc request = factory.createQueueListRequest(SEMP_VERSION, "endpointName", null);
         String xml = marshaller.toRequestXml(request);
         assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><queue><name>endpointName</name><durable/><count/><num-elements>1000</num-elements></queue></show></rpc>", xml);
     }
 
     @Test
     public void getQueueRatesListTest() {
-        Rpc request = factory.createQueueRatesListRequest(SEMP_VERSION, "endpointName");
+        Rpc request = factory.createQueueRatesListRequest(SEMP_VERSION, "endpointName", null);
         String xml = marshaller.toRequestXml(request);
         assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><queue><name>endpointName</name><rates/><durable/><count/><num-elements>100</num-elements></queue></show></rpc>", xml);
     }
 
     @Test
     public void getQueueStatListTest() {
-        Rpc request = factory.createQueueStatsListRequest(SEMP_VERSION, "endpointName");
+        Rpc request = factory.createQueueStatsListRequest(SEMP_VERSION, "endpointName", null);
         String xml = marshaller.toRequestXml(request);
         assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><queue><name>endpointName</name><stats/><durable/><count/><num-elements>100</num-elements></queue></show></rpc>", xml);
     }
 
     @Test
     public void getTopicEndpointListTest() {
-        Rpc request = factory.createTopicEndpointListRequest(SEMP_VERSION, "endpointName");
+        Rpc request = factory.createTopicEndpointListRequest(SEMP_VERSION, "endpointName", null);
         String xml = marshaller.toRequestXml(request);
         assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><topic-endpoint><name>endpointName</name><durable/><count/><num-elements>1000</num-elements></topic-endpoint></show></rpc>", xml);
     }
 
     @Test
     public void getTopicEndpointRatesListTest() {
-        Rpc request = factory.createTopicEndpointRatesListRequest(SEMP_VERSION, "endpointName");
+        Rpc request = factory.createTopicEndpointRatesListRequest(SEMP_VERSION, "endpointName", null);
         String xml = marshaller.toRequestXml(request);
         assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><topic-endpoint><name>endpointName</name><rates/><durable/><count/><num-elements>100</num-elements></topic-endpoint></show></rpc>", xml);
     }
 
     @Test
     public void getTopicEndpointStatsListTest() {
-        Rpc request = factory.createTopicEndpointStatsListRequest(SEMP_VERSION, "endpointName");
+        Rpc request = factory.createTopicEndpointStatsListRequest(SEMP_VERSION, "endpointName", null);
         String xml = marshaller.toRequestXml(request);
         assertEquals(xmltag+"<rpc semp-version=\""+SEMP_VERSION+"\"><show><topic-endpoint><name>endpointName</name><stats/><durable/><count/><num-elements>100</num-elements></topic-endpoint></show></rpc>", xml);
     }

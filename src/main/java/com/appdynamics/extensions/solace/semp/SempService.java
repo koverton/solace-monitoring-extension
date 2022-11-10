@@ -60,42 +60,42 @@ public interface SempService {
      *
      * @return List of key-&gt;value maps of queue metrics per queue
      */
-    List<Map<String,Object>> checkQueueList(String namePattern);
+    List<Map<String,Object>> checkQueueList(String namePattern, String vpnName);
 
     /**
      * Equivalent CLI: show queue * rates
      *
      * @return List of key-&gt;value maps of queue rate statistics per queue
      */
-    List<Map<String,Object>> checkQueueRatesList(String namePattern);
+    List<Map<String,Object>> checkQueueRatesList(String namePattern, String vpnName);
 
     /**
      * Equivalent CLI: show queue * stats
      *
      * @return List of key-&gt;value maps of queue statistics per queue
      */
-    List<Map<String,Object>> checkQueueStatsList(String namePattern);
+    List<Map<String,Object>> checkQueueStatsList(String namePattern, String vpnName);
 
     /**
      * Equivalent CLI: show topic-endpoint * detail
      *
      * @return List of key-&gt;value maps of DTE metrics per DTE
      */
-    List<Map<String,Object>> checkTopicEndpointList(String namePattern);
+    List<Map<String,Object>> checkTopicEndpointList(String namePattern, String vpnName);
 
     /**
      * Equivalent CLI: show topic-endpoint * rates
      *
      * @return List of key-&gt;value maps of rate statistics per DTE
      */
-    List<Map<String,Object>> checkTopicEndpointRatesList(String namePattern);
+    List<Map<String,Object>> checkTopicEndpointRatesList(String namePattern, String vpnName);
 
     /**
      * Equivalent CLI: show topic-endpoint * stats
      *
      * @return List of key-&gt;value maps of statistics per DTE
      */
-    List<Map<String,Object>> checkTopicEndpointStatsList(String namePattern);
+    List<Map<String,Object>> checkTopicEndpointStatsList(String namePattern, String vpnName);
 
     /**
      * Equivalent CLI: show bridge * detail

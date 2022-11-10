@@ -22,6 +22,7 @@ servers:
     topicEndpointExclusionPolicy: "blacklist"
     excludeTopicEndpoints: ["#P2P/.*"]
     excludeTemporaries: true
+    repeatingQueryDelayMS: 50
 
 # number of concurrent tasks
 numberOfThreads: 2
