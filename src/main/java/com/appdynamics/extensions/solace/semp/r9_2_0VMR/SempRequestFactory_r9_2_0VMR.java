@@ -67,10 +67,12 @@ public class SempRequestFactory_r9_2_0VMR implements SempRequestFactory<Rpc> {
         return request;
     }
 
-    public Rpc createQueueListRequest(String sempVersion, String namePattern) {
-        final Rpc request = newShowRequest(sempVersion);
+
+    public com.solacesystems.semp_jaxb.r9_2_0VMR.request.Rpc createQueueListRequest(String sempVersion, String namePattern, String vpnName) {
+        final com.solacesystems.semp_jaxb.r9_2_0VMR.request.Rpc request = newShowRequest(sempVersion);
         request.getShow().setQueue(factory.createRpcShowQueue());
         request.getShow().getQueue().setName(namePattern);
+        if( vpnName != null )  request.getShow().getQueue().setVpnName( vpnName );
         if (serverConfigs.getExcludeTemporaries())
             request.getShow().getQueue().setDurable(factory.createKeywordType());
 //        request.getShow().getQueue().setDetail(factory.createKeywordType());
@@ -79,10 +81,11 @@ public class SempRequestFactory_r9_2_0VMR implements SempRequestFactory<Rpc> {
         return request;
     }
 
-    public Rpc createQueueRatesListRequest(String sempVersion, String namePattern) {
-        final Rpc request = newShowRequest(sempVersion);
+    public com.solacesystems.semp_jaxb.r9_2_0VMR.request.Rpc createQueueRatesListRequest(String sempVersion, String namePattern, String vpnName) {
+        final com.solacesystems.semp_jaxb.r9_2_0VMR.request.Rpc request = newShowRequest(sempVersion);
         request.getShow().setQueue(factory.createRpcShowQueue());
         request.getShow().getQueue().setName(namePattern);
+        if( vpnName != null )  request.getShow().getQueue().setVpnName( vpnName );
         if (serverConfigs.getExcludeTemporaries())
             request.getShow().getQueue().setDurable(factory.createKeywordType());
         request.getShow().getQueue().setRates(factory.createKeywordType());
@@ -91,10 +94,11 @@ public class SempRequestFactory_r9_2_0VMR implements SempRequestFactory<Rpc> {
         return request;
     }
 
-    public Rpc createQueueStatsListRequest(String sempVersion, String namePattern) {
-        final Rpc request = newShowRequest(sempVersion);
+    public com.solacesystems.semp_jaxb.r9_2_0VMR.request.Rpc createQueueStatsListRequest(String sempVersion, String namePattern, String vpnName) {
+        final com.solacesystems.semp_jaxb.r9_2_0VMR.request.Rpc request = newShowRequest(sempVersion);
         request.getShow().setQueue(factory.createRpcShowQueue());
         request.getShow().getQueue().setName(namePattern);
+        if( vpnName != null )  request.getShow().getQueue().setVpnName( vpnName );
         if (serverConfigs.getExcludeTemporaries())
             request.getShow().getQueue().setDurable(factory.createKeywordType());
         request.getShow().getQueue().setStats(factory.createKeywordType());
@@ -103,10 +107,11 @@ public class SempRequestFactory_r9_2_0VMR implements SempRequestFactory<Rpc> {
         return request;
     }
 
-    public Rpc createTopicEndpointListRequest(String sempVersion, String namePattern) {
-        final Rpc request = newShowRequest(sempVersion);
+    public com.solacesystems.semp_jaxb.r9_2_0VMR.request.Rpc createTopicEndpointListRequest(String sempVersion, String namePattern, String vpnName) {
+        final com.solacesystems.semp_jaxb.r9_2_0VMR.request.Rpc request = newShowRequest(sempVersion);
         request.getShow().setTopicEndpoint(factory.createRpcShowTopicEndpoint());
         request.getShow().getTopicEndpoint().setName(namePattern);
+        if( vpnName != null )  request.getShow().getTopicEndpoint().setVpnName( vpnName );
         if (serverConfigs.getExcludeTemporaries())
             request.getShow().getTopicEndpoint().setDurable(factory.createKeywordType());
 //        request.getShow().getTopicEndpoint().setDetail(factory.createKeywordType());
@@ -115,10 +120,11 @@ public class SempRequestFactory_r9_2_0VMR implements SempRequestFactory<Rpc> {
         return request;
     }
 
-    public Rpc createTopicEndpointRatesListRequest(String sempVersion, String namePattern) {
-        final Rpc request = newShowRequest(sempVersion);
+    public com.solacesystems.semp_jaxb.r9_2_0VMR.request.Rpc createTopicEndpointRatesListRequest(String sempVersion, String namePattern, String vpnName) {
+        final com.solacesystems.semp_jaxb.r9_2_0VMR.request.Rpc request = newShowRequest(sempVersion);
         request.getShow().setTopicEndpoint(factory.createRpcShowTopicEndpoint());
         request.getShow().getTopicEndpoint().setName(namePattern);
+        if( vpnName != null )  request.getShow().getTopicEndpoint().setVpnName( vpnName );
         if (serverConfigs.getExcludeTemporaries())
             request.getShow().getTopicEndpoint().setDurable(factory.createKeywordType());
         request.getShow().getTopicEndpoint().setRates(factory.createKeywordType());
@@ -127,10 +133,11 @@ public class SempRequestFactory_r9_2_0VMR implements SempRequestFactory<Rpc> {
         return request;
     }
 
-    public Rpc createTopicEndpointStatsListRequest(String sempVersion, String namePattern) {
-        final Rpc request = newShowRequest(sempVersion);
+    public com.solacesystems.semp_jaxb.r9_2_0VMR.request.Rpc createTopicEndpointStatsListRequest(String sempVersion, String namePattern, String vpnName) {
+        final com.solacesystems.semp_jaxb.r9_2_0VMR.request.Rpc request = newShowRequest(sempVersion);
         request.getShow().setTopicEndpoint(factory.createRpcShowTopicEndpoint());
         request.getShow().getTopicEndpoint().setName(namePattern);
+        if( vpnName != null )  request.getShow().getTopicEndpoint().setVpnName( vpnName );
         if (serverConfigs.getExcludeTemporaries())
             request.getShow().getTopicEndpoint().setDurable(factory.createKeywordType());
         request.getShow().getTopicEndpoint().setStats(factory.createKeywordType());

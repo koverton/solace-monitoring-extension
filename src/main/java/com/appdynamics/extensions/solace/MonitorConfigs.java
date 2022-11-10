@@ -20,6 +20,7 @@ public class MonitorConfigs {
     public final static String EXCLUDE_TLS_METRICS = "excludeTlsMetrics";
     public final static String EXCLUDE_DISCARD_METRICS = "excludeDiscardMetrics";
     public final static String EXCLUDE_EXTENDED_STATS = "excludeExtendedStats";
+    public final static String REPEATING_QUERY_DELAY_MS = "repeatingQueryDelayMS";
 
     public final static String METRIC_PREFIX = "metricPrefix";
     public final static String SERVERS = "servers";

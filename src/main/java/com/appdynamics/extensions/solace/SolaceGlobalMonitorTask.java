@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 import static com.appdynamics.extensions.solace.DerivedMetricsLogic.deriveMetrics;
+import static com.appdynamics.extensions.solace.MonitorConfigs.ExclusionPolicy.WHITELIST;
 
 /**
  * Worker task for all Solace metrics gathering. Executes all desired metrics queries
@@ -55,12 +56,6 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         // Run VPN checks
         checkMsgVpns( serverName );
 
-        // Run queues checks
-        checkQueues( serverName );
-
-        // Run topic-endpoints checks
-        checkTopicEndpoints( serverName );
-
         // Run bridges check
         checkBridges( serverName );
 
@@ -82,33 +77,57 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     }
 
     private void checkMsgVpns(String serverName) {
+        Set<String> included = new HashSet<>();
+        Set<String> excluded = new HashSet<>();
         // vpn stats
-        for(Map<String,Object> vpn : svc.checkMsgVpnList())
-            checkMsgVpn(vpn, serverName);
+        for(Map<String,Object> vpn : svc.checkMsgVpnList()) {
+            String vpnName= (String) vpn.get(Metrics.Vpn.VpnName);
+            if( checkMsgVpn(vpn, serverName) )
+                included.add( vpnName );
+            else
+                excluded.add( vpnName );
+        }
         // vpn spool stats
-        for(Map<String,Object> vpn : svc.checkMsgVpnSpoolList())
+        for(Map<String,Object> vpn : svc.checkMsgVpnSpoolList()) {
             checkMsgVpn(vpn, serverName);
+        }
+
+        if( serverConfigs.getVpnExclusionPolicy() == WHITELIST ) {
+            for( String vpnName : included ) {
+                // Run queues checks
+                checkQueues( serverName, vpnName );
+                // Run topic-endpoints checks
+                checkTopicEndpoints( serverName, vpnName );
+            }
+        }
+        else {
+            // Run queues checks
+            checkQueues( serverName, null );
+            // Run topic-endpoints checks
+            checkTopicEndpoints( serverName, null );
+        }
     }
 
-    private void checkMsgVpn(Map<String,Object> vpn, String serverName) {
+    private boolean checkMsgVpn(Map<String,Object> vpn, String serverName) {
         String vpnName= (String) vpn.get(Metrics.Vpn.VpnName);
         if ( Helper.isExcluded(vpnName, serverConfigs.getVpnFilter(), serverConfigs.getVpnExclusionPolicy()) ) {
             logger.info("NOT writing metrics for the '{}' MsgVPN because it did not match the exclusion policy. If this was not expected, check your '{}' and '{}' configurations.",
                     vpnName, MonitorConfigs.VPN_EXCLUSION_POLICY, MonitorConfigs.EXCLUDE_MSG_VPNS);
-            return;
+            return false;
         }
         vpn.remove(Metrics.Vpn.VpnName);
         metricPrinter.printMetrics(vpn, basePrefix, serverName, Metrics.Vpn.PREFIX, vpnName);
+        return true;
     }
 
-    private void checkQueues(String serverName) {
+    private void checkQueues(String serverName, String vpnName) {
         // HACK -- stats and rates queries do NOT include durability in the results
         Map<String,Object> durableQueueMap = new HashMap<>();
         for(String namePattern : Helper.getPolicyPatternList(serverConfigs.getQueueFilter(), serverConfigs.getQueueExclusionPolicy()) ) {
             if( namePattern == null || namePattern.isEmpty() )
                 continue;
-            for(Map<String,Object> queue : svc.checkQueueList(namePattern)) {
-                String vpnName= (String) queue.get(Metrics.Queue.VpnName);
+            for(Map<String,Object> queue : svc.checkQueueList(namePattern, vpnName)) {
+//                String vpnName= (String) queue.get(Metrics.Queue.VpnName);
                 String qname = (String) queue.get(Metrics.Queue.QueueName);
                 if ( checkQueue(queue, serverName) ) {
                     Integer isDurable = (Integer)queue.getOrDefault(Metrics.Queue.IsDurable, 0);
@@ -116,15 +135,15 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
                 }
             }
             if (!serverConfigs.getExcludeExtendedStats()) {
-                for(Map<String,Object> queue : svc.checkQueueStatsList(namePattern)) {
-                    String vpnName= (String) queue.get(Metrics.Queue.VpnName);
+                for(Map<String,Object> queue : svc.checkQueueStatsList(namePattern, vpnName)) {
+//                    String vpnName= (String) queue.get(Metrics.Queue.VpnName);
                     String qname = (String) queue.get(Metrics.Queue.QueueName);
                     Integer isDurable = (Integer)durableQueueMap.get(vpnName+"^"+qname);
                     queue.put(Metrics.Queue.IsDurable, isDurable);
                     checkQueue(queue, serverName);
                 }
-                for (Map<String, Object> queue : svc.checkQueueRatesList(namePattern)) {
-                    String vpnName= (String) queue.get(Metrics.Queue.VpnName);
+                for (Map<String, Object> queue : svc.checkQueueRatesList(namePattern, vpnName)) {
+//                    String vpnName= (String) queue.get(Metrics.Queue.VpnName);
                     String qname = (String) queue.get(Metrics.Queue.QueueName);
                     Integer isDurable = (Integer)durableQueueMap.get(vpnName+"^"+qname);
                     queue.put(Metrics.Queue.IsDurable, isDurable);
@@ -163,14 +182,14 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         return true;
     }
 
-    private void checkTopicEndpoints(String serverName) {
+    private void checkTopicEndpoints(String serverName, String vpnName) {
         // HACK -- stats and rates queries do NOT include durability in the results
         Map<String,Object> durableEndpointsMap = new HashMap<>();
         for(String namePattern : Helper.getPolicyPatternList(serverConfigs.getTopicEndpointFilter(), serverConfigs.getTopicEndpointExclusionPolicy()) ) {
             if( namePattern == null || namePattern.isEmpty() )
                 continue;
-            for ( Map<String, Object> endpoint : svc.checkTopicEndpointList(namePattern) ) {
-                String vpnName = (String) endpoint.get( Metrics.TopicEndpoint.VpnName );
+            for ( Map<String, Object> endpoint : svc.checkTopicEndpointList(namePattern, vpnName) ) {
+//                String vpnName = (String) endpoint.get( Metrics.TopicEndpoint.VpnName );
                 String ename = (String) endpoint.get( Metrics.TopicEndpoint.TopicEndpointName );
                 if ( checkTopicEndpoint( endpoint, serverName ) ) {
                     Integer isDurable = (Integer) endpoint.getOrDefault( Metrics.TopicEndpoint.IsDurable, 0 );
@@ -178,15 +197,15 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
                 }
             }
             if ( !serverConfigs.getExcludeExtendedStats() ) {
-                for ( Map<String, Object> endpoint : svc.checkTopicEndpointStatsList(namePattern) ) {
-                    String vpnName = (String) endpoint.get( Metrics.TopicEndpoint.VpnName );
+                for ( Map<String, Object> endpoint : svc.checkTopicEndpointStatsList(namePattern, vpnName) ) {
+//                    String vpnName = (String) endpoint.get( Metrics.TopicEndpoint.VpnName );
                     String ename = (String) endpoint.get( Metrics.TopicEndpoint.TopicEndpointName );
                     Integer isDurable = (Integer) durableEndpointsMap.get( vpnName + "^" + ename );
                     endpoint.put( Metrics.TopicEndpoint.IsDurable, isDurable );
                     checkTopicEndpoint( endpoint, serverName );
                 }
-                for ( Map<String, Object> endpoint : svc.checkTopicEndpointRatesList(namePattern) ) {
-                    String vpnName = (String) endpoint.get( Metrics.TopicEndpoint.VpnName );
+                for ( Map<String, Object> endpoint : svc.checkTopicEndpointRatesList(namePattern, vpnName) ) {
+//                    String vpnName = (String) endpoint.get( Metrics.TopicEndpoint.VpnName );
                     String ename = (String) endpoint.get( Metrics.TopicEndpoint.TopicEndpointName );
                     Integer isDurable = (Integer) durableEndpointsMap.get( vpnName + "^" + ename );
                     endpoint.put( Metrics.TopicEndpoint.IsDurable, isDurable );

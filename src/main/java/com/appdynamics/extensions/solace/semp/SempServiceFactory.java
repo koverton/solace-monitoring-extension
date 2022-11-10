@@ -40,6 +40,7 @@ public class SempServiceFactory {
             if (sempVersion.getVersionNumber() >= SempVersion.v9_9VMR.getVersionNumber()) {
                 try {
                     return new GenericSempService<>(
+                        serverConfigs,
                         new SempConnectionContext<>(connector,
                             new SempRequestFactory_r9_9VMR(serverConfigs),
                             new SempReplyFactory_r9_9VMR(serverConfigs),
@@ -54,6 +55,7 @@ public class SempServiceFactory {
             else if (sempVersion.getVersionNumber() >= SempVersion.v9_2_0VMR.getVersionNumber()) {
                 try {
                     return new GenericSempService<>(
+                        serverConfigs,
                         new SempConnectionContext<>(connector,
                             new SempRequestFactory_r9_2_0VMR(serverConfigs),
                             new SempReplyFactory_r9_2_0VMR(serverConfigs),
@@ -69,6 +71,7 @@ public class SempServiceFactory {
                 // 8_6VMR is lowest supported
                 try {
                     return new GenericSempService<>(
+                        serverConfigs,
                             new SempConnectionContext<>(connector,
                                     new SempRequestFactory_r8_6VMR(serverConfigs),
                                     new SempReplyFactory_r8_6VMR(serverConfigs),
@@ -88,6 +91,7 @@ public class SempServiceFactory {
             if (sempVersion.getVersionNumber() >= SempVersion.v9_9.getVersionNumber()) {
                 try {
                     return new GenericSempService<>(
+                        serverConfigs,
                         new SempConnectionContext<>(connector,
                             new SempRequestFactory_r9_9(serverConfigs),
                             new SempReplyFactory_r9_9(serverConfigs),
@@ -103,6 +107,7 @@ public class SempServiceFactory {
             else if (sempVersion.getVersionNumber() >= SempVersion.v9_2_0.getVersionNumber()) {
                 try {
                     return new GenericSempService<>(
+                        serverConfigs,
                         new SempConnectionContext<>(connector,
                             new SempRequestFactory_r9_2_0(serverConfigs),
                             new SempReplyFactory_r9_2_0(serverConfigs),
@@ -118,6 +123,7 @@ public class SempServiceFactory {
             else {
                 try {
                     return new GenericSempService<>(
+                        serverConfigs,
                             new SempConnectionContext<>(connector,
                                     new SempRequestFactory_r8_13_0(serverConfigs),
                                     new SempReplyFactory_r8_13_0(serverConfigs),
