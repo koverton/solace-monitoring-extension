@@ -38,7 +38,7 @@ public class ADMetricPrinter implements MetricPrinter
             // NO NEED TO LOG THIS; metricwriter logs this when loglevel = DEBUG
             metricWriter.printMetric(metricPath, metricValue.toString(),
                     MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
-                    MetricWriter.METRIC_TIME_ROLLUP_TYPE_AVERAGE,
+                    MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
                     MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
         }
         else {
