@@ -20,14 +20,14 @@ public class Sempv1Connector implements SempConnector {
         this.url = new URL(url);
         this.displayName = displayName;
         this.timeout = DEFAULT_TIMEOUT;
-        Authenticator.setDefault(new MyAuthenticator(username, password));
+        Authenticator.setDefault( new MyAuthenticator( username, password ) );
     }
 
     public Sempv1Connector(final String url, final String username, final String password, String displayName, Integer timeout) throws MalformedURLException {
         this.url = new URL(url);
         this.displayName = displayName;
         this.timeout = timeout;
-        Authenticator.setDefault(new MyAuthenticator(username, password));
+        Authenticator.setDefault( new MyAuthenticator( username, password ) );
     }
 
     public String getDisplayName() {
@@ -45,7 +45,7 @@ public class Sempv1Connector implements SempConnector {
 
             OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
             logger.info("SEMP POST URL: {}", url);
-            logger.debug("SEMP POST DATA: {}", request);
+            logger.info("SEMP POST DATA: {}", request);
             out.write(request);
             out.close();
 
@@ -91,7 +91,7 @@ public class Sempv1Connector implements SempConnector {
         return SempVersion.INVALID;
     }
 
-    private class MyAuthenticator extends Authenticator {
+    private static class MyAuthenticator extends Authenticator {
         String user;
         String pwd;
         MyAuthenticator(String username, String password) {
