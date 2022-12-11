@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.appdynamics.extensions.solace.DerivedMetricsLogic.deriveMetrics;
 import static com.appdynamics.extensions.solace.MonitorConfigs.ExclusionPolicy.WHITELIST;
@@ -29,6 +30,9 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     @Override
     public void run() {
         logger.trace("<SolaceGlobalMonitorTask.run>");
+
+        done = false;
+        logger.info(">>>run():RUNNING: {}",running.incrementAndGet());
 
         startTimeMillis = System.currentTimeMillis();
         logger.info("SolaceGlobalMonitorTask started at {}.", startTimeMillis);
@@ -63,11 +67,22 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         Map<String,Object> derivedMetrics = deriveMetrics(serverConfigs.getRedundancyModel(), serviceStats, redundancyStats, spoolStats);
         metricPrinter.printMetrics(derivedMetrics, basePrefix, serverName, Metrics.Derived.PREFIX);
 
+        done = true;
+        logger.info("<<<run(): count: {}",running.decrementAndGet());
         logger.trace("</SolaceGlobalMonitorTask.run>");
     }
 
+    public boolean isDone() { return done; }
+
     @Override
     public void onTaskComplete() {
+        if(!done) {
+            done = true; // in case we reached here due to an exception
+            logger.info("<<<onTaskComplete(): count: {}",running.decrementAndGet());
+        }
+        else {
+            logger.info("---onTaskComplete()");
+        }
         double seconds = (System.currentTimeMillis()-this.startTimeMillis)/1000.0;
         logger.info("SolaceGlobalMonitorTask monitoring run completed in {} seconds.", seconds);
     }
@@ -126,7 +141,10 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
         for(String namePattern : Helper.getPolicyPatternList(serverConfigs.getQueueFilter(), serverConfigs.getQueueExclusionPolicy()) ) {
             if( namePattern == null || namePattern.isEmpty() )
                 continue;
-            for(Map<String,Object> queue : svc.checkQueueList(namePattern, vpnName)) {
+            List<Map<String,Object>> queues = svc.checkQueueList(namePattern, vpnName);
+            int qcount = queues.size();
+            logger.info("Queue count: {}", qcount);
+            for(Map<String,Object> queue : queues ) {
 //                String vpnName= (String) queue.get(Metrics.Queue.VpnName);
                 String qname = (String) queue.get(Metrics.Queue.QueueName);
                 if ( checkQueue(queue, serverName) ) {
@@ -151,7 +169,7 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
                 }
             }
             else {
-                logger.info("SKIPPING extended queue and endpoint stats for " + serverName);
+                logger.debug("SKIPPING extended queue and endpoint stats for " + serverName);
             }
         }
     }
@@ -213,7 +231,7 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
                 }
             }
             else {
-                logger.info( "SKIPPING extended queue and endpoint stats for " + serverName );
+                logger.debug( "SKIPPING extended queue and endpoint stats for " + serverName );
             }
         }
     }
@@ -268,4 +286,6 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
     final private String basePrefix;
     final private ServerConfigs serverConfigs;
     private long startTimeMillis;
+    private boolean done = false;
+    private final AtomicInteger running = new AtomicInteger(0);
 }

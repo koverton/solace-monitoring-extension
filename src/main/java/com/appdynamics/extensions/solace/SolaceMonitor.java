@@ -38,7 +38,7 @@ public class SolaceMonitor extends ABaseMonitor {
 
     @Override
     protected List<Map<String, ?>> getServers() {
-        return (List<Map<String, ?>>) Helper.getMonitorServerList( getContextConfiguration() );
+        return Helper.getMonitorServerList( getContextConfiguration() );
     }
 
     @Override
@@ -75,12 +75,17 @@ public class SolaceMonitor extends ABaseMonitor {
                         timeout);
                 SempService sempService = SempServiceFactory.createSempService(connector, serverConfigs);
                 if (sempService != null) {
-                    serviceProvider.submit(displayName,
+                    SolaceGlobalMonitorTask solaceTask =
                             new SolaceGlobalMonitorTask(
                                     new ADMetricPrinter(metricWriter),
                                     baseMetricPrefix,
                                     serverConfigs,
-                                    sempService));
+                                    sempService);
+                    serviceProvider.submit(displayName, solaceTask);
+//                    while( !solaceTask.isDone() ) {
+//                        logger.debug("Waiting for "+displayName+" to complete");
+//                        try { Thread.sleep( 5000 ); } catch(InterruptedException e) {};
+//                    }
                 }
                 else {
                     logger.error("Could not create SEMP Service due to exception; SKIPPED POLLING OF SERVER [{}]",
@@ -91,6 +96,7 @@ public class SolaceMonitor extends ABaseMonitor {
                 logger.error("MalformedURLException thrown creating and executing service request for server "+displayName, ex);
             }
         }
+
     }
 
     protected int getTaskCount() {

@@ -3,6 +3,7 @@ package com.appdynamics.extensions.solace;
 import com.appdynamics.extensions.ABaseMonitor;
 import com.appdynamics.extensions.TasksExecutionServiceProvider;
 import com.appdynamics.extensions.solace.semp.Sempv1Connector;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -17,10 +18,18 @@ import static com.appdynamics.extensions.solace.MonitorConfigs.*;
 import static com.appdynamics.extensions.solace.MonitorConfigs.TIMEOUT;
 import static org.junit.Assert.*;
 
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+
+
 public class SolaceMonitorTest {
 
-    //@Test
+    @Ignore
+    @Test
     public void testSolaceMonitor() throws Exception {
+        Logger root = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+        root.setLevel(Level.INFO);
         try {
             final SolaceMonitor monitor = new SolaceMonitor();
             final Map<String, String> taskArgs = new HashMap<>();
@@ -88,7 +97,7 @@ public class SolaceMonitorTest {
             }
         }
         protected int getTaskCount() {
-            return 0;
+            return getServers().size();
         }
     }
 
