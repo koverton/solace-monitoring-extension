@@ -107,7 +107,7 @@ public class SolaceMonitorTest {
             final ABaseMonitor monitor = new TestMonitor();
             final Map<String, String> taskArgs = new HashMap<>();
 
-            taskArgs.put("config-file", "src/test/resources/conf/citi-config.yml");
+            taskArgs.put("config-file", "src/test/resources/conf/config.yml");
 
             try {
                 monitor.execute(taskArgs, null);
