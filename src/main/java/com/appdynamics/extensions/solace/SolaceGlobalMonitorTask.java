@@ -107,20 +107,20 @@ class SolaceGlobalMonitorTask implements AMonitorTaskRunnable {
             checkMsgVpn(vpn, serverName);
         }
 
-        if( serverConfigs.getVpnExclusionPolicy() == WHITELIST ) {
-            for( String vpnName : included ) {
-                // Run queues checks
-                checkQueues( serverName, vpnName );
-                // Run topic-endpoints checks
-                checkTopicEndpoints( serverName, vpnName );
-            }
-        }
-        else {
+//        if( serverConfigs.getVpnExclusionPolicy() == WHITELIST ) {
+//            for( String vpnName : included ) {
+//                // Run queues checks
+//                checkQueues( serverName, vpnName );
+//                // Run topic-endpoints checks
+//                checkTopicEndpoints( serverName, vpnName );
+//            }
+//        }
+//        else {
             // Run queues checks
             checkQueues( serverName, null );
             // Run topic-endpoints checks
             checkTopicEndpoints( serverName, null );
-        }
+//        }
     }
 
     private boolean checkMsgVpn(Map<String,Object> vpn, String serverName) {
